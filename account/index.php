@@ -30,6 +30,17 @@ $user = $_SESSION['user'];
         <?php html_mini_navbar() ?>
         <?php display_alert() ?>
         <h1>Hello, <?= $user->name ?></h1>
+        <hr>
+        <?php if ($user->role->as_value() > UserRole::User->as_value()): ?>
+            <div>
+                <h2>Related links</h2>
+                <div class="row gap-8">
+                    <?php if ($user->role === UserRole::Moderator): ?>
+                        <a href="/moderation/index.php">Moderation</a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endif; ?>
     </main>
 </body>
 
