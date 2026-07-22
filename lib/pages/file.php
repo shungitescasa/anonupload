@@ -13,14 +13,6 @@ $description = null;
 if ($single_attachment) {
     $description = "{$single_attachment->mime} - {$single_attachment->extension}";
 
-    if (isset($post->views)) {
-        $description .= " - {$post->views} views";
-    }
-
-    if (isset($post->uploaded_at)) {
-        $description .= " - uploaded " . format_timestamp($post->uploaded_at) . " ago";
-    }
-
     if (isset($single_attachment->metadata)) {
         $m = $single_attachment->metadata;
         if (isset($m->width, $m->height)) {
@@ -37,8 +29,17 @@ if ($single_attachment) {
         }
     }
 } else {
-    $description = 'Post with multiple attachments';
+    $description = "Post with " . count($post->attachments) . " attachments";
 }
+
+if (isset($post->views) && $post->views >= CONFIG['views']['minimal_display_count']) {
+    $description .= " - {$post->views} views";
+}
+
+if (isset($post->uploaded_at)) {
+    $description .= " - uploaded " . format_timestamp($post->uploaded_at) . " ago";
+}
+
 ?>
 <!DOCTYPE html>
 <html>
