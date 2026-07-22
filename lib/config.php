@@ -12,7 +12,10 @@ $cfg = [
         "links" => [],
         "defaultstyle" => "default",
         'machine_id' => 1,
-        'epoch' => 1609459200000
+        'epoch' => 1609459200000,
+    ],
+    'siblings' => [
+        'news' => null
     ],
     'storage' => [
         'type' => 'local',

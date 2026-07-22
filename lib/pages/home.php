@@ -152,9 +152,16 @@ unset($_SESSION['recently_uploaded_files']);
     <footer>
         <?php html_footer(); ?>
         <?php html_legal(); ?>
+        <?php if (isset(CONFIG['siblings']['news'])): ?>
+            <p id="latest-news"></p>
+        <?php endif; ?>
         <?php html_motd(); ?>
     </footer>
 </body>
+
+<?php if (isset(CONFIG['siblings']['news'])): ?>
+    <script src="<?= CONFIG['siblings']['news'] ?>"></script>
+<?php endif; ?>
 
 <script src="/static/scripts/options.js"></script>
 <script src="/static/scripts/file.js"></script>
