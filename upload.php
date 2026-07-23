@@ -331,12 +331,18 @@ try {
             $bad_status_count++;
     }
 
+    $upload_fail = $bad_status_count === count($uploaded_posts);
+
+    if ($upload_fail) {
+        $status->send('error', null);
+    } else {
     $status->send('success', null);
+    }
 
     generate_alert(
         "/",
         null,
-        $bad_status_count === count($uploaded_posts) ? 400 : 201,
+        $upload_fail ? 400 : 201,
         match (true) {
             count($uploaded_posts) == 1 => $uploaded_posts[0],
             default => $uploaded_posts

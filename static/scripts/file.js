@@ -113,16 +113,16 @@ function createFile(file) {
 
         if (saveOnFetch) {
             fetch(fileThumbnailURL)
-            .then((r) => {
-                if (r.status !== 200) return;
-                fileThumbnailURL = r.url;
-                img.src = fileThumbnailURL;
-                
-                if (!file.urls) file.urls = {};
-                if (!file.urls.thumbnail_url) file.urls.thumbnail_url = fileThumbnailURL;
+                .then((r) => {
+                    if (r.status !== 200) return;
+                    fileThumbnailURL = r.url;
+                    img.src = fileThumbnailURL;
 
-                file.save();
-            });
+                    if (!file.urls) file.urls = {};
+                    if (!file.urls.thumbnail_url) file.urls.thumbnail_url = fileThumbnailURL;
+
+                    file.save();
+                });
         } else {
             img.src = fileThumbnailURL;
         }
@@ -306,7 +306,7 @@ function createFileUploadProgress(files) {
     };
 
     f.setStatus = (text, attr = null) => {
-        fileStatusElement.style.display = text === null ? 'none' : 'flex';
+        fileStatusElement.style.display = text === null && attr !== 'error' ? 'none' : 'flex';
         fileStatusElement.textContent = text;
         if (attr !== null) {
             fileElement.setAttribute("status", attr);
@@ -377,6 +377,7 @@ function uploadData(form) {
         file.setProgress(100);
         if (xhr.status !== 201 && xhr.getResponseHeader("Content-Type") !== 'application/json') {
             file.setStatus(`${xhr.status} ${xhr.statusText}`, 'error');
+            if (source) source.close();
             return;
         }
 
@@ -384,6 +385,7 @@ function uploadData(form) {
         let d = j.data;
         if (j.status_code !== 201) {
             file.setStatus(j.message ?? d.error ?? `received ${j.status_code} code`, 'error');
+            if (source) source.close();
             return;
         }
 
@@ -436,6 +438,7 @@ function uploadData(form) {
 
     xhr.addEventListener("error", () => {
         file.status.setStatus('upload error', 'error');
+        if (source) source.close();
     });
 
     xhr.send(form);
