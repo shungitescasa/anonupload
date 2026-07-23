@@ -47,7 +47,7 @@ unset($_SESSION['recently_uploaded_files']);
                                 <th><label for="file-password">password<sup class="hint iconless"
                                             title="for file deletion">[?]</sup>:</label>
                                 </th>
-                                <td><input type="text" name="password" id="file-password"
+                                <td><input type="password" name="password" id="file-password"
                                         placeholder="leave empty for permanent file"></td>
                             </tr>
                             <tr>

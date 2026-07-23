@@ -166,10 +166,10 @@ function html_legal()
             <li><a href="/qa">q&a</a></li>
         <?php endif; ?>
         <?php if (file_exists("{$_SERVER['DOCUMENT_ROOT']}/TOS.txt")): ?>
-            <li><a href="/tos">terms of service</a></li>
+            <li><a href="/tos" rel="terms-of-service">terms of service</a></li>
         <?php endif; ?>
         <?php if (file_exists("{$_SERVER['DOCUMENT_ROOT']}/PRIVACY.txt")): ?>
-            <li><a href="/privacy">privacy policy</a></li>
+            <li><a href="/privacy" rel="privacy-policy">privacy policy</a></li>
         <?php endif; ?>
     </ul>
     <?php ;
