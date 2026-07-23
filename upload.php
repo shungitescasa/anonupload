@@ -65,6 +65,27 @@ function create_post(
     return $p;
 }
 
+$uploaded_posts = null;
+
+function delete_empty_posts(array &$posts)
+{
+    $posts = array_values(array_filter(
+        $posts,
+        function ($post) {
+            if (is_array($post)) {
+                return true;
+            }
+
+            $has_attachments = isset($post->attachments) && !empty($post->attachments);
+            if (!$has_attachments) {
+                FILEREGISTRY->delete_post($post);
+                return false;
+            }
+            return true;
+        }
+    ));
+}
+
 try {
     $files = [];
 
@@ -294,6 +315,12 @@ try {
         $thumbnails = THUMBNAILER->generate_thumbnails($data);
     }
 
+    delete_empty_posts($uploaded_posts);
+
+    if (empty($uploaded_posts)) {
+        throw new HTTPException('No posts');
+    }
+
     if (isset($_POST['save_upload_list']) && boolval($_POST['save_upload_list'])) {
         $_SESSION['recently_uploaded_files'] = $uploaded_posts;
     }
@@ -317,7 +344,9 @@ try {
     );
 } catch (HTTPException $e) {
     $status->send('error', $e->getMessage());
+    delete_empty_posts($uploaded_posts);
     generate_alert('/', $e->getMessage(), $e->getStatusCode());
 } catch (Exception $e) {
+    delete_empty_posts($uploaded_posts);
     generate_alert('/', $e->getMessage(), 400);
 }
