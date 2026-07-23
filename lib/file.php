@@ -321,6 +321,12 @@ class Post implements JsonSerializable
             $o->expires_at = null;
         }
 
+        if (isset($res['attachments'])) {
+            foreach ($res['attachments'] as $a) {
+                array_push($o->attachments, BaseFile::from_array($a));
+            }
+        }
+
         return $o;
     }
 
