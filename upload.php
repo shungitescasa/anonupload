@@ -132,11 +132,15 @@ try {
         $file['size'] = filesize($file['tmp_name']);
         array_push($files, $file);
     } else {
-        throw new HTTPException("No file to upload");
+        throw new HTTPException("No files to upload");
     }
 
-    if (count($files) > CONFIG['upload']['max_files_per_request']) {
+    $file_count = count($files);
+
+    if ($file_count > CONFIG['upload']['max_files_per_request']) {
         throw new HTTPException("Exceeded file upload limit", 413);
+    } else if ($file_count === 0) {
+        throw new HTTPException("No files to upload");
     }
 
     $single_url = boolval($_POST['single_url'] ?? '0');
@@ -184,7 +188,6 @@ try {
 
     $root_post = $single_url ? create_post($password, $upload_date, $expiration_date, $description) : null;
     $uploaded_posts = $single_url ? [$root_post] : [];
-    $file_count = count($files);
 
     for ($i = 0; $i < $file_count; $i++) {
         $file = $files[$i];
@@ -336,7 +339,7 @@ try {
     if ($upload_fail) {
         $status->send('error', null);
     } else {
-    $status->send('success', null);
+        $status->send('success', null);
     }
 
     generate_alert(
