@@ -51,11 +51,11 @@ if (isset($post->uploaded_at)) {
 <body>
     <section class="post-preview">
         <section class="disclaimer">
-            <?php html_legal(); ?>
             <p>
                 All trademarks and copyrights belong to their respective owners.
                 The uploader is responsible for any content shared here.
             </p>
+            <?php html_legal(); ?>
         </section>
 
         <section class="feed" feed-id="<?= $post->id ?>" feed-url="<?= $post->url() ?>">

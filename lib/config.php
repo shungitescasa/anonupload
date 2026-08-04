@@ -249,6 +249,10 @@ $cfg = [
         'minimal_display_count' => 0,
         'ignore_user_agents' => []
     ],
+    'librecounter' => [
+        'enabled' => false,
+        'hidden' => false
+    ],
     "report" => [
         'mail' => null
     ],

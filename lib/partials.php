@@ -171,6 +171,18 @@ function html_legal()
         <?php if (file_exists("{$_SERVER['DOCUMENT_ROOT']}/PRIVACY.txt")): ?>
             <li><a href="/privacy" rel="privacy-policy">privacy policy</a></li>
         <?php endif; ?>
+
+        <?php if (CONFIG['librecounter']['enabled']): ?>
+            <?php if (CONFIG['librecounter']['hidden']): ?>
+                <img src="https://librecounter.org/counter.svg" referrerPolicy="unsafe-url" width="0" />
+            <?php else: ?>
+                <li>
+                    <a href="https://librecounter.org/referer/show" target="_blank">
+                        <img src="https://librecounter.org/counter.svg" referrerPolicy="unsafe-url" height="16" />
+                    </a>
+                </li>
+            <?php endif; ?>
+        <?php endif; ?>
     </ul>
     <?php ;
 }
