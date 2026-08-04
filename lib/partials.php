@@ -174,11 +174,11 @@ function html_legal()
 
         <?php if (CONFIG['librecounter']['enabled']): ?>
             <?php if (CONFIG['librecounter']['hidden']): ?>
-                <img src="https://librecounter.org/counter.svg" referrerPolicy="unsafe-url" width="0" />
+                <img src="https://librecounter.org/solid-brown.svg" referrerPolicy="unsafe-url" width="0" />
             <?php else: ?>
                 <li>
                     <a href="https://librecounter.org/referer/show" target="_blank">
-                        <img src="https://librecounter.org/counter.svg" referrerPolicy="unsafe-url" height="16" />
+                        <img src="https://librecounter.org/solid-brown.svg" referrerPolicy="unsafe-url" height="16" />
                     </a>
                 </li>
             <?php endif; ?>
