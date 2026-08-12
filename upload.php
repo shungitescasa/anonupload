@@ -181,6 +181,7 @@ try {
 
     if (!empty($description)) {
         $pdown = new Parsedown();
+        $pdown->setSafeMode(true);
         $description = $pdown->text($description);
     } else {
         $description = null;

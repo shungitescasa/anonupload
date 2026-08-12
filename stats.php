@@ -129,6 +129,7 @@ if (IS_JSON_REQUEST) {
 <?php if (isset($stats['timeline'], CONFIG['driver']['chart'])): ?>
     <script src="<?= CONFIG['driver']['chart'] ?>"></script>
     <script>
+        // TODO: place it in .js file
         new Chart("uploaded-files-chart", {
             type: "bar",
             data: {
