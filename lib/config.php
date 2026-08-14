@@ -242,7 +242,8 @@ $cfg = [
         'height' => 128,
         'extension' => 'webp',
         'directory' => './userdata/thumbnails',
-        'prefix' => '/userdata/thumbnails'
+        'prefix' => '/userdata/thumbnails',
+        'bucket' => null
     ],
     'views' => [
         'enabled' => false,

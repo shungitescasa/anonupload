@@ -125,14 +125,15 @@ class LocalThumbnailer implements Thumbnailer
 
 class S3ProxyThumbnailer implements Thumbnailer
 {
-    private string $url, $extension, $prefix;
+    private string $url, $extension, $prefix, $bucket;
     private string|null $authorization_key;
 
-    public function __construct(string $url, string $prefix, string $extension, string|null $authorization_key = null)
+    public function __construct(string $url, string $prefix, string $extension, string $bucket, string|null $authorization_key = null)
     {
         $this->url = $url;
         $this->prefix = $prefix;
         $this->extension = $extension;
+        $this->bucket = $bucket;
         $this->authorization_key = $authorization_key;
     }
 
@@ -157,12 +158,15 @@ class S3ProxyThumbnailer implements Thumbnailer
         }
 
         $ch = curl_init("{$this->url}/generate");
+        curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
             [
-                'key' => basename($input_path),
+                'input_key' => "/original/$input_path",
+                'output_key' => "/thumbnails/" . pathinfo($input_path, PATHINFO_FILENAME) . ".{$this->get_thumbnail_extension()}",
                 'width' => $width,
                 'height' => $height,
-                'extension' => $this->extension
+                'extension' => $this->get_thumbnail_extension(),
+                'bucket' => $this->bucket
             ]
         ]));
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -186,10 +190,12 @@ class S3ProxyThumbnailer implements Thumbnailer
                 throw new RuntimeException("Files must have input_path, width, height");
             }
             array_push($payload, [
-                'key' => basename($f['input_path']),
+                'input_key' => "/original/{$f['input_path']}",
+                'output_key' => "/thumbnails/" . pathinfo($f['input_path'], PATHINFO_FILENAME) . ".{$this->get_thumbnail_extension()}",
                 'width' => $f['width'],
                 'height' => $f['height'],
-                'extension' => $this->extension
+                'extension' => $this->get_thumbnail_extension(),
+                'bucket' => $this->bucket
             ]);
         }
 
@@ -202,6 +208,7 @@ class S3ProxyThumbnailer implements Thumbnailer
         }
 
         $ch = curl_init("{$this->url}/generate");
+        curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -222,6 +229,7 @@ define("THUMBNAILER", match (true) {
         CONFIG['thumbnails']['url'],
         CONFIG['thumbnails']['prefix'],
         CONFIG['thumbnails']['extension'],
+        CONFIG['thumbnails']['bucket'],
         CONFIG['thumbnails']['authorization_key']
     ),
     CONFIG['thumbnails']['type'] === "local" && CONFIG['storage']['type'] !== "s3" => new LocalThumbnailer(
