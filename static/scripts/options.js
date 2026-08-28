@@ -5,6 +5,7 @@ function initOptions(rootId) {
         const id = c.getAttribute("name");
 
         switch (c.getAttribute("type")) {
+            case "password":
             case "text": {
                 c.addEventListener("change", () => {
                     options[id] = c.value;
