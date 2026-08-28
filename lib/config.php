@@ -73,7 +73,7 @@ $cfg = [
     ],
     "files" => [
         'track_ttl' => 300,
-        'hide_upload_timestamp' => false
+        'show_upload_timestamp' => true
     ],
     'id' => [
         'type' => 'chars',
@@ -306,7 +306,7 @@ if (file_exists(CONFIG_FILE_PATH)) {
             }
             // value is a boolean
             else if ($v === 'true' || $v === 'false') {
-                $v = boolval($v);
+                $v = $v === 'true';
             }
 
             $cfg[$s][$k] = $v;

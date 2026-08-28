@@ -293,7 +293,7 @@ class Post implements JsonSerializable
             $o->views = $res['views'] ?? null;
         }
 
-        if (CONFIG['files']['hide_upload_timestamp'] && isset($res['uploaded_at'])) {
+        if (CONFIG['files']['show_upload_timestamp'] && isset($res['uploaded_at'])) {
             $o->uploaded_at = new DateTime();
 
             if (is_numeric($res['uploaded_at'])) {
