@@ -27,7 +27,7 @@ unset($_SESSION['recently_uploaded_files']);
     <header>
         <?php html_header(); ?>
         <h2>
-            max upload size is <?= get_cfg_var(option: 'upload_max_filesize') ?>
+            max upload size is <?= ini_get(option: 'upload_max_filesize') ?>
             <?php if (!empty(CONFIG['expiration']['time']) && CONFIG['expiration']['force_default'] && CONFIG['expiration']['default'] !== 'ne'): ?>
                 & files expire after <?= CONFIG['expiration']['time'][CONFIG['expiration']['default']] ?>
             <?php endif; ?>

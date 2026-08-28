@@ -134,7 +134,7 @@ include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/partials.php";
                             </tr>
                             <tr>
                                 <th>Max file size:</th>
-                                <td><code><?= get_cfg_var("upload_max_filesize") ?></code></td>
+                                <td><code><?= ini_get("upload_max_filesize") ?></code></td>
                             </tr>
                         </table>
                     </div>
