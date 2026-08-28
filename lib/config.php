@@ -210,20 +210,12 @@ $cfg = [
         "customidlength" => 12,
         "zipwebapps" => false,
         "titlelength" => 100,
-        "removeletterboxes" => false,
-        'expiration' => [
-            'ne' => 'Never',
-            '14d' => '2 weeks',
-            '7d' => 'a week',
-            '3d' => '3 days',
-            '1d' => 'a day',
-            '12h' => '12 hours',
-            '3h' => '3 hours',
-            '5m' => '5 minutes',
-            're' => 'Burn after seeing'
-        ],
-        'default_expiration' => 'ne',
-        'force_default_expiration' => false
+        "removeletterboxes" => false
+    ],
+    'expiration' => [
+        'time' => [],
+        'default' => null,
+        'force_default' => false
     ],
     "externalupload" => [
         "enable" => true,

@@ -146,11 +146,11 @@ try {
     $single_url = boolval($_POST['single_url'] ?? '0');
     $strip_exif = boolval($_POST['strip_exif'] ?? '0');
     $preserve_original_name = boolval($_POST['preserve_original_name'] ?? '0');
-    $expire_in = $_POST['expires_in'] ?? CONFIG['upload']['default_expiration'];
+    $expire_in = $_POST['expires_in'] ?? CONFIG['expiration']['default'];
     $password = $_POST['password'] ?? null;
 
-    if (CONFIG['upload']['force_default_expiration'] || !array_key_exists($expire_in, CONFIG['upload']['expiration'])) {
-        $expire_in = CONFIG['upload']['default_expiration'];
+    if (CONFIG['expiration']['force_default'] || !array_key_exists($expire_in, CONFIG['expiration']['time'])) {
+        $expire_in = CONFIG['expiration']['default'];
     }
 
     $format = 'Y-m-d H:i:s';
