@@ -59,11 +59,21 @@ if (isset($post->uploaded_at)) {
         </section>
 
         <section class="feed" feed-id="<?= $post->id ?>" feed-url="<?= $post->url() ?>">
-            <?php foreach ($post->attachments as $file): ?>
-                <div class="preview">
-                    <?php html_file_full($file); ?>
-                </div>
-            <?php endforeach; ?>
+            <?php if (!$single_attachment): ?>
+                <button class="feed-controller" data-action="back" disabled></button>
+            <?php endif; ?>
+
+            <div class="file-attachments">
+                <?php foreach ($post->attachments as $file): ?>
+                    <div class="preview">
+                        <?php html_file_full($file); ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+
+            <?php if (!$single_attachment): ?>
+                <button class="feed-controller" data-action="next" disabled></button>
+            <?php endif; ?>
         </section>
 
         <section class="feed-metadata">

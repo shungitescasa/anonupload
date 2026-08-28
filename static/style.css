@@ -721,17 +721,4 @@ p.error {
     #form-upload .options>.controls {
         flex-direction: column;
     }
-
-    .feed {
-        flex-direction: column;
-
-        overflow-x: hidden;
-        overflow-y: auto;
-
-        scroll-snap-type: y mandatory;
-    }
-
-    .feed>.preview {
-        min-height: 100%;
-    }
 }

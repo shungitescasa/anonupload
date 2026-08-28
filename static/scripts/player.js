@@ -25,3 +25,73 @@ window.addEventListener("load", () => {
         }
     });
 });
+
+window.addEventListener("DOMContentLoaded", () => {
+    const feed = document.querySelector(".file-attachments");
+    const items = [...feed.children];
+    if (items.length <= 1) return;
+
+    const backButton = document.querySelector('.feed-controller[data-action="back"]');
+    const nextButton = document.querySelector('.feed-controller[data-action="next"]');
+
+    function getCurrentIndex() {
+        const feedRect = feed.getBoundingClientRect();
+
+        return items.reduce((closestIndex, item, index) => {
+            const distance = Math.abs(
+                item.getBoundingClientRect().left - feedRect.left
+            );
+
+            const closestDistance = Math.abs(
+                items[closestIndex].getBoundingClientRect().left - feedRect.left
+            );
+
+            return distance < closestDistance ? index : closestIndex;
+        }, 0);
+    }
+
+    function scrollToIndex(index) {
+        if (!items[index]) return;
+
+        items[index].scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'start'
+        });
+    }
+
+    function updateButtons() {
+        const currentIndex = getCurrentIndex();
+
+        backButton.disabled = currentIndex === 0;
+        nextButton.disabled = currentIndex === items.length - 1;
+    }
+
+    function back() {
+        const currentIndex = getCurrentIndex();
+
+        if (currentIndex > 0) {
+            scrollToIndex(currentIndex - 1);
+        }
+        updateButtons();
+    }
+
+    function next() {
+        const currentIndex = getCurrentIndex();
+
+        if (currentIndex < items.length - 1) {
+            scrollToIndex(currentIndex + 1);
+        }
+        updateButtons();
+    }
+
+    backButton.addEventListener('click', back);
+    nextButton.addEventListener('click', next);
+    feed.addEventListener('scroll', updateButtons, { passive: true });
+
+    updateButtons();
+
+    backButton.style.display = 'block';
+    nextButton.style.display = 'block';
+    feed.style.overflowX = "hidden";
+});

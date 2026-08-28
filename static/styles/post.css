@@ -21,6 +21,12 @@ body:has(> .post-preview) {
     display: flex;
     flex-direction: row;
     flex-grow: 1;
+}
+
+.feed .file-attachments {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
 
     overflow-x: auto;
     overflow-y: hidden;
@@ -31,13 +37,50 @@ body:has(> .post-preview) {
     scrollbar-color: var(--showcase-control-foreground);
 }
 
-.feed>.preview {
+.feed .file-attachments>.preview {
     flex: 0 0 100%;
     scroll-snap-align: start;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.feed .feed-controller {
+    background: linear-gradient(to left, #2d3047, transparent);
+    color: #6171b6;
+    font-weight: bold;
+    font-size: 2em;
+    padding: 0 32px;
+    display: none;
+}
+
+.feed .feed-controller[data-action="next"]::after {
+    content: '⮞';
+}
+
+.feed .feed-controller[data-action="back"]::before {
+    content: '⮜';
+}
+
+.feed .feed-controller[data-action="back"] {
+    background: linear-gradient(to right, #2d3047, transparent);
+}
+
+.feed .feed-controller:hover {
+    background: linear-gradient(to left, #44496b, transparent);
+    text-decoration: none;
+}
+
+.feed .feed-controller[data-action="back"]:hover {
+    background: linear-gradient(to right, #44496b, transparent);
+}
+
+.feed .feed-controller:disabled,
+.feed .feed-controller:disabled:hover {
+    background: none;
+    color: #303030;
+    cursor: not-allowed;
 }
 
 .file-preview {
@@ -103,12 +146,19 @@ body:has(> .post-preview) {
     color: var(--showcase-control-foreground);
     font-family: 'Courier New', Courier, monospace;
     font-size: 0.75em;
-    text-align: right;
+    text-align: center;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin-inline: auto;
+    width: fit-content;
 }
 
 .disclaimer a {
@@ -137,6 +187,25 @@ body:has(> .post-preview) {
     justify-content: center;
     align-items: center;
     padding: var(--pad);
+}
+
+@media screen and (max-width: 1000px) {
+    .file-attachments {
+        flex-direction: column !important;
+
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+
+        scroll-snap-type: y mandatory !important;
+    }
+
+    .file-attachments .preview {
+        min-height: 100% !important;
+    }
+
+    .feed-controller {
+        display: none !important;
+    }
 }
 
 @media screen and (max-width: 600px) {
