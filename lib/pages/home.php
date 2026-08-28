@@ -87,7 +87,8 @@ unset($_SESSION['recently_uploaded_files']);
                 </div>
                 <fieldset class="description">
                     <legend>description</legend>
-                    <textarea name="description" placeholder="write your SNCA here... (Markdown supported)"></textarea>
+                    <textarea name="description"
+                        placeholder="tell us what you are going to upload... (Markdown supported)"></textarea>
                 </fieldset>
             </div>
             <button type="submit">upload</button>
