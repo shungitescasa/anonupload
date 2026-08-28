@@ -72,18 +72,8 @@ $cfg = [
         "enable" => false,
     ],
     "files" => [
-        "fancyview" => true,
-        "countviews" => true,
-        "showuploadtime" => true,
-        "showviews" => true,
-        "displayhtml" => true,
-        "description" => true,
-        "directory" => "{$_SERVER['DOCUMENT_ROOT']}/userdata/uploads",
-        "url" => "/userdata/uploads",
-        "deletion" => true,
-        "deletionkeylength" => 16,
-        "defaultvisibility" => 1,
-        'track_ttl' => 300
+        'track_ttl' => 300,
+        'hide_upload_timestamp' => false
     ],
     'id' => [
         'type' => 'chars',
@@ -313,6 +303,10 @@ if (file_exists(CONFIG_FILE_PATH)) {
                 $c = strlen($v);
                 $v = substr($v, 1, $c - 2);
                 $v = explode("\t", $v);
+            }
+            // value is a boolean
+            else if ($v === 'true' || $v === 'false') {
+                $v = boolval($v);
             }
 
             $cfg[$s][$k] = $v;
