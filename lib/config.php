@@ -1,6 +1,12 @@
 <?php
 define('GEN_TIMESTAMP', floor(microtime(true) * 1000));
-define("CONFIG_FILE_PATH", $_SERVER['DOCUMENT_ROOT'] . '/anonupload.ini');
+
+if (isset($_SERVER['ANONUPLOAD_CONFIG_FILE_PATH'])) {
+    define("CONFIG_FILE_PATH", $_SERVER['ANONUPLOAD_CONFIG_FILE_PATH']);
+} else {
+    define("CONFIG_FILE_PATH", $_SERVER['DOCUMENT_ROOT'] . '/anonupload.ini');
+}
+
 
 $cfg = [
     "instance" => [
