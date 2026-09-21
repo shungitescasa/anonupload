@@ -1,6 +1,7 @@
 <?php
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/config.php";
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/file.php";
+include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/registry.php";
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/utils.php";
 
 function get_big_icon(): string
@@ -130,14 +131,16 @@ function html_footer()
                 </div>
             </li>
         <?php endif; ?>
-        <?php if (CONFIG['surpriseme']['enable']): ?>
+        <?php if (CONFIG['surpriseme']['enable'] && FILEREGISTRY->is_available()): ?>
             <li><a href="/?random">surprise me</a></li>
         <?php endif; ?>
         <li><a href="/history">history</a></li>
         <li><a href="/favorites">favorites</a></li>
-        <li><a href="/sync">sync</a></li>
+        <?php if (FILEREGISTRY->is_available()): ?>
+            <li><a href="/sync">sync</a></li>
+        <?php endif; ?>
         <li><a href="/uploaders">uploaders</a></li>
-        <?php if (CONFIG['stats']['enabled']): ?>
+        <?php if (CONFIG['stats']['enabled'] && FILEREGISTRY->is_available()): ?>
             <li><a href="/stats">statistics</a></li>
         <?php endif; ?>
         <li><a href="/preferences">preferences</a></li>

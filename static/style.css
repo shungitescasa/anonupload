@@ -260,6 +260,11 @@ fieldset>legend {
     text-decoration: none;
 }
 
+#huge-upload-button:hover:disabled {
+    background: var(--box-background);
+    cursor: not-allowed;
+}
+
 #form-upload input[type="file"]::file-selector-button {
     font-family: var(--font);
     background: var(--button-background);

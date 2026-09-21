@@ -23,17 +23,23 @@ interface FileRegistry
     public function has_storage_data(string $id): bool;
     public function get_storage_data(string $id): mixed;
     public function put_storage_data(string $id, mixed $data): bool;
+
+    public function is_available(): bool;
 }
 
 class SQLFileRegistry implements FileRegistry
 {
     private PDO $db;
+    private bool $is_available = true;
 
     public function __construct(string $url, string $user, string $password)
     {
-        $this->db = new PDO($url, $user, $password);
-        $sql = file_get_contents("{$_SERVER['DOCUMENT_ROOT']}/database.sql");
-        $this->db->exec($sql);
+        try {
+            $this->db = new PDO($url, $user, $password);
+            $this->db->exec('SELECT 1 FROM posts');
+        } catch (Exception $e) {
+            $this->is_available = false;
+        }
     }
 
     public function has_post(string $id): bool
@@ -332,6 +338,11 @@ class SQLFileRegistry implements FileRegistry
             data = :data');
         $stmt->execute([':id' => $id, ':data' => json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)]);
         return true;
+    }
+
+    public function is_available(): bool
+    {
+        return $this->is_available;
     }
 }
 

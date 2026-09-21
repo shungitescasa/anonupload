@@ -34,67 +34,73 @@ unset($_SESSION['recently_uploaded_files']);
         </h2>
     </header>
     <main>
-        <form action="/upload" method="post" enctype="multipart/form-data" autocomplete="off" id="form-upload">
-            <button id="huge-upload-button" style="display:none">click, drop, or paste files here</button>
-            <input type="file" name="file[]" id="upload-file" required multiple>
-            <div class="options">
-                <div class="controls">
-                    <fieldset>
-                        <legend>general</legend>
+        <?php if (FILESTORAGE->is_available() && FILEREGISTRY->is_available()): ?>
+            <form action="/upload" method="post" enctype="multipart/form-data" autocomplete="off" id="form-upload">
+                <button id="huge-upload-button" style="display:none">click, drop, or paste files here</button>
+                <input type="file" name="file[]" id="upload-file" required multiple>
+                <div class="options">
+                    <div class="controls">
+                        <fieldset>
+                            <legend>general</legend>
 
-                        <table class="vertical">
-                            <tr>
-                                <th><label for="file-password">password<sup class="hint iconless"
-                                            title="for file deletion">[?]</sup>:</label>
-                                </th>
-                                <td><input type="password" name="password" id="file-password"
-                                        placeholder="leave empty for permanent file"></td>
-                            </tr>
-                            <tr>
-                                <th><label for="file-singleurl">single URL<sup class="hint iconless"
-                                            title="attach all files to a single link">[?]</sup>:</label></th>
-                                <td><input type="checkbox" name="single_url" id="file-singleurl" value="1"></td>
-                            </tr>
-                            <?php if (!empty(CONFIG['expiration']['time']) && !CONFIG['expiration']['force_default']): ?>
+                            <table class="vertical">
                                 <tr>
-                                    <th><label for="file-expiration">expires in:</label></th>
-                                    <td>
-                                        <select name="expires_in" id="file-expiration">
-                                            <?php foreach (CONFIG['expiration']['time'] as $v => $t): ?>
-                                                <option value="<?= $v ?>" <?= $v === CONFIG['expiration']['default'] ? 'selected' : '' ?>><?= $t ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </td>
+                                    <th><label for="file-password">password<sup class="hint iconless"
+                                                title="for file deletion">[?]</sup>:</label>
+                                    </th>
+                                    <td><input type="password" name="password" id="file-password"
+                                            placeholder="leave empty for permanent file"></td>
                                 </tr>
-                            <?php endif; ?>
-                        </table>
-                    </fieldset>
-                    <fieldset>
-                        <legend>miscellaneous</legend>
+                                <tr>
+                                    <th><label for="file-singleurl">single URL<sup class="hint iconless"
+                                                title="attach all files to a single link">[?]</sup>:</label></th>
+                                    <td><input type="checkbox" name="single_url" id="file-singleurl" value="1"></td>
+                                </tr>
+                                <?php if (!empty(CONFIG['expiration']['time']) && !CONFIG['expiration']['force_default']): ?>
+                                    <tr>
+                                        <th><label for="file-expiration">expires in:</label></th>
+                                        <td>
+                                            <select name="expires_in" id="file-expiration">
+                                                <?php foreach (CONFIG['expiration']['time'] as $v => $t): ?>
+                                                    <option value="<?= $v ?>" <?= $v === CONFIG['expiration']['default'] ? 'selected' : '' ?>><?= $t ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                <?php endif; ?>
+                            </table>
+                        </fieldset>
+                        <fieldset>
+                            <legend>miscellaneous</legend>
 
-                        <table class="vertical">
-                            <tr>
-                                <th><label for="file-originalname">preserve original filename:</label></th>
-                                <td><input type="checkbox" name="preserve_original_filename" id="file-originalname"
-                                        value="1"></td>
-                            </tr>
-                            <tr>
-                                <th><label for="file-exif">strip EXIF data:</label></th>
-                                <td><input type="checkbox" name="strip_exif_data" id="file-exif" value="1"></td>
-                            </tr>
-                        </table>
+                            <table class="vertical">
+                                <tr>
+                                    <th><label for="file-originalname">preserve original filename:</label></th>
+                                    <td><input type="checkbox" name="preserve_original_filename" id="file-originalname"
+                                            value="1"></td>
+                                </tr>
+                                <tr>
+                                    <th><label for="file-exif">strip EXIF data:</label></th>
+                                    <td><input type="checkbox" name="strip_exif_data" id="file-exif" value="1"></td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </div>
+                    <fieldset class="description">
+                        <legend>description</legend>
+                        <textarea name="description"
+                            placeholder="tell us what you are going to upload... (Markdown supported)"></textarea>
                     </fieldset>
                 </div>
-                <fieldset class="description">
-                    <legend>description</legend>
-                    <textarea name="description"
-                        placeholder="tell us what you are going to upload... (Markdown supported)"></textarea>
-                </fieldset>
-            </div>
-            <button type="submit">upload</button>
-            <input type="hidden" name="save_upload_list" value="1">
-        </form>
-        <p class="hint" id="upload-hint">the page will be refreshed once all uploads are complete</p>
+                <button type="submit">upload</button>
+                <input type="hidden" name="save_upload_list" value="1">
+            </form>
+            <p class="hint" id="upload-hint">the page will be refreshed once all uploads are complete</p>
+        <?php else: ?>
+            <section id="form-upload">
+                <button id="huge-upload-button" disabled>file upload is temporarily unavailable</button>
+            </section>
+        <?php endif; ?>
         <section id="file-upload-queue">
             <table>
                 <thead>

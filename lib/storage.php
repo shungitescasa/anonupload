@@ -15,16 +15,19 @@ interface FileStorage
     public function save_file(string $name, string $input_path, FileOptions|null $metadata): BaseFile|null;
     public function delete_file(string $name): bool;
     public function ensure_file(BaseFile &$file): bool;
+    public function is_available(): bool;
 }
 
 class LocalFileStorage implements FileStorage
 {
     protected string $directory, $prefix;
+    private bool $is_available;
 
     public function __construct(string $directory, string $prefix)
     {
         $this->directory = $directory;
         $this->prefix = $prefix;
+        $this->is_available = is_dir($this->directory) && is_writable($this->directory) && is_readable($this->directory);
     }
 
     public function has_file(string $name): bool
@@ -79,27 +82,40 @@ class LocalFileStorage implements FileStorage
         $file->path = $f->path;
         return true;
     }
+
+    public function is_available(): bool
+    {
+        return $this->is_available;
+    }
 }
 
 class S3FileStorage implements FileStorage
 {
     private S3Client $s3;
     private string $bucket, $directory;
+    private bool $is_available = true;
 
     public function __construct($data)
     {
-        $this->s3 = new S3Client([
-            'version' => $data['version'] ?? 'latest',
-            'region' => $data['region'],
-            'credentials' => [
-                'key' => $data['access_key'],
-                'secret' => $data['secret_key']
-            ],
-            'endpoint' => $data['endpoint'],
-            'use_path_style_endpoint' => $data['use_path_style_endpoint'] ?? false
-        ]);
-        $this->bucket = $data['bucket'];
-        $this->directory = $data['directory'];
+        try {
+            $this->s3 = new S3Client([
+                'version' => $data['version'] ?? 'latest',
+                'region' => $data['region'],
+                'credentials' => [
+                    'key' => $data['access_key'],
+                    'secret' => $data['secret_key']
+                ],
+                'endpoint' => $data['endpoint'],
+                'use_path_style_endpoint' => $data['use_path_style_endpoint'] ?? false
+            ]);
+            $this->bucket = $data['bucket'];
+            $this->directory = $data['directory'];
+
+            // writing to test file
+            $this->s3->upload($this->bucket, '.test', 'test');
+        } catch (Exception $e) {
+            $this->is_available = false;
+        }
     }
 
     public function has_file(string $name): bool
@@ -178,6 +194,11 @@ class S3FileStorage implements FileStorage
 
         $file->path = $f->path;
         return true;
+    }
+
+    public function is_available(): bool
+    {
+        return $this->is_available;
     }
 }
 

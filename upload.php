@@ -87,6 +87,10 @@ function delete_empty_posts(array &$posts)
 }
 
 try {
+    if (!FILESTORAGE->is_available() || !FILEREGISTRY->is_available()) {
+        throw new HTTPException('File upload is temporarily unavailable. Please try again later!', 500);
+    }
+
     $files = [];
 
     $status->send('up_prep', 'preparing...');
