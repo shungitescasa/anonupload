@@ -35,8 +35,10 @@ class SQLFileRegistry implements FileRegistry
     public function __construct(string $url, string $user, string $password)
     {
         try {
-            $this->db = new PDO($url, $user, $password);
-            $this->db->exec('SELECT 1 FROM posts');
+            $this->db = new PDO($url, $user, $password, [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            ]);
+            $this->db->query('SELECT 1');
         } catch (Exception $e) {
             $this->is_available = false;
         }
