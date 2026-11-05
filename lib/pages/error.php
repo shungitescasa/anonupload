@@ -53,7 +53,10 @@ if (is_dir($_SERVER['DOCUMENT_ROOT'] . $folder_path)) {
 
 <head>
     <?php html_head("$error_code $error_reason"); ?>
-    <meta http-equiv="refresh" content="5; url=<?= CONFIG['instance']['url'] ?>">
+
+    <?php if (!isset($error_redirect)): ?>
+        <meta http-equiv="refresh" content="5; url=<?= CONFIG['instance']['url'] ?>">
+    <?php endif; ?>
 </head>
 
 <body>
