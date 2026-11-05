@@ -2,8 +2,6 @@
 include_once "{$_SERVER['DOCUMENT_ROOT']}/vendor/autoload.php";
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/config.php";
 
-use CzProject\GitPhp\Git;
-
 define('IS_JSON_REQUEST', isset($_SERVER['HTTP_ACCEPT']) && $_SERVER['HTTP_ACCEPT'] == 'application/json');
 
 function send_json_response(mixed $data, string|null $message = null, int $code = 200)
@@ -84,24 +82,13 @@ function str_safe(string $s, int|null $max_length, bool $remove_new_lines = true
 
 function get_commit(): ?array
 {
-    try {
-        $git = new Git();
-        $repo = $git->open(getcwd());
-
-        $commit = $repo->getLastCommit();
-
-        if (!$commit) {
-            return null;
-        }
-
+    if ($s = file_get_contents("{$_SERVER['DOCUMENT_ROOT']}/.git/refs/heads/master")) {
         return [
-            'sha' => $commit->getId()->toString(),
-            'timestamp' => $commit->getDate()->getTimestamp(),
-            'message' => $commit->getSubject(),
+            'sha' => $s
         ];
-    } catch (Exception $e) {
-        return null;
     }
+
+    return null;
 }
 
 class HTTPException extends Exception

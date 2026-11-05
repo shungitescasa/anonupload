@@ -4,7 +4,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/lib/partials.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/lib/utils.php';
 
 if (IS_JSON_REQUEST) {
-    $x = get_commit();
+    $x = get_commit() ?? ['sha' => 'N/A'];
     $x['app_name'] = 'anonupload';
     send_json_response($x);
 }
