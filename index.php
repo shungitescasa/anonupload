@@ -28,7 +28,7 @@ try {
             $get_thumbnail = isset($_GET['thumbnail']);
         } else if ($path = parse_url($_SERVER['REQUEST_URI'])) {
             $file_name = basename($path['path']);
-            $get_thumbnail = str_contains($path['query'], 'thumbnail');
+            $get_thumbnail = str_contains($path['query'] ?? "", 'thumbnail');
         }
 
         $post = FILEREGISTRY->get_post($file_name);
@@ -58,6 +58,25 @@ try {
                 } else {
                     http_response_code(404);
                     die();
+                }
+            }
+
+            // redirect to original file
+            if (isset($_SERVER["HTTP_USER_AGENT"]) && !empty(CONFIG["views"]["redirect_user_agents"])) {
+                $redirect_to_original_file = false;
+
+                foreach (CONFIG["views"]["redirect_user_agents"] as $ua) {
+                    $redirect_to_original_file = preg_match($ua, $_SERVER["HTTP_USER_AGENT"]);
+                    if ($redirect_to_original_file) {
+                        break;
+                    }
+                }
+
+                if ($redirect_to_original_file && ($s = $post->single_attachment())) {
+                    $url = $s->raw_url();
+                    http_response_code(303);
+                    header("Location: $url");
+                    die($url);
                 }
             }
 

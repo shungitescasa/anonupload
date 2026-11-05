@@ -236,7 +236,8 @@ $cfg = [
     'views' => [
         'enabled' => false,
         'minimal_display_count' => 0,
-        'ignore_user_agents' => []
+        'ignore_user_agents' => [],
+        'redirect_user_agents' => []
     ],
     'librecounter' => [
         'enabled' => false,
