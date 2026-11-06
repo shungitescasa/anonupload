@@ -67,7 +67,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 window.addEventListener("DOMContentLoaded", () => {
     const feed = document.querySelector(".feed");
-    const files = document.querySelectorAll(".feed>.preview");
+    const files = document.querySelectorAll(".file-preview");
     const buttons = document.getElementById("control-buttons");
     if (!buttons) return;
 
@@ -79,7 +79,7 @@ window.addEventListener("DOMContentLoaded", () => {
     };
 
     if (files.length === 1) {
-        const firstFile = files[0].querySelector(".file-preview");
+        const firstFile = files[0];
         file.mime = firstFile.getAttribute("file-mime");
         file.size = firstFile.getAttribute("file-size");
         file.extension = firstFile.getAttribute("file-ext");
