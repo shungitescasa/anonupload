@@ -134,11 +134,7 @@ function html_footer()
         <?php if (CONFIG['surpriseme']['enable'] && FILEREGISTRY->is_available()): ?>
             <li><a href="/?random">surprise me</a></li>
         <?php endif; ?>
-        <li><a href="/history">history</a></li>
-        <li><a href="/favorites">favorites</a></li>
-        <?php if (FILEREGISTRY->is_available()): ?>
-            <li><a href="/sync">sync</a></li>
-        <?php endif; ?>
+        <li><a href="/account/">account</a></li>
         <li><a href="/uploaders">uploaders</a></li>
         <?php if (CONFIG['stats']['enabled'] && FILEREGISTRY->is_available()): ?>
             <li><a href="/stats">statistics</a></li>

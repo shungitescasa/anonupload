@@ -259,14 +259,43 @@ $cfg = [
         "banfiles" => true,
         "hashpath" => "{$_SERVER['DOCUMENT_ROOT']}/.bannedhashes"
     ],
-    "users" => [
-        "path" => "{$_SERVER['DOCUMENT_ROOT']}/.anonuploadpasswd",
-        "cookietime" => 60 * 60 * 24 * 30,
-        "allowregistration" => true,
-        "usernameregex" => '/^[A-za-z0-9]+$/',
-        "usernameminlength" => 3,
-        "usernamemaxlength" => 25,
-        "passwordminlength" => 8
+    'account' => [
+        'enabled' => false,
+
+        // supported services: ldap
+        'type' => 'ldap',
+
+        'name' => null,
+        'registration_url' => null,
+
+        // --- LDAP ---
+        // e.g. ldap://localhost:389 or ldaps://ldap.example.com
+        'uri' => 'ldap://localhost:389',
+        'starttls' => false,
+        'timeout' => 5,
+
+        'base_dn' => 'ou=users,dc=example,dc=com',
+        'user_dn' => 'uid=%s,ou=users,dc=example,dc=com',
+
+        // optional service account to search for the user's DN with 'user_filter'
+        'bind_dn' => null,
+        'bind_password' => null,
+        'user_filter' => '(uid=%s)',
+
+        'attributes' => ['uid', 'cn', 'displayName', 'mail'],
+
+        'group_base_dn' => 'ou=groups,dc=example,dc=com',
+        'group_filter' => '(|(member={dn})(uniqueMember={dn})(memberUid={username}))',
+        'group_name_attribute' => 'cn',
+
+        'moderator_group' => 'moderators',
+        'admin_group' => 'admins',
+
+        'cookie_name' => 'token',
+        'cookie_time' => 60 * 60 * 24 * 30,
+        'username_min_length' => 3,
+        'username_max_length' => 20,
+        'password_min_length' => 8
     ],
     'stats' => [
         'enabled' => false,

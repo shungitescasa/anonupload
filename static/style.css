@@ -1,4 +1,5 @@
 @import "/static/styles/post.css";
+@import "/static/styles/pages.css";
 
 :root {
     --background: #ffffff;
@@ -141,6 +142,11 @@ a:has(> img:only-child):hover {
     text-decoration: initial;
 }
 
+hr {
+    color: var(--foreground);
+    margin: var(--pad) 0;
+}
+
 button,
 .button {
     background: var(--button-background);
@@ -172,7 +178,8 @@ button:has(> img:only-child):hover,
 }
 
 /** INPUT */
-input[type="text"] {
+input[type="text"],
+input[type="password"] {
     background: var(--input-background);
     color: var(--input-foreground);
     border: var(--input-border);
@@ -180,12 +187,25 @@ input[type="text"] {
     outline: none;
 }
 
-input[type="text"]:focus {
+input[type="text"]:focus,
+input[type="password"]:focus {
     border: var(--input-border-active);
 }
 
-input[type="text"]::placeholder {
+input[type="text"]::placeholder,
+input[type="password"]::placeholder {
     color: var(--input-foreground-placeholder);
+}
+
+.spoiler {
+    background: var(--foreground);
+    color: transparent;
+    user-select: none;
+}
+
+.spoiler:hover {
+    background: inherit;
+    color: inherit;
 }
 
 /** TABLES */
