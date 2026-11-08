@@ -73,10 +73,11 @@ $cfg = [
         "ruffle" => null,
         "chart" => null
     ],
-    "filecatalog" => [
-        "public" => true,
-        "limit" => 50,
-        "includemimetypes" => [],
+    'catalogue' => [
+        'public' => true,
+        'limit' => 50,
+        'filter_mime' => [],
+        'cache_ttl' => 60
     ],
     "surpriseme" => [
         "enable" => false,

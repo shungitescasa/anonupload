@@ -3,6 +3,7 @@ include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/config.php";
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/file.php";
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/registry.php";
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/utils.php";
+include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/account.php";
 
 function get_big_icon(): string
 {
@@ -110,6 +111,45 @@ function html_header()
     echo '</a>';
 }
 
+function html_mini_header(?Posts $posts = null)
+{
+    ?>
+    <nav class="mini-nav">
+        <ul class="horizontal links">
+            <li>
+                <?php html_mini_icon(); ?>
+            </li>
+
+            <?php if (isset($posts)): ?>
+                <li>found <?= $posts->count ?> posts</li>
+            <?php endif; ?>
+        </ul>
+
+        <?php if ($posts): ?>
+            <?php
+            parse_str($_SERVER['QUERY_STRING'], $query);
+            $s = $query['s'] ?? 'recent';
+            ?>
+
+            <section class="query-settings">
+                <?php html_pagination($posts->total_pages, $posts->page); ?>
+                <form action="/post/list" method="get">
+                    <select name="s" id="sort">
+                        <option value="recent" <?= $s === 'recent' ? 'selected' : '' ?>>recent</option>
+                        <option value="oldest" <?= $s === 'oldest' ? 'selected' : '' ?>>oldest</option>
+                        <option value="most_views" <?= $s === 'most_views' ? 'selected' : '' ?>>most viewed</option>
+                        <option value="least_views" <?= $s === 'least_views' ? 'selected' : '' ?>>least viewed</option>
+                        <option value="filesize" <?= $s === 'filesize' ? 'selected' : '' ?>>file size</option>
+                    </select>
+                    <input type="hidden" name="p" value="<?= $query['p'] ?? '1' ?>">
+                    <button type="submit">search</button>
+                </form>
+            </section>
+        <?php endif; ?>
+    </nav>
+    <?php ;
+}
+
 function html_footer()
 {
     $dropdown_links = CONFIG['instance']['links'];
@@ -130,6 +170,9 @@ function html_footer()
                     <?php endforeach; ?>
                 </div>
             </li>
+        <?php endif; ?>
+        <?php if (CONFIG['catalogue']['public'] || ACCOUNT_SERVICE?->get_user()): ?>
+            <li><a href="/post/list">catalogue</a></li>
         <?php endif; ?>
         <?php if (CONFIG['surpriseme']['enable'] && FILEREGISTRY->is_available()): ?>
             <li><a href="/?random">surprise me</a></li>
@@ -298,6 +341,97 @@ function html_file_full(BaseFile $file)
     }
 
     echo '</div>';
+
+    echo '</div>';
+}
+
+function html_post_brick(Post $post)
+{
+    $s = $post->single_attachment();
+
+    echo "<a href='{$post->url()}' class='no-highlight' target='_blank'>";
+    echo "<div class='item box post' post-id='{$post->id}' style=\"background-image: ";
+
+    if ($s) {
+        echo "url('{$s->thumbnail_url()}'), url('/static/img/default/default-thumbnail.webp')\"";
+    } else {
+        echo "url('/static/img/default/multi-upload.webp')\"";
+    }
+
+    echo "'>";
+
+    echo '<div class="post-metadata">';
+
+    echo "<h3 class='post-name'>{$post->name()}</h3>";
+
+    if ($s) {
+        echo "<p class='post-mime'>{$s->mime}</p>";
+        echo "<p class='post-size'>" . format_filesize($s->size) . "</p>";
+    } else {
+        echo "<p class='post-multi'>multiple attachments</p>";
+    }
+
+    echo '</div></div></a>';
+}
+
+function html_pagination(int $total_pages, int $current_page)
+{
+    if ($total_pages < 1) {
+        return;
+    }
+
+    parse_str($_SERVER['QUERY_STRING'], $query);
+    $redirect = parse_url($_SERVER['REQUEST_URI']);
+    $redirect = $redirect['path'];
+
+    echo '<div class="pagination">';
+
+    if ($current_page > 1) {
+        $query['p'] = $current_page - 1;
+        echo "<a href='$redirect?" . http_build_query($query) . "'>&lt;</a>";
+    }
+
+    $query['p'] = 1;
+    echo "<a href='$redirect?" . http_build_query($query) . "'>" . ($current_page == 1 ? "<b>1</b>" : 1) . '</a>';
+
+    $max = 5;
+    $range = 2;
+
+    $start = max(2, $current_page - $range);
+    $end = min($total_pages - 1, $current_page + $range);
+
+    if ($current_page <= $range) {
+        $start = 2;
+        $end = min($total_pages - 1, $max);
+    }
+
+    if ($current_page > $total_pages - $range) {
+        $start = max(2, $total_pages - $max);
+        $end = $total_pages - 1;
+    }
+
+    if ($start > 2) {
+        echo '...';
+    }
+
+    for ($i = $start; $i <= $end; $i++) {
+        $query['p'] = $i;
+        echo "<a href='$redirect?" . http_build_query($query) . "'>";
+        echo $i == $current_page ? "<b>$i</b>" : $i;
+        echo '</a>';
+    }
+
+    if ($end < $total_pages - 1) {
+        echo '...';
+    }
+
+    $query['p'] = $total_pages;
+    echo "<a href='$redirect?" . http_build_query($query) . "'>" . ($current_page == $total_pages ? "<b>$total_pages</b>" : $total_pages) . '</a>';
+
+    if ($current_page < $total_pages) {
+        $query['p'] = $current_page + 1;
+        echo "<a href='$redirect?" . http_build_query($query) . "'>&gt;</a>";
+    }
 
     echo '</div>';
 }

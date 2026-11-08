@@ -7,6 +7,7 @@ interface FileRegistry
 {
     public function get_files(): array;
 
+    public function get_posts(int $page = 1, string $sort = 'recent'): Posts;
     public function get_posts_by_hash(string $hash): array;
 
     public function has_post(string $id): bool;
@@ -86,6 +87,93 @@ class SQLFileRegistry implements FileRegistry
         }
 
         return null;
+    }
+
+    public function get_posts(int $page = 1, string $sort = 'recent'): Posts
+    {
+        $page = max($page, 1);
+        $sort_name = match ($sort) {
+            'oldest', 'most_views', 'least_views', 'filesize' => $sort,
+            default => 'recent'
+        };
+
+        // checking the cache first
+        $cache_key = CONFIG['instance']['id'] . ":posts:{$page}:{$sort_name}";
+        if (MEMCACHED && ($cached = MEMCACHED->get($cache_key)) && is_string($cached)) {
+            $obj = unserialize($cached, ['allowed_classes' => [Posts::class, Post::class, BaseFile::class, DateTime::class]]);
+            if ($obj instanceof Posts) {
+                return $obj;
+            }
+        }
+
+        $posts = new Posts();
+        $posts->page = $page;
+        $sort = match ($sort) {
+            'oldest' => 'ORDER BY p.uploaded_at ASC, p.id ASC',
+            'most_views' => 'ORDER BY p.views DESC, p.id ASC',
+            'least_views' => 'ORDER BY p.views ASC, p.id ASC',
+            'filesize' => 'ORDER BY MAX(f.size) DESC, p.id ASC',
+            default => 'ORDER BY p.uploaded_at DESC, p.id ASC'
+        };
+
+        $page = max($page, 1) - 1;
+        $offset = $posts->limit * $page;
+
+        // TODO: WHERE visibility = 1
+        $from = "FROM posts p
+        LEFT JOIN post_attachments pa ON pa.post_id = p.id
+        LEFT JOIN files f ON f.id = pa.file_id";
+
+        // filtering by mime types
+        $where = '';
+        $params = [];
+        $filter = CONFIG['catalogue']['filter_mime'] ?? [];
+        if (!empty($filter)) {
+            $conds = [];
+            foreach (array_values($filter) as $i => $mime) {
+                $pattern = addcslashes($mime, '%_\\');
+                if (str_ends_with($mime, '/*')) {
+                    $pattern = substr($pattern, 0, -1) . '%';
+                }
+                $conds[] = "f.mime LIKE :mime$i";
+                $params[":mime$i"] = $pattern;
+            }
+            $where = 'WHERE ' . implode(' OR ', $conds);
+        }
+
+        $stmt = $this->db->prepare("SELECT
+            p.id
+        $from
+        $where
+        GROUP BY p.id
+        $sort
+        LIMIT {$posts->limit} OFFSET $offset
+        ");
+        $stmt->execute($params);
+
+        $posts->total_pages = 0;
+
+        while ($res = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $post = $this->get_post($res['id']);
+
+            if ($post) {
+                array_push($posts->posts, $post);
+            }
+        }
+
+        // counting total pages
+        $stmt = $this->db->prepare("SELECT COUNT(DISTINCT p.id) AS post_count $from $where");
+        $stmt->execute($params);
+        if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $posts->count = (int) $row['post_count'];
+            $posts->total_pages = max(1, (int) ceil($posts->count / $posts->limit));
+        }
+
+        if (MEMCACHED && CONFIG['catalogue']['cache_ttl'] > 0) {
+            MEMCACHED->set($cache_key, serialize($posts), CONFIG['catalogue']['cache_ttl']);
+        }
+
+        return $posts;
     }
 
     public function get_file_by_hash(string $hash): BaseFile|null

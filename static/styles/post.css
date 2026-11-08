@@ -2,7 +2,51 @@
     --feed-description-background: linear-gradient(0deg, #1c1d1e 90%, #171718);
     --feed-description-foreground: #cdd7e2;
     --feed-description-border: 2px dotted #4c5661;
+    --post-metadata-background: linear-gradient(0deg, #000, transparent);
+    --post-metadata-foreground: #fff;
 }
+
+/** POST CATALOGUE */
+#posts.item-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--pad);
+}
+
+.post.box {
+    width: 128px;
+    height: 128px;
+    padding: 0;
+    border: none;
+    display: flex;
+
+    background-image: url('/static/img/default/default-thumbnail.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    color: var(--post-metadata-foreground);
+}
+
+.post.box .post-metadata {
+    display: none;
+    background: var(--post-metadata-background);
+    flex-direction: column;
+    justify-content: end;
+    flex: 1;
+    padding: var(--pad);
+}
+
+.post.box .post-metadata p {
+    font-size: 0.8em;
+}
+
+.post.box:hover .post-metadata {
+    display: flex;
+}
+
+/** POST VIEWER */
 
 body:has(> .post-preview) {
     display: flex;

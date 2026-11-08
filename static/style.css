@@ -1,5 +1,6 @@
 @import "/static/styles/post.css";
 @import "/static/styles/pages.css";
+@import "/static/styles/partials.css";
 
 :root {
     --background: #ffffff;
@@ -88,6 +89,12 @@ footer {
     margin: var(--pad) auto;
 }
 
+body.full-size header,
+body.full-size main,
+body.full-size footer {
+    width: 100%;
+}
+
 header,
 footer {
     display: flex;
@@ -139,6 +146,16 @@ a:hover {
 a:has(> img:only-child):hover {
     color: initial;
     background: initial;
+    text-decoration: initial;
+}
+
+a.no-highlight {
+    padding: initial;
+}
+
+a.no-highlight:hover {
+    background-color: inherit;
+    color: var(--anchor-foreground);
     text-decoration: initial;
 }
 

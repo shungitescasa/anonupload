@@ -398,6 +398,13 @@ class Post implements JsonSerializable
     }
 }
 
+class Posts
+{
+    public array $posts = [];
+    public int $limit = CONFIG['catalogue']['limit'];
+    public int $count = 0, $page = 1, $total_pages = 1;
+}
+
 class FileTrackStatus
 {
     public string|null $id;

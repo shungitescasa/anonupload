@@ -1,0 +1,45 @@
+/** MINI HEADER */
+header:has(>.mini-nav) {
+    justify-content: unset;
+    align-items: unset;
+    margin-top: 0;
+}
+
+.mini-nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background: var(--box-background);
+    border-bottom: 2px solid var(--foreground);
+}
+
+.mini-nav>.links {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--pad);
+    padding: 2px;
+}
+
+.query-settings,
+.query-settings>* {
+    display: flex;
+    flex-direction: row;
+    gap: var(--pad);
+}
+
+.query-settings>form {
+    gap: 0;
+}
+
+.query-settings>form>button[type="submit"] {
+    padding: var(--pad) calc(var(--pad)*2);
+}
+
+.pagination {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: var(--pad);
+}
