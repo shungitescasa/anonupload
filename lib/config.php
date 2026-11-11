@@ -50,6 +50,8 @@ $cfg = [
         'bucket' => null,
         'endpoint' => null,
         'use_path_style_endpoint' => true,
+
+        'index_ping' => true
     ],
     'memcached' => [
         'hosts' => null,

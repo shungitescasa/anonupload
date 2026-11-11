@@ -8,7 +8,7 @@ $post = null;
 // -- retrieving file
 $file_name_specified = isset($_GET['i']) || isset($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] !== '/';
 
-if (!FILESTORAGE->is_available() || !FILEREGISTRY->is_available()) {
+if (CONFIG['storage']['index_ping'] && (!FILESTORAGE->is_available() || !FILEREGISTRY->is_available())) {
     $error = '503 File upload is temporarily unavailable';
     $error_redirect = true;
     include $_SERVER['DOCUMENT_ROOT'] . '/lib/pages/error.php';
