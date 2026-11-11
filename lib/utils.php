@@ -110,3 +110,33 @@ class HTTPException extends Exception
         return $this->statusCode;
     }
 }
+
+/**
+ * Returns request parameters from the query string merged with the request body.
+ * PHP populates $_POST only for POST requests, so PATCH/DELETE bodies
+ * (url-encoded or JSON) are parsed manually.
+ */
+function request_params(): array
+{
+    $body = [];
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST)) {
+        $body = $_POST;
+    } else {
+        $raw = file_get_contents('php://input');
+        $content_type = strtolower($_SERVER['CONTENT_TYPE'] ?? '');
+
+        if ($raw !== false && $raw !== '') {
+            if (str_starts_with($content_type, 'application/json')) {
+                $body = json_decode($raw, true);
+                if (!is_array($body)) {
+                    $body = [];
+                }
+            } else {
+                parse_str($raw, $body);
+            }
+        }
+    }
+
+    return array_merge($_GET, $body);
+}

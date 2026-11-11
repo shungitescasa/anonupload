@@ -120,7 +120,7 @@ function html_mini_header(?Posts $posts = null)
                 <?php html_mini_icon(); ?>
             </li>
 
-            <?php if (isset($posts)): ?>
+            <?php if (isset($posts->count)): ?>
                 <li>found <?= $posts->count ?> posts</li>
             <?php endif; ?>
         </ul>
@@ -132,7 +132,9 @@ function html_mini_header(?Posts $posts = null)
             ?>
 
             <section class="query-settings">
-                <?php html_pagination($posts->total_pages, $posts->page); ?>
+                <?php if (isset($posts->total_pages)): ?>
+                    <?php html_pagination($posts->total_pages, $posts->page); ?>
+                <?php endif; ?>
                 <form action="/post/list" method="get">
                     <select name="s" id="sort">
                         <option value="recent" <?= $s === 'recent' ? 'selected' : '' ?>>recent</option>
@@ -345,12 +347,15 @@ function html_file_full(BaseFile $file)
     echo '</div>';
 }
 
-function html_post_brick(Post $post)
+function html_post_brick(Post $post, string|null $href = null, bool $active = false)
 {
     $s = $post->single_attachment();
+    $target = $href === null ? " target='_blank'" : '';
+    $href ??= $post->url();
+    $classes = 'item box post' . ($active ? ' active' : '');
 
-    echo "<a href='{$post->url()}' class='no-highlight' target='_blank'>";
-    echo "<div class='item box post' post-id='{$post->id}' style=\"background-image: ";
+    echo "<a href='$href' class='no-highlight'$target>";
+    echo "<div class='$classes' post-id='{$post->id}' style=\"background-image: ";
 
     if ($s) {
         echo "url('{$s->thumbnail_url()}'), url('/static/img/default/default-thumbnail.webp')\"";

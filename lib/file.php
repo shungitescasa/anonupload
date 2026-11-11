@@ -275,8 +275,13 @@ class BaseFile implements JsonSerializable
 
 class Post implements JsonSerializable
 {
+    public const VISIBILITY_UNLISTED = -1;
+    public const VISIBILITY_PENDING = 0;
+    public const VISIBILITY_PUBLIC = 1;
+
     public string $id;
     public array $attachments = [];
+    public int $visibility = self::VISIBILITY_PENDING;
 
     public DateTime|null $uploaded_at = null, $expires_at = null;
     public string|null $password = null, $description = null;
@@ -288,6 +293,7 @@ class Post implements JsonSerializable
         $o->id = $res['id'];
         $o->password = $res['password'] ?? null;
         $o->description = $res['description'] ?? null;
+        $o->visibility = intval($res['visibility'] ?? self::VISIBILITY_PENDING);
 
         if (CONFIG['views']['enabled']) {
             $o->views = $res['views'] ?? null;
@@ -330,6 +336,11 @@ class Post implements JsonSerializable
         return $o;
     }
 
+    public static function is_valid_visibility(int $visibility): bool
+    {
+        return in_array($visibility, [self::VISIBILITY_UNLISTED, self::VISIBILITY_PENDING, self::VISIBILITY_PUBLIC], true);
+    }
+
     public function url(): string
     {
         return CONFIG['instance']['url'] . "/{$this->id}";
@@ -344,6 +355,7 @@ class Post implements JsonSerializable
                 'download_url' => $this->url(),
                 'deletion_url' => null
             ],
+            'visibility' => $this->visibility,
             'attachments' => $this->attachments
         ];
 
@@ -352,7 +364,7 @@ class Post implements JsonSerializable
         }
 
         if ($this->password && password_get_info($this->password)['algo'] === null) {
-            $d['urls']['deletion_url'] = "/delete?id={$this->id}&key={$this->password}";
+            $d['urls']['deletion_url'] = "/post/delete?id={$this->id}&key={$this->password}";
         }
 
         if ($this->uploaded_at !== null) {
@@ -402,7 +414,9 @@ class Posts
 {
     public array $posts = [];
     public int $limit = CONFIG['catalogue']['limit'];
-    public int $count = 0, $page = 1, $total_pages = 1;
+    public int $page = 1;
+    // null if posts were not counted
+    public int|null $count = 0, $total_pages = 1;
 }
 
 class FileTrackStatus

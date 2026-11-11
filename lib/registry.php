@@ -7,7 +7,13 @@ interface FileRegistry
 {
     public function get_files(): array;
 
-    public function get_posts(int $page = 1, string $sort = 'recent'): Posts;
+    public function get_posts(
+        int $page = 1,
+        string $sort = 'recent',
+        int|null $visibility = Post::VISIBILITY_PUBLIC,
+        bool $use_cache = true,
+        bool $count_pages = true
+    ): Posts;
     public function get_posts_by_hash(string $hash): array;
 
     public function has_post(string $id): bool;
@@ -18,6 +24,9 @@ interface FileRegistry
     public function get_random_post(): Post|null;
 
     public function get_file_by_hash(string $hash): BaseFile|null;
+
+    public function ban_file(string $hash, string|null $reason): bool;
+    public function get_file_ban(string $hash): array|null;
 
     public function get_stats(): array|null;
 
@@ -89,8 +98,13 @@ class SQLFileRegistry implements FileRegistry
         return null;
     }
 
-    public function get_posts(int $page = 1, string $sort = 'recent'): Posts
-    {
+    public function get_posts(
+        int $page = 1,
+        string $sort = 'recent',
+        int|null $visibility = Post::VISIBILITY_PUBLIC,
+        bool $use_cache = true,
+        bool $count_pages = true
+    ): Posts {
         $page = max($page, 1);
         $sort_name = match ($sort) {
             'oldest', 'most_views', 'least_views', 'filesize' => $sort,
@@ -98,8 +112,9 @@ class SQLFileRegistry implements FileRegistry
         };
 
         // checking the cache first
-        $cache_key = CONFIG['instance']['id'] . ":posts:{$page}:{$sort_name}";
-        if (MEMCACHED && ($cached = MEMCACHED->get($cache_key)) && is_string($cached)) {
+        $vis_name = $visibility ?? 'all';
+        $cache_key = CONFIG['instance']['id'] . ":posts:{$page}:{$sort_name}:{$vis_name}:" . intval($count_pages);
+        if ($use_cache && MEMCACHED && ($cached = MEMCACHED->get($cache_key)) && is_string($cached)) {
             $obj = unserialize($cached, ['allowed_classes' => [Posts::class, Post::class, BaseFile::class, DateTime::class]]);
             if ($obj instanceof Posts) {
                 return $obj;
@@ -108,7 +123,7 @@ class SQLFileRegistry implements FileRegistry
 
         $posts = new Posts();
         $posts->page = $page;
-        $sort = match ($sort) {
+        $order = match ($sort_name) {
             'oldest' => 'ORDER BY p.uploaded_at ASC, p.id ASC',
             'most_views' => 'ORDER BY p.views DESC, p.id ASC',
             'least_views' => 'ORDER BY p.views ASC, p.id ASC',
@@ -116,42 +131,47 @@ class SQLFileRegistry implements FileRegistry
             default => 'ORDER BY p.uploaded_at DESC, p.id ASC'
         };
 
-        $page = max($page, 1) - 1;
-        $offset = $posts->limit * $page;
+        $offset = $posts->limit * ($page - 1);
 
-        // TODO: WHERE visibility = 1
         $from = "FROM posts p
         LEFT JOIN post_attachments pa ON pa.post_id = p.id
         LEFT JOIN files f ON f.id = pa.file_id";
 
-        // filtering by mime types
-        $where = '';
+        $conds = [];
         $params = [];
+
+        // filtering by visibility
+        if ($visibility !== null) {
+            $conds[] = 'p.visibility = :visibility';
+            $params[':visibility'] = $visibility;
+        }
+
+        // filtering by mime types
         $filter = CONFIG['catalogue']['filter_mime'] ?? [];
         if (!empty($filter)) {
-            $conds = [];
+            $mime_conds = [];
             foreach (array_values($filter) as $i => $mime) {
                 $pattern = addcslashes($mime, '%_\\');
                 if (str_ends_with($mime, '/*')) {
                     $pattern = substr($pattern, 0, -1) . '%';
                 }
-                $conds[] = "f.mime LIKE :mime$i";
+                $mime_conds[] = "f.mime LIKE :mime$i";
                 $params[":mime$i"] = $pattern;
             }
-            $where = 'WHERE ' . implode(' OR ', $conds);
+            $conds[] = '(' . implode(' OR ', $mime_conds) . ')';
         }
+
+        $where = empty($conds) ? '' : 'WHERE ' . implode(' AND ', $conds);
 
         $stmt = $this->db->prepare("SELECT
             p.id
         $from
         $where
         GROUP BY p.id
-        $sort
+        $order
         LIMIT {$posts->limit} OFFSET $offset
         ");
         $stmt->execute($params);
-
-        $posts->total_pages = 0;
 
         while ($res = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $post = $this->get_post($res['id']);
@@ -162,18 +182,41 @@ class SQLFileRegistry implements FileRegistry
         }
 
         // counting total pages
-        $stmt = $this->db->prepare("SELECT COUNT(DISTINCT p.id) AS post_count $from $where");
-        $stmt->execute($params);
-        if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $posts->count = (int) $row['post_count'];
-            $posts->total_pages = max(1, (int) ceil($posts->count / $posts->limit));
+        if ($count_pages) {
+            $stmt = $this->db->prepare("SELECT COUNT(DISTINCT p.id) AS post_count $from $where");
+            $stmt->execute($params);
+            if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $posts->count = (int) $row['post_count'];
+                $posts->total_pages = max(1, (int) ceil($posts->count / $posts->limit));
+            }
+        } else {
+            $posts->count = null;
+            $posts->total_pages = null;
         }
 
-        if (MEMCACHED && CONFIG['catalogue']['cache_ttl'] > 0) {
+        if ($use_cache && MEMCACHED && CONFIG['catalogue']['cache_ttl'] > 0) {
             MEMCACHED->set($cache_key, serialize($posts), CONFIG['catalogue']['cache_ttl']);
         }
 
         return $posts;
+    }
+
+    public function ban_file(string $hash, string|null $reason): bool
+    {
+        $stmt = $this->db->prepare('INSERT INTO banned_files(hash, reason)
+            VALUES (:hash, :reason)
+            ON DUPLICATE KEY UPDATE
+                reason = :reason');
+        $stmt->execute([':hash' => $hash, ':reason' => $reason]);
+        return true;
+    }
+
+    public function get_file_ban(string $hash): array|null
+    {
+        $stmt = $this->db->prepare('SELECT hash, reason, banned_at FROM banned_files WHERE hash = ?');
+        $stmt->execute([$hash]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
     public function get_file_by_hash(string $hash): BaseFile|null
@@ -244,10 +287,11 @@ class SQLFileRegistry implements FileRegistry
 
         // saving post data
         $stmt = $this->db->prepare("INSERT INTO
-            posts(id, uploaded_at, expires_at, description, password)
-            VALUES(:id, :uat, :eat, :des, :password)
+            posts(id, uploaded_at, expires_at, description, password, visibility, views)
+            VALUES(:id, :uat, :eat, :des, :password, :vis, COALESCE(:vc, 0))
             ON DUPLICATE KEY UPDATE
-            views = :vc
+            views = COALESCE(:vc, views),
+            visibility = :vis
         ");
         $stmt->execute([
             ':id' => $post->id,
@@ -255,7 +299,8 @@ class SQLFileRegistry implements FileRegistry
             ':eat' => $post->expires_at?->format('Y-m-d H:i:s'),
             ':des' => $post->description,
             ':password' => $password,
-            ':vc' => $post->views ?? 0
+            ':vc' => $post->views,
+            ':vis' => $post->visibility
         ]);
 
         return true;

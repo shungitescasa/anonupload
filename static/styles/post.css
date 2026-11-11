@@ -258,3 +258,134 @@ body:has(> .post-preview) {
         align-items: center;
     }
 }
+
+/** POST APPROVAL */
+body.approval {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+body.approval>header {
+    margin: 0;
+}
+
+body.approval>main.approval-main {
+    flex: 1;
+    flex-direction: row;
+    min-height: 0;
+    margin: 0;
+}
+
+.approval-content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    background: var(--showcase-background);
+}
+
+.approval-content .post-preview {
+    flex-grow: 1;
+}
+
+.approval-content .feed {
+    min-height: 0;
+    padding: var(--pad) 0;
+}
+
+.approval-content .file-preview>.file-contents>* {
+    max-width: 100%;
+    max-height: 65vh;
+}
+
+.approval-controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--pad);
+    background: var(--showcase-control-background);
+}
+
+.approval-controls .buttons {
+    display: flex;
+    flex-direction: row;
+    gap: var(--pad);
+}
+
+.approval-controls button {
+    background: var(--showcase-button-background);
+    padding: var(--pad) calc(var(--pad) * 2);
+}
+
+.approval-controls button:hover {
+    background: var(--showcase-button-background-hover);
+}
+
+.approval-controls button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.approval-status {
+    color: var(--showcase-control-foreground);
+    font-size: 0.8em;
+}
+
+.approval-status.error {
+    color: var(--error-background);
+}
+
+.approval-empty {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--showcase-control-foreground);
+}
+
+.approval-sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--pad);
+    padding: var(--pad);
+    overflow-y: auto;
+    flex-shrink: 0;
+    background: var(--box-background);
+    border-left: 2px solid var(--foreground);
+}
+
+.approval-sidebar>a {
+    display: block;
+    flex-shrink: 0;
+}
+
+.approval-count {
+    font-size: 0.8em;
+    text-align: center;
+    max-width: 128px;
+}
+
+.approval-sidebar .post.box.active {
+    outline: 4px solid var(--showcase-button-background);
+    outline-offset: -4px;
+}
+
+@media screen and (max-width: 600px) {
+    body.approval>main.approval-main {
+        flex-direction: column-reverse;
+    }
+
+    .approval-sidebar {
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+        border-left: none;
+        border-top: 2px solid var(--foreground);
+    }
+}

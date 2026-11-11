@@ -64,6 +64,24 @@ $unauthorized = $user === null;
                         </form>
                     </div>
                 </section>
+
+                <?php if ($user->is_moderator() || $user->is_admin()): ?>
+                    <section>
+                        <h3>system</h3>
+                        <table class="vertical">
+                            <?php if ($user->is_moderator()): ?>
+                                <tr>
+                                    <th>
+                                        <a href="/system/approval">Media Approval System</a>
+                                    </th>
+                                    <td>
+                                        <i>approve the new files for public access or leave them unlisted permanently</i>
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
+                        </table>
+                    </section>
+                <?php endif; ?>
             <?php endif; ?>
         <?php endif; ?>
         <section>

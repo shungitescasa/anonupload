@@ -378,3 +378,9 @@ define('ACCOUNT_SERVICE', CONFIG['account']['enabled'] ? match (CONFIG['account'
     'ldap' => new LDAPAccountService(CONFIG['account']),
     default => null
 } : null);
+
+
+function is_moderator(): bool
+{
+    return ACCOUNT_SERVICE?->get_user()?->is_moderator() ?? false;
+}

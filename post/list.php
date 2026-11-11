@@ -16,7 +16,13 @@ if ($page < 1) {
 
 $sort = $_GET['s'] ?? 'recent';
 
-$posts = FILEREGISTRY->get_posts($page, $sort);
+$posts = FILEREGISTRY->get_posts(
+    page: $page,
+    sort: $sort,
+    visibility: Post::VISIBILITY_PUBLIC,
+    use_cache: true,
+    count_pages: true
+);
 ?>
 <!DOCTYPE html>
 <html>

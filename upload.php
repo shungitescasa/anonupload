@@ -239,14 +239,23 @@ try {
                 throw new RuntimeException('Failed to strip EXIF tags.');
             }
 
-            $post = $root_post ?? create_post($password, $upload_date, $expiration_date, $description);
-
-            // searching for similar file
             $file_hash = hash_file("sha256", $file['tmp_name']);
             if (!$file_hash) {
                 throw new RuntimeException("Failed to calculate file hash");
             }
 
+            // checking if the file is banned
+            if ($ban = FILEREGISTRY->get_file_ban($file_hash)) {
+                $message = 'This file has been banned';
+                if (!empty($ban['reason'])) {
+                    $message .= ": {$ban['reason']}";
+                }
+                throw new HTTPException($message, 403);
+            }
+
+            $post = $root_post ?? create_post($password, $upload_date, $expiration_date, $description);
+
+            // searching for similar file
             $base_file = FILEREGISTRY->get_file_by_hash($file_hash);
             if (!$base_file) {
                 $opt = new FileOptions();
