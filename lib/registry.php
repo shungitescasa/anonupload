@@ -30,10 +30,6 @@ interface FileRegistry
 
     public function get_stats(): array|null;
 
-    public function has_storage_data(string $id): bool;
-    public function get_storage_data(string $id): mixed;
-    public function put_storage_data(string $id, mixed $data): bool;
-
     public function is_available(): bool;
 }
 
@@ -442,36 +438,6 @@ class SQLFileRegistry implements FileRegistry
             }
         }
 
-        return true;
-    }
-
-    public function has_storage_data(string $id): bool
-    {
-        $stmt = $this->db->prepare('SELECT 1 FROM storages WHERE id = ?');
-        $stmt->execute([$id]);
-
-        return $stmt->rowCount() >= 1;
-    }
-
-    public function get_storage_data(string $id): mixed
-    {
-        $stmt = $this->db->prepare('SELECT data FROM storages WHERE id = ?');
-        $stmt->execute([$id]);
-
-        if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            return json_decode($row['data'], true);
-        }
-
-        return null;
-    }
-
-    public function put_storage_data(string $id, mixed $data): bool
-    {
-        $stmt = $this->db->prepare('INSERT INTO storages(id, data)
-        VALUES (:id, :data)
-        ON DUPLICATE KEY UPDATE
-            data = :data');
-        $stmt->execute([':id' => $id, ':data' => json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)]);
         return true;
     }
 

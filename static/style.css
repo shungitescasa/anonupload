@@ -132,6 +132,17 @@ noscript {
     text-align: center;
 }
 
+noscript:has(>p) {
+    display: flex;
+}
+
+noscript:has(>div) {
+    background: initial;
+    color: initial;
+    border: initial;
+    text-align: initial;
+}
+
 a {
     color: var(--anchor-foreground);
     text-decoration: underline;

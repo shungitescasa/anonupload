@@ -73,12 +73,82 @@ interface AccountService
     public function login(array $credentials): Account|null;
 
     public function logout(): void;
+
+    public function is_storage_available(): bool;
+
+    public function get_storage_data(Account $account): array|null;
+
+    public function put_storage_data(Account $account, array $data): bool;
 }
 
 class LDAPAccountService implements AccountService
 {
-    public function __construct(private array $cfg)
+    private PDO|null $db = null;
+
+    public function __construct(private array $cfg, private array|null $storage_cfg = null)
     {
+    }
+
+    public function is_storage_available(): bool
+    {
+        return $this->db() !== null;
+    }
+
+    public function get_storage_data(Account $account): array|null
+    {
+        $db = $this->db();
+        if ($db === null) {
+            return null;
+        }
+
+        $stmt = $db->prepare('SELECT data FROM storages WHERE id = ?');
+        $stmt->execute([$this->storage_id($account)]);
+
+        if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $data = json_decode($row['data'], true);
+            return is_array($data) ? $data : null;
+        }
+
+        return null;
+    }
+
+    public function put_storage_data(Account $account, array $data): bool
+    {
+        $db = $this->db();
+        if ($db === null) {
+            return false;
+        }
+
+        $stmt = $db->prepare('INSERT INTO storages(id, data)
+        VALUES (:id, :data)
+        ON DUPLICATE KEY UPDATE
+            data = :data');
+
+        return $stmt->execute([
+            ':id' => $this->storage_id($account),
+            ':data' => json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
+        ]);
+    }
+
+    private function storage_id(Account $account): string
+    {
+        return hash('sha256', "account:{$account->id}");
+    }
+
+    private function db(): PDO|null
+    {
+        if ($this->db === null && $this->storage_cfg !== null) {
+            try {
+                $this->db = new PDO($this->storage_cfg['url'], $this->storage_cfg['user'], $this->storage_cfg['pass'], [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                ]);
+            } catch (PDOException $e) {
+                error_log("Account storage: {$e->getMessage()}");
+                $this->storage_cfg = null;
+            }
+        }
+
+        return $this->db;
     }
 
     public function get_user(): Account|null
@@ -375,7 +445,10 @@ class LDAPAccountService implements AccountService
 }
 
 define('ACCOUNT_SERVICE', CONFIG['account']['enabled'] ? match (CONFIG['account']['type']) {
-    'ldap' => new LDAPAccountService(CONFIG['account']),
+    'ldap' => new LDAPAccountService(
+        CONFIG['account'],
+        CONFIG['metadata']['type'] === 'sql' ? CONFIG['metadata'] : null
+    ),
     default => null
 } : null);
 

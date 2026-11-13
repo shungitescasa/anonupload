@@ -46,7 +46,7 @@ $title = 'log in to ' . (CONFIG['account']['name'] ?? CONFIG['instance']['name']
         <?php display_alert() ?>
     </header>
     <main>
-        <form method="post" action="/account/login" class="preferences">
+        <form method="post" action="/account/login" class="preferences" id="login">
             <fieldset>
                 <legend>account credentials</legend>
 
@@ -89,5 +89,7 @@ $title = 'log in to ' . (CONFIG['account']['name'] ?? CONFIG['instance']['name']
         <?php html_motd(); ?>
     </footer>
 </body>
+
+<script src="/static/scripts/pages/login.js"></script>
 
 </html>

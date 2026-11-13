@@ -79,6 +79,11 @@ function html_head(string $title = "", string|null $description = null, Post|nul
             setcookie("theme", "", 0, "/");
         }
     }
+
+    if (ACCOUNT_SERVICE !== null) {
+        echo '<script src="/static/scripts/account.js"></script>';
+        echo '<script src="/static/scripts/account-preferences.js"></script>';
+    }
 }
 
 function html_mini_icon()
@@ -184,7 +189,6 @@ function html_footer()
         <?php if (CONFIG['stats']['enabled'] && FILEREGISTRY->is_available()): ?>
             <li><a href="/stats">statistics</a></li>
         <?php endif; ?>
-        <li><a href="/preferences">preferences</a></li>
         <?php if (!empty(CONFIG['contact']['url'])): ?>
             <li><a href="<?= CONFIG['contact']['url'] ?>" referrerpolicy="origin"><?= CONFIG['contact']['name'] ?></a></li>
         <?php endif; ?>
