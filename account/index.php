@@ -99,7 +99,7 @@ $storage_available = !$unauthorized && ACCOUNT_SERVICE->is_storage_available();
             <table class="vertical">
                 <tr>
                     <th>
-                        <a href="/history">/history</a>
+                        <a href="/account/history">history</a>
                     </th>
                     <td>
                         <i>your uploaded files</i>
@@ -107,7 +107,7 @@ $storage_available = !$unauthorized && ACCOUNT_SERVICE->is_storage_available();
                 </tr>
                 <tr>
                     <th>
-                        <a href="/favorites">/favorites</a>
+                        <a href="/account/favorites">favorites</a>
                     </th>
                     <td>
                         <i>files you like</i>

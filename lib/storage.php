@@ -57,7 +57,7 @@ class LocalFileStorage implements FileStorage
 
     public function save_file(string $name, string $input_path, FileOptions|null $options = null): BaseFile|null
     {
-        if (!$this->check_directory()) {
+        if ($this->check_directory()) {
             throw new RuntimeException("Failed to create a directory for files: {$this->directory}");
         }
 

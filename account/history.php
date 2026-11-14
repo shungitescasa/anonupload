@@ -1,6 +1,7 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/lib/config.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/lib/partials.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/lib/account.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -13,7 +14,11 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/lib/partials.php';
     <header>
         <?php html_header(); ?>
         <h2>file upload history</h2>
-        <p>every file you uploaded from this device is stored in local storage</p>
+        <?php if (ACCOUNT_SERVICE?->get_user() === null): ?>
+            <p>every file you uploaded from this device is stored in local storage</p>
+        <?php else: ?>
+            <p>every file you uploaded is synchronized between devices</p>
+        <?php endif; ?>
     </header>
     <main>
         <noscript>JavaScript is required for file upload history.</noscript>
