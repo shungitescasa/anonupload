@@ -27,7 +27,8 @@ class LocalFileStorage implements FileStorage
     {
         $this->directory = $directory;
         $this->prefix = $prefix;
-        $this->is_available = is_dir($this->directory) && is_writable($this->directory) && is_readable($this->directory);
+
+        $this->is_available = !$this->check_directory() && is_writable($this->directory) && is_readable($this->directory);
     }
 
     public function has_file(string $name): bool
@@ -56,7 +57,7 @@ class LocalFileStorage implements FileStorage
 
     public function save_file(string $name, string $input_path, FileOptions|null $options = null): BaseFile|null
     {
-        if (!is_dir($this->directory) && !mkdir($this->directory, 0770, true)) {
+        if (!$this->check_directory()) {
             throw new RuntimeException("Failed to create a directory for files: {$this->directory}");
         }
 
@@ -86,6 +87,11 @@ class LocalFileStorage implements FileStorage
     public function is_available(): bool
     {
         return $this->is_available;
+    }
+
+    private function check_directory(): bool
+    {
+        return !is_dir($this->directory) && !mkdir($this->directory, 0777, true);
     }
 }
 
