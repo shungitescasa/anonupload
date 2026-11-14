@@ -286,6 +286,7 @@ $cfg = [
         'user_filter' => '(uid=%s)',
 
         'attributes' => ['uid', 'cn', 'displayName', 'mail'],
+        'cache_ttl' => 60 * 60,
 
         'group_base_dn' => 'ou=groups,dc=example,dc=com',
         'group_filter' => '(|(member={dn})(uniqueMember={dn})(memberUid={username}))',

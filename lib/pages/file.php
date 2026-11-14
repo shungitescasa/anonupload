@@ -100,6 +100,9 @@ if (isset($post->uploaded_at)) {
                                     <?= format_timestamp($post->uploaded_at) ?> ago
                                 </li>
                             <?php endif; ?>
+                            <?php if (isset($post->uploaded_by['username'])): ?>
+                                <li id="post-signer">by <?= htmlspecialchars($post->uploaded_by['username']) ?></li>
+                            <?php endif; ?>
                             <?php if (isset($post->views) && $post->views >= CONFIG['views']['minimal_display_count']): ?>
                                 <li id="post-views"> <?= $post->views ?> views</li>
                             <?php endif; ?>

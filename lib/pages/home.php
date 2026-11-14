@@ -15,6 +15,8 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 
 $recently_uploaded_files = $_SESSION['recently_uploaded_files'] ?? [];
 unset($_SESSION['recently_uploaded_files']);
+
+$user = ACCOUNT_SERVICE?->get_user();
 ?>
 <!DOCTYPE html>
 <html>
@@ -55,6 +57,14 @@ unset($_SESSION['recently_uploaded_files']);
                                             title="attach all files to a single link">[?]</sup>:</label></th>
                                 <td><input type="checkbox" name="single_url" id="file-singleurl" value="1"></td>
                             </tr>
+                            <?php if ($user !== null): ?>
+                                <tr>
+                                    <th><label for="file-sign">sign this post<sup class="hint iconless"
+                                                title="link this post with your account (<?= htmlspecialchars($user->username) ?>)">[?]</sup>:</label>
+                                    </th>
+                                    <td><input type="checkbox" name="sign_post" id="file-sign" value="1"></td>
+                                </tr>
+                            <?php endif; ?>
                             <?php if (!empty(CONFIG['expiration']['time']) && !CONFIG['expiration']['force_default']): ?>
                                 <tr>
                                     <th><label for="file-expiration">expires in:</label></th>

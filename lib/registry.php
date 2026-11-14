@@ -2,6 +2,7 @@
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/config.php";
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/file.php";
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/id.php";
+include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/account.php";
 
 interface FileRegistry
 {
@@ -86,6 +87,10 @@ class SQLFileRegistry implements FileRegistry
                     throw new RuntimeException("Failed to delete expired post");
                 }
                 return null;
+            }
+
+            if ($post->uploaded_by !== null) {
+                $post->uploaded_by['username'] = ACCOUNT_SERVICE?->get_user_by_username($post->uploaded_by['id'])?->name;
             }
 
             return $post;
@@ -283,8 +288,8 @@ class SQLFileRegistry implements FileRegistry
 
         // saving post data
         $stmt = $this->db->prepare("INSERT INTO
-            posts(id, uploaded_at, expires_at, description, password, visibility, views)
-            VALUES(:id, :uat, :eat, :des, :password, :vis, COALESCE(:vc, 0))
+            posts(id, uploaded_at, expires_at, description, password, visibility, uploaded_by, views)
+            VALUES(:id, :uat, :eat, :des, :password, :vis, :uby, COALESCE(:vc, 0))
             ON DUPLICATE KEY UPDATE
             views = COALESCE(:vc, views),
             visibility = :vis
@@ -296,7 +301,8 @@ class SQLFileRegistry implements FileRegistry
             ':des' => $post->description,
             ':password' => $password,
             ':vc' => $post->views,
-            ':vis' => $post->visibility
+            ':vis' => $post->visibility,
+            ':uby' => $post->uploaded_by['id'] ?? null
         ]);
 
         return true;

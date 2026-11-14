@@ -85,6 +85,8 @@ interface AccountService
 {
     public function get_user(): Account|null;
 
+    public function get_user_by_username(string $username): Account|null;
+
     public function login(array $credentials): Account|null;
 
     public function logout(): void;
@@ -202,6 +204,100 @@ class LDAPAccountService implements AccountService
 
         $this->save_session($profile);
         return $profile;
+    }
+
+    public function get_user_by_username(string $username): Account|null
+    {
+        $cache_key = CONFIG['instance']['id'] . ':account:' . hash('sha256', $username);
+
+        if (MEMCACHED && is_string($cached = MEMCACHED->get($cache_key))) {
+            $data = json_decode($cached, true);
+            if (is_array($data)) {
+                return Account::from_array($data);
+            }
+        }
+
+        try {
+            $account = $this->find_user($username);
+        } catch (RuntimeException $e) {
+            error_log("LDAP: {$e->getMessage()}");
+            return null;
+        }
+
+        MEMCACHED?->set(
+            $cache_key,
+            json_encode($account !== null ? [
+                'id' => $account->id,
+                'username' => $account->username,
+                'name' => $account->name
+            ] : [], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+            (int) $this->cfg['cache_ttl']
+        );
+
+        return $account;
+    }
+
+    private function find_user(string $username): Account|null
+    {
+        if (!extension_loaded('ldap')) {
+            throw new RuntimeException('LDAP extension is not installed');
+        }
+
+        $cfg = $this->cfg;
+
+        $conn = ldap_connect($cfg['uri']);
+        if (!$conn) {
+            throw new RuntimeException('Failed to connect to LDAP server');
+        }
+
+        ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, 3);
+        ldap_set_option($conn, LDAP_OPT_REFERRALS, 0);
+        ldap_set_option($conn, LDAP_OPT_NETWORK_TIMEOUT, (int) $cfg['timeout']);
+
+        try {
+            if ($cfg['starttls'] && !@ldap_start_tls($conn)) {
+                throw new RuntimeException('Failed to start TLS with LDAP server');
+            }
+
+            if (!empty($cfg['bind_dn']) && !@ldap_bind($conn, $cfg['bind_dn'], $cfg['bind_password'] ?? '')) {
+                throw new RuntimeException('Failed to bind LDAP service account');
+            }
+
+            $attributes = $cfg['attributes'];
+
+            if (!empty($cfg['bind_dn'])) {
+                $filter = sprintf($cfg['user_filter'], ldap_escape($username, '', LDAP_ESCAPE_FILTER));
+                $result = @ldap_search($conn, $cfg['base_dn'], $filter, $attributes, 0, 2);
+            } else {
+                $dn = sprintf($cfg['user_dn'], ldap_escape($username, '', LDAP_ESCAPE_DN));
+                $result = @ldap_read($conn, $dn, '(objectClass=*)', $attributes);
+            }
+
+            if (!$result) {
+                $errno = ldap_errno($conn);
+                if ($errno === 0x20) {
+                    return null;
+                }
+                throw new RuntimeException('LDAP lookup failed: ' . ldap_err2str($errno));
+            }
+
+            $entries = ldap_get_entries($conn, $result);
+            if ($entries['count'] !== 1) {
+                return null;
+            }
+
+            $attrs = $this->extract_attributes($entries[0], $attributes);
+
+            return new Account(
+                id: $entries[0]['dn'],
+                username: $username,
+                name: $this->first_value($attrs['displayName'] ?? $attrs['cn'] ?? null) ?? $username,
+                email: $this->first_value($attrs['mail'] ?? null),
+                attributes: $attrs
+            );
+        } finally {
+            ldap_unbind($conn);
+        }
     }
 
     public function login(array $credentials): Account|null

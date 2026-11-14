@@ -287,6 +287,8 @@ class Post implements JsonSerializable
     public string|null $password = null, $description = null;
     public int|null $views = null;
 
+    public array|null $uploaded_by = null;
+
     public static function from_array(array $res): Post
     {
         $o = new Post();
@@ -294,6 +296,12 @@ class Post implements JsonSerializable
         $o->password = $res['password'] ?? null;
         $o->description = $res['description'] ?? null;
         $o->visibility = intval($res['visibility'] ?? self::VISIBILITY_PENDING);
+        if (is_string($res['uploaded_by'] ?? null)) {
+            $o->uploaded_by = [
+                'id' => $res['uploaded_by'],
+                'username' => null
+            ];
+        }
 
         if (CONFIG['views']['enabled']) {
             $o->views = $res['views'] ?? null;
@@ -356,6 +364,7 @@ class Post implements JsonSerializable
                 'deletion_url' => null
             ],
             'visibility' => $this->visibility,
+            'uploaded_by' => $this->uploaded_by,
             'attachments' => $this->attachments
         ];
 

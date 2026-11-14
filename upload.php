@@ -8,6 +8,7 @@ include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/registry.php";
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/id.php";
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/thumbnails.php";
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/file.php";
+include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/account.php";
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
@@ -33,7 +34,8 @@ function create_post(
     string|null $password,
     DateTime $upload_date,
     DateTime|null $expiration_date,
-    string|null $description
+    string|null $description,
+    Account|null $signer
 ): Post {
     global $status;
 
@@ -57,6 +59,7 @@ function create_post(
     $p->expires_at = $expiration_date;
     $p->password = $password;
     $p->description = $description;
+    $p->uploaded_by = $signer !== null ? ['id' => $signer->username, 'username' => $signer->name] : null;
 
     if (!FILEREGISTRY->put_post($p)) {
         throw new RuntimeException("Failed to save post");
@@ -153,6 +156,14 @@ try {
     $expire_in = $_POST['expires_in'] ?? CONFIG['expiration']['default'];
     $password = $_POST['password'] ?? null;
 
+    $signer = null;
+    if (boolval($_POST['sign_post'] ?? '0')) {
+        $signer = ACCOUNT_SERVICE?->get_user();
+        if ($signer === null) {
+            throw new HTTPException('You must be logged in to sign posts', 401);
+        }
+    }
+
     if (CONFIG['expiration']['force_default'] || !array_key_exists($expire_in, CONFIG['expiration']['time'])) {
         $expire_in = CONFIG['expiration']['default'];
     }
@@ -191,7 +202,7 @@ try {
         $description = null;
     }
 
-    $root_post = $single_url ? create_post($password, $upload_date, $expiration_date, $description) : null;
+    $root_post = $single_url ? create_post($password, $upload_date, $expiration_date, $description, $signer) : null;
     $uploaded_posts = $single_url ? [$root_post] : [];
 
     for ($i = 0; $i < $file_count; $i++) {
@@ -253,7 +264,7 @@ try {
                 throw new HTTPException($message, 403);
             }
 
-            $post = $root_post ?? create_post($password, $upload_date, $expiration_date, $description);
+            $post = $root_post ?? create_post($password, $upload_date, $expiration_date, $description, $signer);
 
             // searching for similar file
             $base_file = FILEREGISTRY->get_file_by_hash($file_hash);
