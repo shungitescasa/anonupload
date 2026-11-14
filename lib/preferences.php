@@ -1,5 +1,6 @@
 <?php
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/config.php";
+include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/account.php";
 
 const PREFERENCES_COOKIE_TIME = 86400 * 30 * 180;
 const PREFERENCES_MAX_BLOB_SIZE = 4096;
@@ -48,17 +49,4 @@ function set_preferences_cookies(array $preferences): void
             $remove($k);
         }
     }
-}
-
-function is_encrypted_blob(mixed $blob): bool
-{
-    if (!is_array($blob) || !is_string($blob['iv'] ?? null) || !is_string($blob['data'] ?? null)) {
-        return false;
-    }
-
-    $iv = base64_decode($blob['iv'], true);
-    $data = base64_decode($blob['data'], true);
-
-    return $iv !== false && strlen($iv) === 12
-        && $data !== false && $data !== '' && strlen($blob['data']) <= PREFERENCES_MAX_BLOB_SIZE;
 }

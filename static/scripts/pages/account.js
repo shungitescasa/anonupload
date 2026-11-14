@@ -19,8 +19,8 @@ window.addEventListener("DOMContentLoaded", async () => {
     const authorized = form.dataset.authorized !== undefined;
 
     if (cryptoAvailable && !authorized) {
-        // signed out: forget the key of a previous session
-        clearAccountKey().catch(() => { });
+        // signed out
+        forgetAccount().catch(() => { });
     }
 
     const logout = document.getElementById("logout");
@@ -28,9 +28,9 @@ window.addEventListener("DOMContentLoaded", async () => {
         logout.addEventListener("submit", async (e) => {
             e.preventDefault();
             try {
-                await clearAccountKey();
+                await forgetAccount();
             } catch (err) {
-                console.error("Failed to clear account key:", err);
+                console.error("Failed to forget account:", err);
             }
             logout.submit();
         });

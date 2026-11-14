@@ -1,5 +1,6 @@
 function saveFavoriteFiles(files) {
     localStorage.setItem('favorite-files', JSON.stringify(files));
+    window.dispatchEvent(new CustomEvent("local-data-change", { detail: { key: "favorite-files" } }));
 }
 
 function getFavoriteFiles() {

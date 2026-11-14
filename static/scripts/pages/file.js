@@ -127,6 +127,8 @@ window.addEventListener("DOMContentLoaded", () => {
             setFavoriteIcon(file, favoriteButton, goodIcon, badIcon);
         });
         buttons.append(favoriteButton);
+
+        window.addEventListener("account-data-load", () => setFavoriteIcon(file, favoriteButton, goodIcon, badIcon));
     }
 });
 

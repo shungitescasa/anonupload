@@ -2,6 +2,39 @@ const ACCOUNT_KEY_DB = "account";
 const ACCOUNT_KEY_STORE = "keys";
 const ACCOUNT_KEY_ID = "storage";
 
+const ACCOUNT_LOCAL_SECTIONS = {
+    history: "uploaded_files",
+    favorites: "favorite-files"
+};
+
+function accountBaseKey(section) {
+    return `account-base:${section}`;
+}
+
+function readJsonArray(key) {
+    try {
+        const value = JSON.parse(localStorage.getItem(key) ?? "null");
+        return Array.isArray(value) ? value : null;
+    } catch (err) {
+        return null;
+    }
+}
+
+async function forgetAccount() {
+    await clearAccountKey();
+
+    for (const [section, key] of Object.entries(ACCOUNT_LOCAL_SECTIONS)) {
+        const base = readJsonArray(accountBaseKey(section));
+        if (base === null) continue;
+
+        localStorage.removeItem(accountBaseKey(section));
+
+        if (JSON.stringify(readJsonArray(key) ?? []) === JSON.stringify(base)) {
+            localStorage.removeItem(key);
+        }
+    }
+}
+
 function isAccountCryptoAvailable() {
     return window.crypto?.subtle !== undefined && window.indexedDB !== undefined;
 }

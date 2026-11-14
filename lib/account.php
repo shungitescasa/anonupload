@@ -1,6 +1,21 @@
 <?php
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/config.php";
 
+const ACCOUNT_DATA_MAX_BLOB_SIZE = 2 * 1024 * 1024;
+
+function is_encrypted_blob(mixed $blob, int $max_size = ACCOUNT_DATA_MAX_BLOB_SIZE): bool
+{
+    if (!is_array($blob) || !is_string($blob['iv'] ?? null) || !is_string($blob['data'] ?? null)) {
+        return false;
+    }
+
+    $iv = base64_decode($blob['iv'], true);
+    $data = base64_decode($blob['data'], true);
+
+    return $iv !== false && strlen($iv) === 12
+        && $data !== false && $data !== '' && strlen($blob['data']) <= $max_size;
+}
+
 class Account
 {
     public function __construct(

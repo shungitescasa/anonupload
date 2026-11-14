@@ -6,13 +6,10 @@ function checkEmptyList(list, files) {
     list.append(message);
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-    const favoriteFiles = document.getElementById("favorite-files");
-    if (!favoriteFiles) {
-        return;
-    }
+function renderFavoriteFiles(favoriteFiles) {
+    favoriteFiles.replaceChildren();
 
-    const files = JSON.parse(localStorage.getItem("favorite-files") ?? '[]');
+    const files = getFavoriteFiles();
 
     for (let file of files) {
         file.is_favorite = true;
@@ -21,4 +18,17 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     checkEmptyList(favoriteFiles, files);
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+    const favoriteFiles = document.getElementById("favorite-files");
+    if (!favoriteFiles) {
+        return;
+    }
+
+    renderFavoriteFiles(favoriteFiles);
+
+    window.addEventListener("account-data-load", (e) => {
+        if (e.detail.sections.includes("favorites")) renderFavoriteFiles(favoriteFiles);
+    });
 });

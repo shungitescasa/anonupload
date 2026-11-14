@@ -449,35 +449,6 @@ fieldset>legend {
     width: 100%;
 }
 
-/** SYNC */
-#sync-data {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: var(--pad);
-}
-
-#sync-data input {
-    padding: var(--pad);
-}
-
-#sync-data>div {
-    display: flex;
-    flex-direction: column;
-    gap: var(--pad);
-}
-
-#sync-data .buttons {
-    display: flex;
-    flex-direction: row;
-    gap: var(--pad);
-}
-
-#sync-data .buttons>button {
-    flex-grow: 1;
-}
-
 /** ITEMS */
 .item-list {
     display: grid;

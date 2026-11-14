@@ -6,34 +6,8 @@ include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/preferences.php";
 
 $method = $_SERVER['REQUEST_METHOD'];
 
-// newest account preferences (encrypted) and this browser's preferences, so the client can apply them
-if ($method === 'GET' && IS_JSON_REQUEST) {
-    header('Cache-Control: no-store');
-
-    $user = ACCOUNT_SERVICE?->get_user();
-    if ($user === null) {
-        generate_alert('/account/', 'Not authorized', 401);
-    }
-
-    if (!ACCOUNT_SERVICE->is_storage_available()) {
-        generate_alert('/account/', 'Account storage is unavailable', 503);
-    }
-
-    try {
-        $saved = ACCOUNT_SERVICE->get_storage_data($user)['preferences'] ?? null;
-    } catch (Exception $e) {
-        error_log("Failed to load account preferences: {$e->getMessage()}");
-        generate_alert('/account/', 'Failed to load account preferences', 500);
-    }
-
-    generate_alert('/account/', null, 200, [
-        'saved' => is_encrypted_blob($saved) ? $saved : null,
-        'current' => get_preferences()
-    ]);
-}
-
 if ($method !== 'POST') {
-    header('Allow: GET, POST');
+    header('Allow: POST');
     generate_alert('/account/', 'Method not allowed', 405);
 }
 
@@ -48,7 +22,7 @@ if (is_string($storage)) {
         generate_alert('/account/', 'Malformed encrypted preferences', 400);
     }
 }
-if ($storage !== null && !is_encrypted_blob($storage)) {
+if ($storage !== null && !is_encrypted_blob($storage, PREFERENCES_MAX_BLOB_SIZE)) {
     generate_alert('/account/', 'Malformed encrypted preferences', 400);
 }
 

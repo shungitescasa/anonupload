@@ -82,7 +82,7 @@ function html_head(string $title = "", string|null $description = null, Post|nul
 
     if (ACCOUNT_SERVICE !== null) {
         echo '<script src="/static/scripts/account.js"></script>';
-        echo '<script src="/static/scripts/account-preferences.js"></script>';
+        echo '<script src="/static/scripts/account-sync.js"></script>';
     }
 }
 

@@ -8,6 +8,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
         try {
             const key = await deriveAccountKey(form.elements.username.value, form.elements.password.value);
+            await forgetAccount();
             await saveAccountKey(key);
         } catch (err) {
             console.error("Failed to derive account key:", err);

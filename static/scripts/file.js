@@ -5,6 +5,7 @@ function getUploadedFiles() {
 
 function saveUploadedFiles(list) {
     localStorage.setItem("uploaded_files", JSON.stringify(list));
+    window.dispatchEvent(new CustomEvent("local-data-change", { detail: { key: "uploaded_files" } }));
 }
 
 function saveUploadedFile(data) {
@@ -55,7 +56,7 @@ function deleteUploadedFile(id, element = null) {
         .then((j) => {
             if (j.status_code === 200 || j.status_code == 404) {
                 alertStatus('deleted', 'deleted');
-                saveUploadedFiles(files.filter((x) => x.id !== id));
+                saveUploadedFiles(getUploadedFiles().filter((x) => x.id !== id));
             } else {
                 alertStatus(j.message, 'error');
             }
@@ -66,7 +67,9 @@ function deleteUploadedFile(id, element = null) {
         });
 }
 
+// `files` may be outdated (e.g. replaced with the account data meanwhile), so the newest list is updated
 function saveFile(file, files, filesId) {
+    files = JSON.parse(localStorage.getItem(filesId) ?? "[]");
     for (let i = 0; i < files.length; i++) {
         const f = files[i];
         if (f.id !== file.id) continue;
@@ -75,6 +78,7 @@ function saveFile(file, files, filesId) {
     }
 
     localStorage.setItem(filesId, JSON.stringify(files));
+    window.dispatchEvent(new CustomEvent("local-data-change", { detail: { key: filesId } }));
 }
 
 // -- dom functions
