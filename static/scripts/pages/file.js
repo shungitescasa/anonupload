@@ -130,6 +130,42 @@ window.addEventListener("DOMContentLoaded", () => {
 
         window.addEventListener("account-data-load", () => setFavoriteIcon(file, favoriteButton, goodIcon, badIcon));
     }
+
+    // -- deletion button (only if the user has the deletion password for this file)
+    {
+        const deletionButton = document.createElement("button");
+        deletionButton.classList.add("button");
+        deletionButton.innerHTML = '<img src="/static/img/icons/cross.png" alt="delete" title="delete this file" />';
+        deletionButton.setStatus = (text, attr) => {
+            if (attr === 'deleted') {
+                window.location.href = '/';
+            } else {
+                deletionButton.disabled = false;
+                alert(text);
+            }
+        };
+        deletionButton.addEventListener("click", () => {
+            if (!confirm("are you sure you want to delete this file?")) return;
+            deletionButton.disabled = true;
+            deleteUploadedFile(file.id, deletionButton);
+        });
+
+        const updateDeletionButton = () => {
+            const uploaded = getUploadedFiles().find((x) => x.id === file.id);
+            if (uploaded && uploaded.urls && uploaded.urls.deletion_url) {
+                if (!deletionButton.isConnected) buttons.append(deletionButton);
+            } else {
+                deletionButton.remove();
+            }
+        };
+
+        updateDeletionButton();
+
+        // history may arrive later from the account
+        window.addEventListener("account-data-load", (e) => {
+            if (e.detail.sections.includes("history")) updateDeletionButton();
+        });
+    }
 });
 
 // live timestamp counting
