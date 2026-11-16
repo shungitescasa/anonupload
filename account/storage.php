@@ -9,18 +9,18 @@ const ACCOUNT_DATA_SECTIONS = ['history', 'favorites'];
 $method = $_SERVER['REQUEST_METHOD'];
 if ($method !== 'GET' && $method !== 'POST') {
     header('Allow: GET, POST');
-    generate_alert('/account/', 'Method not allowed', 405, null, true);
+    generate_alert('/account/', __('Method not allowed'), 405, null, true);
 }
 
 header('Cache-Control: no-store');
 
 $user = ACCOUNT_SERVICE?->get_user();
 if ($user === null) {
-    generate_alert('/account/', 'Not authorized', 401, null, true);
+    generate_alert('/account/', __('Not authorized'), 401, null, true);
 }
 
 if (!ACCOUNT_SERVICE->is_storage_available()) {
-    generate_alert('/account/', 'Account storage is unavailable', 503, null, true);
+    generate_alert('/account/', __('Account storage is unavailable'), 503, null, true);
 }
 
 // newest encrypted sections and this browser's preferences, so the client can apply them
@@ -29,7 +29,7 @@ if ($method === 'GET') {
         $data = ACCOUNT_SERVICE->get_storage_data($user) ?? [];
     } catch (Exception $e) {
         error_log("Failed to load account data: {$e->getMessage()}");
-        generate_alert('/account/', 'Failed to load account data', 500, null, true);
+        generate_alert('/account/', __('Failed to load account data'), 500, null, true);
     }
 
     $response = [
@@ -53,14 +53,14 @@ foreach (ACCOUNT_DATA_SECTIONS as $section) {
 
     $blob = is_string($_POST[$section]) ? json_decode($_POST[$section], true) : null;
     if (!is_encrypted_blob($blob)) {
-        generate_alert('/account/', "Malformed encrypted $section", 400, null, true);
+        generate_alert('/account/', __('Malformed encrypted %s', $section), 400, null, true);
     }
 
     $sections[$section] = ['iv' => $blob['iv'], 'data' => $blob['data']];
 }
 
 if (empty($sections)) {
-    generate_alert('/account/', 'Nothing to save', 400, null, true);
+    generate_alert('/account/', __('Nothing to save'), 400, null, true);
 }
 
 try {
@@ -71,7 +71,7 @@ try {
     }
 } catch (Exception $e) {
     error_log("Failed to save account data: {$e->getMessage()}");
-    generate_alert('/account/', 'Failed to save account data', 500, null, true);
+    generate_alert('/account/', __('Failed to save account data'), 500, null, true);
 }
 
-generate_alert('/account/', 'Saved!', 200, array_keys($sections), true);
+generate_alert('/account/', __('Saved!'), 200, array_keys($sections), true);

@@ -33,28 +33,28 @@ function format_timestamp(string|DateTime $datetime)
     $months = $diff->m;
 
     if ($years == 0 && $months == 0 && $days == 0 && $hours == 0 && $minutes == 0) {
-        return "$seconds second" . ($seconds > 1 ? "s" : "");
+        return _n('%d second', '%d seconds', $seconds);
     } else if ($years == 0 && $months == 0 && $days == 0 && $hours == 0) {
-        return "$minutes minute" . ($minutes > 1 ? "s" : "");
+        return _n('%d minute', '%d minutes', $minutes);
     } else if ($years == 0 && $months == 0 && $days == 0) {
-        return "$hours hour" . ($hours > 1 ? "s" : "");
+        return _n('%d hour', '%d hours', $hours);
     } else if ($years == 0 && $months == 0) {
-        return "$days day" . ($days > 1 ? "s" : "");
+        return _n('%d day', '%d days', $days);
     } else if ($years == 0) {
-        return "$months month" . ($months > 1 ? "s" : "");
+        return _n('%d month', '%d months', $months);
     } else {
-        return "$years year" . ($years > 1 ? "s" : "");
+        return _n('%d year', '%d years', $years);
     }
 }
 
 function format_filesize($file_size)
 {
-    $suffix = 'MB';
+    $suffix = __('MB');
     $file_size /= 1024 * 1024; // MB
 
     if ($file_size >= 1024) {
         $file_size /= 1024;
-        $suffix = 'GB';
+        $suffix = __('GB');
     }
 
     return sprintf('%.2f%s', $file_size, $suffix);

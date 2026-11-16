@@ -12,7 +12,7 @@ if (isset($error)) {
     $error_reason = $error[1];
 } else {
     $error_code = 999;
-    $error_reason = "Something went wrong";
+    $error_reason = __('Something went wrong');
 }
 
 http_response_code($error_code);
@@ -49,7 +49,7 @@ if (is_dir($_SERVER['DOCUMENT_ROOT'] . $folder_path)) {
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="<?= html_lang() ?>">
 
 <head>
     <?php html_head("$error_code $error_reason"); ?>
@@ -69,9 +69,9 @@ if (is_dir($_SERVER['DOCUMENT_ROOT'] . $folder_path)) {
             </div>
             <div class="content">
                 <?php if (isset($brand_url)): ?>
-                    <img src="<?= $brand_url ?>" alt="There is nothing to see here.">
+                    <img src="<?= $brand_url ?>" alt="<?= __('There is nothing to see here.') ?>">
                 <?php else: ?>
-                    <p>There is nothing to see here.</p>
+                    <p><?= __('There is nothing to see here.') ?></p>
                 <?php endif; ?>
             </div>
         </section>

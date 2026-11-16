@@ -8,10 +8,11 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method !== 'POST') {
     header('Allow: POST');
-    generate_alert('/account/', 'Method not allowed', 405);
+    generate_alert('/account/', __('Method not allowed'), 405);
 }
 
 $preferences = normalize_preferences($_POST);
+i18n_use($preferences['language']);
 
 // account preferences are encrypted with the user's password on the client side,
 // so they can only be saved to the account if JavaScript is enabled
@@ -19,30 +20,30 @@ $storage = $_POST['storage'] ?? null;
 if (is_string($storage)) {
     $storage = $storage !== '' ? json_decode($storage, true) : null;
     if ($storage === null && $_POST['storage'] !== '') {
-        generate_alert('/account/', 'Malformed encrypted preferences', 400);
+        generate_alert('/account/', __('Malformed encrypted preferences'), 400);
     }
 }
 if ($storage !== null && !is_encrypted_blob($storage, PREFERENCES_MAX_BLOB_SIZE)) {
-    generate_alert('/account/', 'Malformed encrypted preferences', 400);
+    generate_alert('/account/', __('Malformed encrypted preferences'), 400);
 }
 
 set_preferences_cookies($preferences);
 
 $user = ACCOUNT_SERVICE?->get_user();
 if ($user === null) {
-    generate_alert('/account/', 'Preferences saved in this browser!', 200, $preferences);
+    generate_alert('/account/', __('Preferences saved in this browser!'), 200, $preferences);
 }
 
 if (!empty($_POST['_loaded'])) {
-    generate_alert('/account/', 'Preferences loaded from your account!', 200, $preferences);
+    generate_alert('/account/', __('Preferences loaded from your account!'), 200, $preferences);
 }
 
 if ($storage === null) {
-    generate_alert('/account/', 'Preferences saved in this browser only. JavaScript is required to save them to your account.', 200, $preferences);
+    generate_alert('/account/', __('Preferences saved in this browser only. JavaScript is required to save them to your account.'), 200, $preferences);
 }
 
 if (!ACCOUNT_SERVICE->is_storage_available()) {
-    generate_alert('/account/', 'Preferences saved in this browser only: account storage is unavailable.', 503, $preferences);
+    generate_alert('/account/', __('Preferences saved in this browser only: account storage is unavailable.'), 503, $preferences);
 }
 
 try {
@@ -54,7 +55,7 @@ try {
     }
 } catch (Exception $e) {
     error_log("Failed to save account preferences: {$e->getMessage()}");
-    generate_alert('/account/', 'Preferences saved in this browser only: failed to save them to your account.', 500, $preferences);
+    generate_alert('/account/', __('Preferences saved in this browser only: failed to save them to your account.'), 500, $preferences);
 }
 
-generate_alert('/account/', 'Preferences saved!', 200, $preferences);
+generate_alert('/account/', __('Preferences saved!'), 200, $preferences);

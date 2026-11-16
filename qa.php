@@ -8,13 +8,13 @@ include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/alert.php";
 
 $file_path = "{$_SERVER['DOCUMENT_ROOT']}/QA.txt";
 if (!file_exists($file_path)) {
-    generate_alert('/', 'QA is not set!', 500);
+    generate_alert('/', __('QA is not set!'), 500);
 }
 
 $markdown = new Parsedown();
 
 $data = [
-    'content' => $markdown->text(file_get_contents($file_path) ?: "No questions - no answers."),
+    'content' => $markdown->text(file_get_contents($file_path) ?: __("No questions - no answers.")),
     'last_updated' => (new DateTime())->setTimestamp(filemtime($file_path) ?: 0)
 ];
 
@@ -22,10 +22,10 @@ if ($data['last_updated']->getTimestamp() === 0)
     $data['last_updated'] = null;
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="<?= html_lang() ?>">
 
 <head>
-    <?php html_head("question & answer"); ?>
+    <?php html_head(__('question & answer')); ?>
     <style>
         main h1 {
             margin-top: 0.8em;
@@ -45,9 +45,9 @@ if ($data['last_updated']->getTimestamp() === 0)
 <body>
     <header>
         <?php html_header(); ?>
-        <h2>question & answer</h2>
+        <h2><?= __('question & answer') ?></h2>
         <?php if ($data['last_updated']): ?>
-            <p>last updated: <?= $data['last_updated']->format('M d, Y') ?></p>
+            <p><?= __('last updated: %s', format_date($data['last_updated'])) ?></p>
         <?php endif; ?>
     </header>
     <main>

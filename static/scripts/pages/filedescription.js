@@ -13,5 +13,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // counting description lines
     const lines = description.textContent.trim().split("\n");
-    button.textContent = `${lines.length} line(s) omitted. click to expand.`;
+    const format = button.dataset.format ?? "%d line(s) omitted. click to expand.";
+    button.textContent = format.replace("%d", lines.length);
 });

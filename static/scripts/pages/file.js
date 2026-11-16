@@ -170,6 +170,15 @@ window.addEventListener("DOMContentLoaded", () => {
 
 // live timestamp counting
 function formatTimestamp(ts) {
+    const lang = document.documentElement.lang || undefined;
+    const unit = (value, unit) => {
+        try {
+            return new Intl.NumberFormat(lang, { style: "unit", unit, unitDisplay: "long" }).format(value);
+        } catch (e) {
+            return `${value} ${unit}${value !== 1 ? "s" : ""}`;
+        }
+    };
+
     const diff = Math.floor(Date.now() - ts * 1000);
 
     const seconds = Math.floor(diff / 1000);
@@ -180,18 +189,18 @@ function formatTimestamp(ts) {
     const years = Math.floor(days / 365);
 
     if (years === 0 && months === 0 && days === 0 && hours === 0 && minutes === 0) {
-        return `${seconds} second${seconds !== 1 ? "s" : ""}`;
+        return unit(seconds, "second");
     } else if (years === 0 && months === 0 && days === 0 && hours === 0) {
-        return `${minutes} minute${minutes !== 1 ? "s" : ""}`;
+        return unit(minutes, "minute");
     } else if (years === 0 && months === 0 && days === 0) {
-        return `${hours} hour${hours !== 1 ? "s" : ""}`;
+        return unit(hours, "hour");
     } else if (years === 0 && months === 0) {
-        return `${days} day${days !== 1 ? "s" : ""}`;
+        return unit(days, "day");
     } else if (years === 0) {
-        return `${months} month${months !== 1 ? "s" : ""}`;
+        return unit(months, "month");
     }
 
-    return `${years} year${years !== 1 ? "s" : ""}`;
+    return unit(years, "year");
 }
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -199,8 +208,9 @@ window.addEventListener("DOMContentLoaded", () => {
     if (!timestampElement) return;
 
     const timestamp = timestampElement.getAttribute("timestamp");
+    const format = timestampElement.dataset.format ?? "uploaded %s ago";
 
     setInterval(() => {
-        timestampElement.textContent = `uploaded ${formatTimestamp(timestamp)} ago`;
+        timestampElement.textContent = format.replace("%s", formatTimestamp(timestamp));
     }, 1000);
 });

@@ -24,25 +24,27 @@ window.addEventListener("DOMContentLoaded", () => {
     if (hint) {
         hint.remove();
         fakeUploadButton.appendChild(hint);
-        hint.textContent = "the upload will start immediately after selecting the file";
+        hint.textContent = hint.dataset.jsText ?? "the upload will start immediately after selecting the file";
     }
 
     // -- fake upload button functionality
+    const uploadText = fakeUploadButton.dataset.text ?? 'click, drop, or paste files here';
+    const dropText = fakeUploadButton.dataset.dropText ?? 'drop files here';
     fakeUploadButton.addEventListener("click", () => fileUploadElement.click());
     fakeUploadButton.addEventListener("dragleave", (ev) => {
         ev.preventDefault();
-        fakeUploadButton.textContent = 'click, drop, or paste files here';
+        fakeUploadButton.textContent = uploadText;
     });
 
     fakeUploadButton.addEventListener("dragover", (ev) => {
         ev.preventDefault();
-        fakeUploadButton.textContent = 'drop files here';
+        fakeUploadButton.textContent = dropText;
     });
 
     fakeUploadButton.addEventListener("drop", (ev) => {
         ev.preventDefault();
         cachedFiles = [];
-        fakeUploadButton.textContent = 'click, drop, or paste files here';
+        fakeUploadButton.textContent = uploadText;
         if (ev.dataTransfer.items) {
             for (const item of ev.dataTransfer.items) {
                 if (item.kind === "file") {

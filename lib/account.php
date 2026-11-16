@@ -336,12 +336,12 @@ class LDAPAccountService implements AccountService
         $ulen = strlen($username);
 
         if ($ulen < $min || $ulen > $max) {
-            return "Username must be between $min and $max characters long";
+            return __('Username must be between %d and %d characters long', $min, $max);
         }
 
         $pmin = (int) $this->cfg['password_min_length'];
         if (strlen($password) < $pmin) {
-            return "Password must be at least $pmin characters long";
+            return _n('Password must be at least %d character long', 'Password must be at least %d characters long', $pmin);
         }
 
         return null;

@@ -6,7 +6,7 @@ include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/alert.php";
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/account.php";
 
 if (!CONFIG['catalogue']['public'] && ACCOUNT_SERVICE?->get_user() === null) {
-    generate_alert('/account/', 'File catalogue is unavailable for anonymous users', 403);
+    generate_alert('/account/', __('File catalogue is unavailable for anonymous users'), 403);
 }
 
 $page = intval($_GET['p'] ?? '1');
@@ -25,10 +25,10 @@ $posts = FILEREGISTRY->get_posts(
 );
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="<?= html_lang() ?>">
 
 <head>
-    <?php html_head("page {$posts->page}/{$posts->total_pages} - {$posts->count} posts - the catalogue"); ?>
+    <?php html_head(__('page %d/%d', $posts->page, $posts->total_pages) . ' - ' . _n('%d post', '%d posts', $posts->count) . ' - ' . __('the catalogue')); ?>
 </head>
 
 <body class="full-size">
@@ -41,7 +41,7 @@ $posts = FILEREGISTRY->get_posts(
                 <?php html_post_brick($post); ?>
             <?php endforeach; ?>
             <?php if (empty($posts->posts)): ?>
-                <p>Nothing found.</p>
+                <p><?= __('Nothing found.') ?></p>
             <?php endif; ?>
         </section>
     </main>

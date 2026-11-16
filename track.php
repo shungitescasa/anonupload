@@ -4,13 +4,13 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/lib/file.php";
 include_once $_SERVER['DOCUMENT_ROOT'] . "/lib/utils.php";
 
 if (!MEMCACHED) {
-    send_json_response(null, 'This feature is not available', 500);
+    send_json_response(null, __('This feature is not available'), 500);
 }
 
 if (isset($_GET['create'])) {
     $id = bin2hex(random_bytes(16));
     $status = new FileTrackStatus($id);
-    $status->send('queue', 'waiting...');
+    $status->send('queue', __('waiting...'));
     send_json_response([
         'id' => $id,
         'ttl' => $status->ttl,
@@ -19,7 +19,7 @@ if (isset($_GET['create'])) {
 
 $status = new FileTrackStatus(trim($_GET['id'] ?? "0"));
 if (!$status->exists()) {
-    send_json_response(null, "File track ID {$status->id} not found", 404);
+    send_json_response(null, __('File track ID %s not found', $status->id), 404);
 }
 
 header('Content-Type: text/event-stream');

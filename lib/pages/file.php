@@ -25,24 +25,24 @@ if ($single_attachment) {
         }
 
         if (isset($m->line_count)) {
-            $description .= " - {$m->line_count} lines";
+            $description .= ' - ' . _n('%d line', '%d lines', $m->line_count);
         }
     }
 } else {
-    $description = "Post with " . count($post->attachments) . " attachments";
+    $description = _n('Post with %d attachment', 'Post with %d attachments', count($post->attachments));
 }
 
 if (isset($post->views) && $post->views >= CONFIG['views']['minimal_display_count']) {
-    $description .= " - {$post->views} views";
+    $description .= ' - ' . _n('%d view', '%d views', $post->views);
 }
 
 if (isset($post->uploaded_at)) {
-    $description .= " - uploaded " . format_timestamp($post->uploaded_at) . " ago";
+    $description .= ' - ' . __('uploaded %s ago', format_timestamp($post->uploaded_at));
 }
 
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="<?= html_lang() ?>">
 
 <head>
     <?php html_head($post->name(), $description, $post); ?>
@@ -52,8 +52,7 @@ if (isset($post->uploaded_at)) {
     <section class="post-preview">
         <section class="disclaimer">
             <p>
-                All trademarks and copyrights belong to their respective owners.
-                The uploader is responsible for any content shared here.
+                <?= __('All trademarks and copyrights belong to their respective owners. The uploader is responsible for any content shared here.') ?>
             </p>
             <?php html_legal(); ?>
         </section>
@@ -90,48 +89,49 @@ if (isset($post->uploaded_at)) {
                                 (<span id="file-mime"><?= $single_attachment->mime ?></span>)
                             <?php else: ?>
                                 <span id="post-id"><?= $post->id ?></span>
-                                (<?= count($post->attachments) ?> attachments)
+                                (<?= _n('%d attachment', '%d attachments', count($post->attachments)) ?>)
                             <?php endif; ?>
                         </p>
                         <ul class="horizontal bulletted">
                             <?php if (isset($post->uploaded_at)): ?>
-                                <li id="post-timestamp" timestamp="<?= $post->uploaded_at->getTimestamp() ?>">
-                                    uploaded
-                                    <?= format_timestamp($post->uploaded_at) ?> ago
+                                <li id="post-timestamp" timestamp="<?= $post->uploaded_at->getTimestamp() ?>"
+                                    data-format="<?= htmlspecialchars(__('uploaded %s ago')) ?>">
+                                    <?= __('uploaded %s ago', format_timestamp($post->uploaded_at)) ?>
                                 </li>
                             <?php endif; ?>
                             <?php if (isset($post->uploaded_by['username'])): ?>
-                                <li id="post-signer">by <?= htmlspecialchars($post->uploaded_by['username']) ?></li>
+                                <li id="post-signer"><?= __('by %s', htmlspecialchars($post->uploaded_by['username'])) ?></li>
                             <?php endif; ?>
                             <?php if (isset($post->views) && $post->views >= CONFIG['views']['minimal_display_count']): ?>
-                                <li id="post-views"> <?= $post->views ?> views</li>
+                                <li id="post-views"><?= _n('%d view', '%d views', $post->views) ?></li>
                             <?php endif; ?>
                         </ul>
                         <p style="display:none" id="post-url"><?= $post->url() ?></p>
                     </div>
                 </div>
                 <div>
-                    <button class="hidden feed-description-opener"> description omitted. click to expand.</button>
+                    <button class="hidden feed-description-opener"
+                        data-format="<?= htmlspecialchars(__('%d line(s) omitted. click to expand.')) ?>"><?= __('description omitted. click to expand.') ?></button>
                 </div>
                 <div class="control-buttons" id="control-buttons">
                     <?php if (isset($_GET['random'])): ?>
                         <a href="/?random" class="button">
-                            <img src="/static/img/icons/reroll.png" alt="re-roll" title="re-roll" />
+                            <img src="/static/img/icons/reroll.png" alt="<?= __('re-roll') ?>" title="<?= __('re-roll') ?>" />
                         </a>
                     <?php endif; ?>
 
                     <a href="<?= $single_attachment?->raw_url() ?>" download="<?= $file_name ?>"
                         class="download-button button">
-                        <img src="/static/img/icons/download.png" alt="download" title="download file" />
+                        <img src="/static/img/icons/download.png" alt="<?= __('download') ?>" title="<?= __('download file') ?>" />
                     </a>
                     <a href="<?= $single_attachment?->raw_url() ?>" class="full-size-button button" target="_blank">
-                        <img src="/static/img/icons/fullsize.png" alt="full size" title="open in full size" />
+                        <img src="/static/img/icons/fullsize.png" alt="<?= __('full size') ?>" title="<?= __('open in full size') ?>" />
                     </a>
 
                     <?php if (CONFIG['report']['mail']): ?>
                         <a href="<?= sprintf('mailto:%s?subject=%s', CONFIG['report']['mail'], rawurlencode("File Report - $file_name")) ?>"
                             class="button">
-                            <img src="/static/img/icons/flag.png" alt="report" title="report this file">
+                            <img src="/static/img/icons/flag.png" alt="<?= __('report') ?>" title="<?= __('report this file') ?>">
                         </a>
                     <?php endif; ?>
                 </div>

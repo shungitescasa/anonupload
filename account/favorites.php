@@ -3,20 +3,20 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/lib/config.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/lib/partials.php';
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="<?= html_lang() ?>">
 
 <head>
-    <?php html_head("favorites"); ?>
+    <?php html_head(__('favorites')); ?>
 </head>
 
 <body>
     <header>
         <?php html_header(); ?>
-        <h2>favorites</h2>
-        <p>all the files you liked</p>
+        <h2><?= __('favorites') ?></h2>
+        <p><?= __('all the files you liked') ?></p>
     </header>
     <main>
-        <noscript>JavaScript is required for favorite files.</noscript>
+        <noscript><?= __('JavaScript is required for favorite files.') ?></noscript>
         <section class="item-list" id="favorite-files"></section>
     </main>
     <footer>

@@ -1,0 +1,1105 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: anonupload\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-05 23:02+0500\n"
+"PO-Revision-Date: 2026-10-05 23:02+0500\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: shungites.casa\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Language-Name: Русский\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: account/favorites.php account/index.php
+msgid "favorites"
+msgstr "избранное"
+
+#: account/favorites.php
+msgid "all the files you liked"
+msgstr "все файлы, которые вам понравились"
+
+#: account/favorites.php
+msgid "JavaScript is required for favorite files."
+msgstr "Для избранного нужен JavaScript."
+
+#: account/history.php
+msgid "file upload history"
+msgstr "история загрузок"
+
+#: account/history.php
+msgid "every file you uploaded from this device is stored in local storage"
+msgstr ""
+"каждый файл, загруженный с этого устройства, хранится в локальном хранилище"
+
+#: account/history.php
+msgid "every file you uploaded is synchronized between devices"
+msgstr "каждый загруженный вами файл синхронизируется между устройствами"
+
+#: account/history.php
+msgid "JavaScript is required for file upload history."
+msgstr "Для истории загрузок нужен JavaScript."
+
+#: account/index.php lib/partials.php
+msgid "account"
+msgstr "аккаунт"
+
+#: account/index.php
+#, php-format
+msgid "hi, %s"
+msgstr "привет, %s"
+
+#: account/index.php
+#, php-format
+msgid "%s account syncs your uploaded files and favorites across devices."
+msgstr ""
+"Аккаунт %s синхронизирует ваши загруженные файлы и избранное между "
+"устройствами."
+
+#: account/index.php
+msgid "Sign in today!"
+msgstr "Войдите уже сегодня!"
+
+#: account/index.php uploaders.php
+msgid "Name:"
+msgstr "Имя:"
+
+#: account/index.php
+msgid "E-Mail:"
+msgstr "E-Mail:"
+
+#: account/index.php
+msgid "Groups:"
+msgstr "Группы:"
+
+#: account/index.php
+msgid "log out"
+msgstr "выйти"
+
+#: account/index.php
+msgid "system"
+msgstr "система"
+
+#: account/index.php
+msgid "Media Approval System"
+msgstr "Модерация контента"
+
+#: account/index.php
+msgid ""
+"approve the new files for public access or leave them unlisted permanently"
+msgstr ""
+"одобряйте новые файлы для публичного доступа или навсегда оставляйте их "
+"скрытыми"
+
+#: account/index.php
+msgid "this browser"
+msgstr "этот браузер"
+
+#: account/index.php
+msgid ""
+"this data is stored locally, which means it will be deleted once you clear "
+"your browser."
+msgstr ""
+"эти данные хранятся локально, поэтому они удалятся, когда вы очистите "
+"браузер."
+
+#: account/index.php
+msgid "my account"
+msgstr "мой аккаунт"
+
+#: account/index.php
+msgid "history"
+msgstr "история"
+
+#: account/index.php
+msgid "your uploaded files"
+msgstr "ваши загруженные файлы"
+
+#: account/index.php
+msgid "saved files that you liked"
+msgstr "сохранённые файлы, которые вам понравились"
+
+#: account/index.php
+msgid "my preferences"
+msgstr "мои настройки"
+
+#: account/index.php
+msgid "preferences are saved in this browser's cookies."
+msgstr "настройки сохраняются в куки этого браузера."
+
+#: account/index.php
+msgid ""
+"account storage is unavailable, so preferences are saved in this browser's "
+"cookies only."
+msgstr ""
+"хранилище аккаунта недоступно, поэтому настройки сохраняются только в "
+"куки этого браузера."
+
+#: account/index.php
+msgid ""
+"preferences are encrypted with your password before they're saved to your "
+"account, which requires JavaScript. without it, they're saved in this "
+"browser's cookies only."
+msgstr ""
+"перед сохранением в аккаунт настройки шифруются вашим паролем, для этого "
+"нужен JavaScript. без него они сохраняются только в куки этого браузера."
+
+#: account/index.php lib/pages/home.php
+msgid "general"
+msgstr "основное"
+
+#: account/index.php
+msgid "theme:"
+msgstr "тема:"
+
+#: account/index.php
+msgid "Default"
+msgstr "По умолчанию"
+
+#: account/index.php
+msgid "language"
+msgstr "язык"
+
+#: account/index.php
+msgid "files"
+msgstr "файлы"
+
+#: account/index.php
+msgid "disable video looping"
+msgstr "отключить повтор видео"
+
+#: account/index.php
+msgid "disable autoplay"
+msgstr "отключить автовоспроизведение"
+
+#: account/index.php
+msgid "save"
+msgstr "сохранить"
+
+#: account/login.php account/logout.php
+msgid "Authentication is disabled!"
+msgstr "Авторизация отключена!"
+
+#: account/login.php
+msgid "Authentication service is unavailable. Try again later."
+msgstr "Сервис авторизации недоступен. Попробуйте позже."
+
+#: account/login.php
+msgid "Invalid username or password"
+msgstr "Неверное имя пользователя или пароль"
+
+#: account/login.php
+msgid "Logged in!"
+msgstr "Вы вошли!"
+
+#: account/login.php
+#, php-format
+msgid "log in to %s account"
+msgstr "вход в аккаунт %s"
+
+#: account/login.php
+msgid "account credentials"
+msgstr "данные для входа"
+
+#: account/login.php
+msgid "username:"
+msgstr "юзернейм:"
+
+#: account/login.php
+msgid "password:"
+msgstr "пароль:"
+
+#: account/login.php
+msgid "remember me"
+msgstr "запомнить меня"
+
+#: account/login.php
+msgid "log in"
+msgstr "войти"
+
+#: account/login.php
+msgid "register"
+msgstr "зарегистрироваться"
+
+#: account/logout.php account/save.php account/storage.php post/ban.php
+#: post/delete.php post/edit.php upload.php
+msgid "Method not allowed"
+msgstr "Метод не разрешён"
+
+#: account/logout.php
+msgid "Logged out!"
+msgstr "Вы вышли!"
+
+#: account/save.php
+msgid "Malformed encrypted preferences"
+msgstr "Повреждённые зашифрованные настройки"
+
+#: account/save.php
+msgid "Preferences saved in this browser!"
+msgstr "Настройки сохранены в этом браузере!"
+
+#: account/save.php
+msgid "Preferences loaded from your account!"
+msgstr "Настройки загружены из вашего аккаунта!"
+
+#: account/save.php
+msgid ""
+"Preferences saved in this browser only. JavaScript is required to save them "
+"to your account."
+msgstr ""
+"Настройки сохранены только в этом браузере. Чтобы сохранить их в аккаунт, "
+"нужен JavaScript."
+
+#: account/save.php
+msgid "Preferences saved in this browser only: account storage is unavailable."
+msgstr ""
+"Настройки сохранены только в этом браузере: хранилище аккаунта недоступно."
+
+#: account/save.php
+msgid ""
+"Preferences saved in this browser only: failed to save them to your account."
+msgstr ""
+"Настройки сохранены только в этом браузере: не удалось сохранить их в "
+"аккаунт."
+
+#: account/save.php
+msgid "Preferences saved!"
+msgstr "Настройки сохранены!"
+
+#: account/storage.php
+msgid "Not authorized"
+msgstr "Не авторизован"
+
+#: account/storage.php
+msgid "Account storage is unavailable"
+msgstr "Хранилище аккаунта недоступно"
+
+#: account/storage.php
+msgid "Failed to load account data"
+msgstr "Не удалось загрузить данные аккаунта"
+
+#: account/storage.php
+#, php-format
+msgid "Malformed encrypted %s"
+msgstr "Повреждённые зашифрованные данные: %s"
+
+#: account/storage.php
+msgid "Nothing to save"
+msgstr "Нечего сохранять"
+
+#: account/storage.php
+msgid "Failed to save account data"
+msgstr "Не удалось сохранить данные аккаунта"
+
+#: account/storage.php
+msgid "Saved!"
+msgstr "Сохранено!"
+
+#: index.php
+msgid "File upload is temporarily unavailable"
+msgstr "Загрузка файлов временно недоступна"
+
+#: index.php
+msgid "Not Found"
+msgstr "Не найдено"
+
+#: lib/account.php
+#, php-format
+msgid "Username must be between %d and %d characters long"
+msgstr "Юзернейм должен быть длиной от %d до %d символов"
+
+#: lib/account.php
+#, php-format
+msgid "Password must be at least %d character long"
+msgid_plural "Password must be at least %d characters long"
+msgstr[0] "Пароль должен содержать не менее %d символа"
+msgstr[1] "Пароль должен содержать не менее %d символов"
+msgstr[2] "Пароль должен содержать не менее %d символов"
+
+#: lib/pages/error.php
+msgid "Something went wrong"
+msgstr "Что-то пошло не так"
+
+#: lib/pages/error.php
+msgid "There is nothing to see here."
+msgstr "Здесь не на что смотреть."
+
+#: lib/pages/file.php lib/partials.php
+#, php-format
+msgid "%d line"
+msgid_plural "%d lines"
+msgstr[0] "%d строка"
+msgstr[1] "%d строки"
+msgstr[2] "%d строк"
+
+#: lib/pages/file.php
+#, php-format
+msgid "Post with %d attachment"
+msgid_plural "Post with %d attachments"
+msgstr[0] "Пост с %d вложением"
+msgstr[1] "Пост с %d вложениями"
+msgstr[2] "Пост с %d вложениями"
+
+#: lib/pages/file.php system/approval.php
+#, php-format
+msgid "%d view"
+msgid_plural "%d views"
+msgstr[0] "%d просмотр"
+msgstr[1] "%d просмотра"
+msgstr[2] "%d просмотров"
+
+#: lib/pages/file.php system/approval.php
+#, php-format
+msgid "uploaded %s ago"
+msgstr "загружено %s назад"
+
+#: lib/pages/file.php
+msgid ""
+"All trademarks and copyrights belong to their respective owners. The "
+"uploader is responsible for any content shared here."
+msgstr ""
+"Все товарные знаки и авторские права принадлежат их владельцам. "
+"Ответственность за опубликованный здесь контент несёт загрузивший его "
+"пользователь."
+
+#: lib/pages/file.php system/approval.php
+#, php-format
+msgid "%d attachment"
+msgid_plural "%d attachments"
+msgstr[0] "%d вложение"
+msgstr[1] "%d вложения"
+msgstr[2] "%d вложений"
+
+#: lib/pages/file.php
+#, php-format
+msgid "by %s"
+msgstr "от %s"
+
+#: lib/pages/file.php
+#, php-format
+msgid "%d line(s) omitted. click to expand."
+msgstr "скрыто строк: %d. нажмите, чтобы развернуть."
+
+#: lib/pages/file.php
+msgid "description omitted. click to expand."
+msgstr "описание скрыто. нажмите, чтобы развернуть."
+
+#: lib/pages/file.php
+msgid "re-roll"
+msgstr "испытать удачу ещё раз"
+
+#: lib/pages/file.php
+msgid "download"
+msgstr "скачать"
+
+#: lib/pages/file.php
+msgid "download file"
+msgstr "скачать файл"
+
+#: lib/pages/file.php
+msgid "full size"
+msgstr "полный размер"
+
+#: lib/pages/file.php
+msgid "open in full size"
+msgstr "открыть в полном размере"
+
+#: lib/pages/file.php
+msgid "report"
+msgstr "пожаловаться"
+
+#: lib/pages/file.php
+msgid "report this file"
+msgstr "пожаловаться на этот файл"
+
+#: lib/pages/home.php
+#, php-format
+msgid "max upload size is %s & files expire after %s"
+msgstr "можно загрузить до %s, файлы удаляются через %s"
+
+#: lib/pages/home.php
+#, php-format
+msgid "max upload size is %s"
+msgstr "максимальный размер файлов - %s"
+
+#: lib/pages/home.php
+msgid "click, drop, or paste files here"
+msgstr "нажмите, перетащите или вставьте файлы сюда"
+
+#: lib/pages/home.php
+msgid "drop files here"
+msgstr "отпустите файлы здесь"
+
+#: lib/pages/home.php
+msgid "password"
+msgstr "пароль"
+
+#: lib/pages/home.php
+msgid "for file deletion"
+msgstr "для удаления файла"
+
+#: lib/pages/home.php
+msgid "leave empty for permanent file"
+msgstr "оставьте пустым для неудаляемого файла"
+
+#: lib/pages/home.php
+msgid "single URL"
+msgstr "одна ссылка"
+
+#: lib/pages/home.php
+msgid "attach all files to a single link"
+msgstr "прикрепить все файлы к одной ссылке"
+
+#: lib/pages/home.php
+msgid "sign this post"
+msgstr "подписать пост"
+
+#: lib/pages/home.php
+#, php-format
+msgid "link this post with your account (%s)"
+msgstr "связать этот пост с вашим аккаунтом (%s)"
+
+#: lib/pages/home.php
+msgid "expires in:"
+msgstr "удалить через:"
+
+#: lib/pages/home.php
+msgid "miscellaneous"
+msgstr "прочее"
+
+#: lib/pages/home.php
+msgid "preserve original filename:"
+msgstr "не менять имя файла:"
+
+#: lib/pages/home.php
+msgid "strip EXIF data:"
+msgstr "удалить EXIF-данные:"
+
+#: lib/pages/home.php
+msgid "description"
+msgstr "описание"
+
+#: lib/pages/home.php
+msgid "tell us what you are going to upload... (Markdown supported)"
+msgstr "расскажи, что собираешься загрузить... (поддерживается Markdown)"
+
+#: lib/pages/home.php
+msgid "upload"
+msgstr "загрузить"
+
+#: lib/pages/home.php
+msgid "the upload will start immediately after selecting the file"
+msgstr "загрузка начнётся сразу после выбора файла"
+
+#: lib/pages/home.php
+msgid "the page will be refreshed once all uploads are complete"
+msgstr "страница обновится, когда все загрузки завершатся"
+
+#: lib/pages/home.php
+msgid "image file"
+msgstr "фото"
+
+#: lib/pages/home.php
+msgid "video file"
+msgstr "видео"
+
+#: lib/pages/home.php
+msgid "audio file"
+msgstr "аудио"
+
+#: lib/pages/home.php
+msgid "text file"
+msgstr "текст"
+
+#: lib/pages/home.php
+msgid "flash file"
+msgstr "flash-файл"
+
+#: lib/pages/home.php
+msgid "file"
+msgstr "файл"
+
+#: lib/pages/home.php lib/partials.php
+msgid "open"
+msgstr "открыть"
+
+#: lib/partials.php
+#, php-format
+msgid ""
+"%s is a simple, free and anonymous file sharing site. We do not store "
+"anything other than the files you upload."
+msgstr ""
+"%s - простой, бесплатный и анонимный файлообменник. Мы не храним ничего, "
+"кроме загруженных вами файлов."
+
+#: lib/partials.php
+#, php-format
+msgid "%s - file sharing website"
+msgstr "%s - файлообменник"
+
+#: lib/partials.php
+#, php-format
+msgid "found %d post"
+msgid_plural "found %d posts"
+msgstr[0] "найден %d пост"
+msgstr[1] "найдено %d поста"
+msgstr[2] "найдено %d постов"
+
+#: lib/partials.php
+msgid "recent"
+msgstr "новые"
+
+#: lib/partials.php
+msgid "oldest"
+msgstr "старые"
+
+#: lib/partials.php
+msgid "most viewed"
+msgstr "самые популярные"
+
+#: lib/partials.php
+msgid "least viewed"
+msgstr "наименее известные"
+
+#: lib/partials.php
+msgid "file size"
+msgstr "размер файла"
+
+#: lib/partials.php
+msgid "search"
+msgstr "искать"
+
+#: lib/partials.php
+msgid "catalogue"
+msgstr "галерея"
+
+#: lib/partials.php
+msgid "surprise me"
+msgstr "испытать удачу"
+
+#: lib/partials.php
+msgid "contact"
+msgstr "контакты"
+
+#: lib/partials.php
+msgid "more..."
+msgstr "ещё..."
+
+#: lib/partials.php uploaders.php
+msgid "uploaders"
+msgstr "загрузчики"
+
+#: lib/partials.php stats.php
+msgid "statistics"
+msgstr "статистика"
+
+#: lib/partials.php
+msgid "q&a"
+msgstr "q&a"
+
+#: lib/partials.php tos.php
+msgid "terms of service"
+msgstr "условия использования"
+
+#: lib/partials.php privacy.php
+msgid "privacy policy"
+msgstr "политика конфиденциальности"
+
+#: lib/partials.php
+msgid "multiple attachments"
+msgstr "несколько вложений"
+
+#: lib/partials.php
+msgid "Image file."
+msgstr "Изображение."
+
+#: lib/partials.php
+msgid "JavaScript is required to play Flash"
+msgstr "Для воспроизведения Flash нужен JavaScript"
+
+#: lib/partials.php
+msgid "This file cannot be displayed."
+msgstr "Этот файл невозможно отобразить."
+
+#: lib/utils.php
+#, php-format
+msgid "%d second"
+msgid_plural "%d seconds"
+msgstr[0] "%d секунду"
+msgstr[1] "%d секунды"
+msgstr[2] "%d секунд"
+
+#: lib/utils.php
+#, php-format
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d минуту"
+msgstr[1] "%d минуты"
+msgstr[2] "%d минут"
+
+#: lib/utils.php
+#, php-format
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d час"
+msgstr[1] "%d часа"
+msgstr[2] "%d часов"
+
+#: lib/utils.php
+#, php-format
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d день"
+msgstr[1] "%d дня"
+msgstr[2] "%d дней"
+
+#: lib/utils.php
+#, php-format
+msgid "%d month"
+msgid_plural "%d months"
+msgstr[0] "%d месяц"
+msgstr[1] "%d месяца"
+msgstr[2] "%d месяцев"
+
+#: lib/utils.php
+#, php-format
+msgid "%d year"
+msgid_plural "%d years"
+msgstr[0] "%d год"
+msgstr[1] "%d года"
+msgstr[2] "%d лет"
+
+#: lib/utils.php
+msgid "MB"
+msgstr "МБ"
+
+#: lib/utils.php
+msgid "GB"
+msgstr "ГБ"
+
+#: post/ban.php
+msgid "Only moderators can ban posts"
+msgstr "Только модераторы могут банить посты"
+
+#: post/ban.php post/delete.php post/edit.php
+msgid "Post ID must be set!"
+msgstr "Нужно указать ID поста!"
+
+#: post/ban.php post/delete.php post/edit.php
+msgid "Post does not exist or has been deleted"
+msgstr "Пост не существует или был удалён"
+
+#: post/ban.php
+msgid "Failed to ban the post files. Try again later."
+msgstr "Не удалось забанить файлы поста. Попробуйте позже."
+
+#: post/ban.php
+msgid ""
+"Files have been banned, but the post could not be deleted. Try again later."
+msgstr "Файлы забанены, но пост удалить не удалось. Попробуйте позже."
+
+#: post/ban.php
+#, php-format
+msgid "Post %s has been banned"
+msgstr "Пост %s забанен"
+
+#: post/delete.php
+msgid "Incorrect password or this post cannot be deleted"
+msgstr "Неверный пароль, или этот пост нельзя удалить"
+
+#: post/delete.php
+msgid "Failed to delete the post. Try again later."
+msgstr "Не удалось удалить пост. Попробуйте позже."
+
+#: post/delete.php
+#, php-format
+msgid "Post %s has been deleted"
+msgstr "Пост %s удалён"
+
+#: post/edit.php
+msgid "Incorrect password or this post cannot be edited"
+msgstr "Неверный пароль, или этот пост нельзя изменить"
+
+#: post/edit.php
+msgid "Only moderators can change post visibility"
+msgstr "Только модераторы могут менять видимость постов"
+
+#: post/edit.php
+msgid "Invalid visibility value"
+msgstr "Недопустимое значение видимости"
+
+#: post/edit.php
+msgid "Nothing to edit"
+msgstr "Нечего изменять"
+
+#: post/edit.php
+msgid "Failed to edit the post. Try again later."
+msgstr "Не удалось изменить пост. Попробуйте позже."
+
+#: post/edit.php
+#, php-format
+msgid "Post %s has been edited"
+msgstr "Пост %s изменён"
+
+#: post/list.php
+msgid "File catalogue is unavailable for anonymous users"
+msgstr "Галерея недоступна анонимным пользователям"
+
+#: post/list.php
+#, php-format
+msgid "%d post"
+msgid_plural "%d posts"
+msgstr[0] "%d пост"
+msgstr[1] "%d поста"
+msgstr[2] "%d постов"
+
+#: post/list.php
+#, php-format
+msgid "page %d/%d"
+msgstr "страница %d/%d"
+
+#: post/list.php
+msgid "the catalogue"
+msgstr "галерея"
+
+#: post/list.php
+msgid "Nothing found."
+msgstr "Ничего не найдено."
+
+#: privacy.php
+msgid "Privacy policy is not set!"
+msgstr "Политика конфиденциальности не задана!"
+
+#: privacy.php
+msgid "We don't store anything personal about you."
+msgstr "Мы не храним о вас никаких личных данных."
+
+#: privacy.php qa.php tos.php
+#, php-format
+msgid "last updated: %s"
+msgstr "последнее обновление: %s"
+
+#: qa.php
+msgid "QA is not set!"
+msgstr "Раздел Q&A не задан!"
+
+#: qa.php
+msgid "No questions - no answers."
+msgstr "Нет вопросов - нет ответов."
+
+#: qa.php
+msgid "question & answer"
+msgstr "вопрос - ответ"
+
+#: stats.php
+#, php-format
+msgid "last updated %s ago"
+msgstr "обновлено %s назад"
+
+#: stats.php
+msgid "about files & posts"
+msgstr "о файлах и постах"
+
+#: stats.php
+msgid "serving posts"
+msgstr "постов на сайте"
+
+#: stats.php
+msgid "serving files"
+msgstr "файлов на сайте"
+
+#: stats.php
+msgid "active content"
+msgstr "объём контента"
+
+#: stats.php
+msgid "average file size"
+msgstr "средний размер файла"
+
+#: stats.php
+msgid "average upload rate (per minute)"
+msgstr "средняя скорость загрузок (в минуту)"
+
+#: stats.php
+msgid "how many files can be uploaded"
+msgstr "сколько ещё файлов можно загрузить"
+
+#: stats.php
+msgid "first uploaded post"
+msgstr "первый загруженный пост"
+
+#: stats.php
+#, php-format
+msgid "%s ago (%s)"
+msgstr "%s назад (%s)"
+
+#: stats.php
+msgid "last uploaded post"
+msgstr "последний загруженный пост"
+
+#: stats.php
+msgid "posts uploaded (per quarter)"
+msgstr "загружено постов (по кварталам)"
+
+#: stats.php
+msgid "JavaScript is required for bar chart"
+msgstr "Для диаграммы нужен JavaScript"
+
+#: stats.php
+msgid "the most viewed posts"
+msgstr "самые просматриваемые посты"
+
+#: system/approval.php
+msgid "Only moderators can access this page"
+msgstr "Эта страница доступна только модераторам"
+
+#: system/approval.php
+#, php-format
+msgid "%d pending post"
+msgid_plural "%d pending posts"
+msgstr[0] "%d пост ожидает"
+msgstr[1] "%d поста ожидают"
+msgstr[2] "%d постов ожидают"
+
+#: system/approval.php
+#, php-format
+msgid "expires in %s"
+msgstr "удалится через %s"
+
+#: system/approval.php
+msgid "public"
+msgstr "публичный"
+
+#: system/approval.php
+msgid "unlisted"
+msgstr "скрытый"
+
+#: system/approval.php
+msgid "pending approval"
+msgstr "ожидает одобрения"
+
+#: system/approval.php
+msgid "delete"
+msgstr "удалить"
+
+#: system/approval.php
+msgid "ban"
+msgstr "забанить"
+
+#: system/approval.php
+msgid "Nothing to approve."
+msgstr "Нечего одобрять."
+
+#: system/approval.php
+#, php-format
+msgid "showing first %d"
+msgstr "показаны первые %d"
+
+#: tos.php
+msgid "TOS is not set!"
+msgstr "Условия использования не заданы!"
+
+#: tos.php
+msgid "Don't upload anything bad."
+msgstr "Не загружайте ничего плохого."
+
+#: track.php
+msgid "This feature is not available"
+msgstr "Эта функция недоступна"
+
+#: track.php
+msgid "waiting..."
+msgstr "ожидание..."
+
+#: track.php
+#, php-format
+msgid "File track ID %s not found"
+msgstr "ID отслеживания %s не найден"
+
+#: upload.php
+msgid "re-rolling IDs..."
+msgstr "подбираем ID..."
+
+#: upload.php
+msgid "File upload is temporarily unavailable. Please try again later!"
+msgstr "Загрузка файлов временно недоступна. Пожалуйста, попробуйте позже!"
+
+#: upload.php
+msgid "preparing..."
+msgstr "подготовка..."
+
+#: upload.php
+msgid "Invalid base64 data"
+msgstr "Недопустимые данные base64"
+
+#: upload.php
+msgid "No files to upload"
+msgstr "Нет файлов для загрузки"
+
+#: upload.php
+msgid "Exceeded file upload limit"
+msgstr "Превышен лимит количества файлов"
+
+#: upload.php
+msgid "You must be logged in to sign posts"
+msgstr "Чтобы подписывать посты, нужно войти в аккаунт"
+
+#: upload.php
+msgid "Invalid parameters"
+msgstr "Недопустимые параметры"
+
+#: upload.php
+msgid "No file sent"
+msgstr "Файл не отправлен"
+
+#: upload.php
+msgid "Exceeded filesize limit"
+msgstr "Превышен лимит размера файла"
+
+#: upload.php
+msgid "Unknown errors"
+msgstr "Неизвестная ошибка"
+
+#: upload.php
+#, php-format
+msgid "verifying file integrity... (%d/%d)"
+msgstr "проверка целостности файла... (%d/%d)"
+
+#: upload.php
+msgid "Invalid file format."
+msgstr "Недопустимый формат файла."
+
+#: upload.php
+msgid "Failed to strip EXIF tags."
+msgstr "Не удалось удалить EXIF-теги."
+
+#: upload.php
+msgid "Failed to calculate file hash"
+msgstr "Не удалось вычислить хеш файла"
+
+#: upload.php
+msgid "This file has been banned"
+msgstr "Этот файл забанен"
+
+#: upload.php
+#, php-format
+msgid "This file has been banned: %s"
+msgstr "Этот файл забанен: %s"
+
+#: upload.php
+msgid "writing files to disk..."
+msgstr "запись файлов на диск..."
+
+#: upload.php
+msgid "writing files to database..."
+msgstr "запись файлов в базу данных..."
+
+#: upload.php
+msgid "saving files to object storage (may take a long time)..."
+msgstr ""
+"сохранение файлов в объектное хранилище (может занять много времени)..."
+
+#: upload.php
+msgid "saving..."
+msgstr "сохранение..."
+
+#: upload.php
+msgid "Failed to save file. Try again later."
+msgstr "Не удалось сохранить файл. Попробуйте позже."
+
+#: upload.php
+msgid "Failed to attach file to the post."
+msgstr "Не удалось прикрепить файл к посту."
+
+#: upload.php
+msgid "drawing thumbnails..."
+msgstr "создание миниатюр..."
+
+#: upload.php
+msgid "No posts"
+msgstr "Нет постов"
+
+#: uploaders.php
+msgid "file uploaders"
+msgstr "загрузчики файлов"
+
+#: uploaders.php
+#, php-format
+msgid "configure your software to work with %s"
+msgstr "настройте свои программы для работы с %s"
+
+#: uploaders.php
+msgid "Request URL:"
+msgstr "URL запроса:"
+
+#: uploaders.php
+msgid "Destination type:"
+msgstr "Тип назначения:"
+
+#: uploaders.php
+msgid "Method:"
+msgstr "Метод:"
+
+#: uploaders.php
+msgid "Body:"
+msgstr "Тело:"
+
+#: uploaders.php
+msgid "Headers:"
+msgstr "Заголовки:"
+
+#: uploaders.php
+msgid "File form name:"
+msgstr "Имя поля формы:"
+
+#: uploaders.php
+msgid "URL:"
+msgstr "URL:"
+
+#: uploaders.php
+msgid "Deletion URL:"
+msgstr "URL удаления:"
+
+#: uploaders.php
+#, php-format
+msgid "Then, select it via %s"
+msgstr "Затем выберите его через %s"
+
+#: uploaders.php
+msgid "Form field:"
+msgstr "Поле формы:"
+
+#: uploaders.php
+msgid "Extra headers:"
+msgstr "Доп. заголовки:"
+
+#: uploaders.php
+msgid "Image link:"
+msgstr "Ссылка на изображение:"
+
+#: uploaders.php
+msgid "Deletion link:"
+msgstr "Ссылка на удаление:"
+
+#: uploaders.php
+msgid "Endpoint"
+msgstr "Адрес"
+
+#: uploaders.php
+msgid "Request Format"
+msgstr "Формат запроса"
+
+#: uploaders.php
+msgid "Content-Type:"
+msgstr "Content-Type:"
+
+#: uploaders.php
+msgid "File field:"
+msgstr "Поле файла:"
+
+#: uploaders.php
+msgid "Max file size:"
+msgstr "Макс. размер файла:"

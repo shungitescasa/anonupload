@@ -190,6 +190,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
         const updated = { ...current };
         if (typeof preferences.theme === "string") updated.theme = preferences.theme;
+        if (typeof preferences.language === "string") updated.language = preferences.language;
         updated.noloop = !!preferences.noloop;
         updated.noautoplay = !!preferences.noautoplay;
 

@@ -11,6 +11,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     const readPreferences = () => ({
         theme: form.elements.theme?.value,
+        language: form.elements.language?.value || undefined,
         noloop: form.elements.noloop.checked,
         noautoplay: form.elements.noautoplay.checked
     });
@@ -49,8 +50,9 @@ window.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    // the theme stylesheet is applied on the server side, so the page reloads when it changes
-    let theme = form.elements.theme?.value;
+    // the theme stylesheet and the language are applied on the server side, so the page reloads when they change
+    const serverRendered = () => [form.elements.theme?.value, form.elements.language?.value].join("\n");
+    let rendered = serverRendered();
 
     const save = async () => {
         const body = new URLSearchParams(new FormData(form));
@@ -70,8 +72,8 @@ window.addEventListener("DOMContentLoaded", async () => {
             return;
         }
 
-        if (form.elements.theme && form.elements.theme.value !== theme) {
-            theme = form.elements.theme.value;
+        if (serverRendered() !== rendered) {
+            rendered = serverRendered();
             location.reload();
             return;
         }

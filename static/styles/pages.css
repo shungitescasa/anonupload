@@ -4,3 +4,24 @@
     flex-direction: column;
     gap: 32px;
 }
+
+/** language selector in /account */
+.language-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 0.25em;
+}
+
+.language-list label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+}
+
+.language-list img.flag {
+    height: 1em;
+    width: auto;
+}

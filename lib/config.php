@@ -18,9 +18,10 @@ $cfg = [
         'id' => 'anonupload',
         "mirrors" => [],
         "url" => (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]",
-        'linkname' => 'other',
+        'linkname' => 'more...',
         "links" => [],
         "defaultstyle" => "default",
+        'defaultlanguage' => 'en',
         'machine_id' => 1,
         'epoch' => 1609459200000,
     ],
@@ -407,3 +408,5 @@ if ($cfg['memcached']['hosts']) {
 }
 
 define("MEMCACHED", $mem);
+
+include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/i18n.php";

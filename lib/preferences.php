@@ -12,10 +12,16 @@ function normalize_preferences(array $input): array
         $theme = CONFIG['instance']['defaultstyle'];
     }
 
+    $language = $input['language'] ?? null;
+    if (!i18n_is_available($language)) {
+        $language = i18n_language();
+    }
+
     $flag = fn(string $k) => filter_var($input[$k] ?? false, FILTER_VALIDATE_BOOLEAN);
 
     return [
         'theme' => $theme,
+        'language' => $language,
         'noloop' => $flag('noloop'),
         'noautoplay' => $flag('noautoplay')
     ];
@@ -25,6 +31,7 @@ function get_preferences(): array
 {
     return normalize_preferences([
         'theme' => $_COOKIE['theme'] ?? null,
+        'language' => i18n_language(),
         'noloop' => isset($_COOKIE['noloop']),
         'noautoplay' => isset($_COOKIE['noautoplay'])
     ]);
@@ -40,6 +47,12 @@ function set_preferences_cookies(array $preferences): void
         $remove('theme');
     } else {
         setcookie('theme', $preferences['theme'], $expires, '/');
+    }
+
+    if ($preferences['language'] === i18n_detect_language()) {
+        $remove(I18N_COOKIE);
+    } else {
+        setcookie(I18N_COOKIE, $preferences['language'], $expires, '/');
     }
 
     foreach (['noloop', 'noautoplay'] as $k) {

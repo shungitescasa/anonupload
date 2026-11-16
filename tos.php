@@ -7,13 +7,13 @@ include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/alert.php";
 
 $file_path = "{$_SERVER['DOCUMENT_ROOT']}/TOS.txt";
 if (!file_exists($file_path)) {
-    generate_alert('/', 'TOS is not set!', 500);
+    generate_alert('/', __('TOS is not set!'), 500);
 }
 
 $markdown = new Parsedown();
 
 $data = [
-    'content' => $markdown->text(file_get_contents($file_path) ?: "Don't upload anything bad."),
+    'content' => $markdown->text(file_get_contents($file_path) ?: __("Don't upload anything bad.")),
     'last_updated' => (new DateTime())->setTimestamp(filemtime($file_path) ?: 0)
 ];
 
@@ -21,16 +21,16 @@ if ($data['last_updated']->getTimestamp() === 0)
     $data['last_updated'] = null;
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="<?= html_lang() ?>">
 
-<head><?php html_head("terms of service"); ?></head>
+<head><?php html_head(__('terms of service')); ?></head>
 
 <body>
     <header>
         <?php html_header(); ?>
-        <h2>terms of service</h2>
+        <h2><?= __('terms of service') ?></h2>
         <?php if ($data['last_updated']): ?>
-            <p>last updated: <?= $data['last_updated']->format('M d, Y') ?></p>
+            <p><?= __('last updated: %s', format_date($data['last_updated'])) ?></p>
         <?php endif; ?>
     </header>
     <main>

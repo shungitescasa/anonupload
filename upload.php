@@ -17,7 +17,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 if ($_SERVER['REQUEST_METHOD'] != 'POST') {
     generate_alert(
         '/',
-        "Method not allowed",
+        __('Method not allowed'),
         405,
         null
     );
@@ -40,7 +40,7 @@ function create_post(
     global $status;
 
     // generating file id
-    $status->send('up_genid', 're-rolling IDs...');
+    $status->send('up_genid', __('re-rolling IDs...'));
     $attempts = 0;
     $id_length = CONFIG["id"]["length"];
     $id_prefix = CONFIG["id"]["prefix"] ?? '';
@@ -91,12 +91,12 @@ function delete_empty_posts(array &$posts)
 
 try {
     if (!FILESTORAGE->is_available() || !FILEREGISTRY->is_available()) {
-        throw new HTTPException('File upload is temporarily unavailable. Please try again later!', 500);
+        throw new HTTPException(__('File upload is temporarily unavailable. Please try again later!'), 500);
     }
 
     $files = [];
 
-    $status->send('up_prep', 'preparing...');
+    $status->send('up_prep', __('preparing...'));
 
     if (isset($_FILES['file'])) {
         $f = $_FILES['file'];
@@ -126,7 +126,7 @@ try {
         $parts = explode(',', $_POST['base64']);
         $meta = $parts[0];
         if (!str_starts_with($meta, 'data:image/') || !str_ends_with($meta, ';base64')) {
-            throw new HTTPException("Invalid base64 data");
+            throw new HTTPException(__('Invalid base64 data'));
         }
 
         $data = $parts[1];
@@ -139,15 +139,15 @@ try {
         $file['size'] = filesize($file['tmp_name']);
         array_push($files, $file);
     } else {
-        throw new HTTPException("No files to upload");
+        throw new HTTPException(__('No files to upload'));
     }
 
     $file_count = count($files);
 
     if ($file_count > CONFIG['upload']['max_files_per_request']) {
-        throw new HTTPException("Exceeded file upload limit", 413);
+        throw new HTTPException(__('Exceeded file upload limit'), 413);
     } else if ($file_count === 0) {
-        throw new HTTPException("No files to upload");
+        throw new HTTPException(__('No files to upload'));
     }
 
     $single_url = boolval($_POST['single_url'] ?? '0');
@@ -160,7 +160,7 @@ try {
     if (boolval($_POST['sign_post'] ?? '0')) {
         $signer = ACCOUNT_SERVICE?->get_user();
         if ($signer === null) {
-            throw new HTTPException('You must be logged in to sign posts', 401);
+            throw new HTTPException(__('You must be logged in to sign posts'), 401);
         }
     }
 
@@ -214,7 +214,7 @@ try {
                 !isset($file['error']) ||
                 is_array($file['error'])
             ) {
-                throw new HTTPException('Invalid parameters');
+                throw new HTTPException(__('Invalid parameters'));
             }
 
             // checking file error
@@ -222,45 +222,44 @@ try {
                 case UPLOAD_ERR_OK:
                     break;
                 case UPLOAD_ERR_NO_FILE:
-                    throw new HTTPException('No file sent');
+                    throw new HTTPException(__('No file sent'));
                 case UPLOAD_ERR_INI_SIZE:
                 case UPLOAD_ERR_FORM_SIZE:
-                    throw new HTTPException('Exceeded filesize limit');
+                    throw new HTTPException(__('Exceeded filesize limit'));
                 default:
-                    throw new HTTPException('Unknown errors');
+                    throw new HTTPException(__('Unknown errors'));
             }
 
-            $status->send('up_integrity', "verifying file integrity... ($ic/$file_count)");
+            $status->send('up_integrity', __('verifying file integrity... (%d/%d)', $ic, $file_count));
 
             // checking file mimetype
             $finfo = new finfo(FILEINFO_MIME_TYPE);
             if (false === $file_ext = array_search($finfo->file($file['tmp_name']), CONFIG["upload"]["acceptedmimetypes"], true)) {
-                throw new HTTPException("Invalid file format.");
+                throw new HTTPException(__('Invalid file format.'));
             }
 
             // verifying file mimetype
             $file_mime = CONFIG["upload"]["acceptedmimetypes"][$file_ext];
             $is_media = str_starts_with($file_mime, 'image/') || str_starts_with($file_mime, 'video/') || str_starts_with($file_mime, 'audio/');
             if (CONFIG["upload"]["verifymimetype"] && $is_media && !verify_mimetype($file['tmp_name'], $file_mime)) {
-                throw new RuntimeException('Invalid file format.');
+                throw new RuntimeException(__('Invalid file format.'));
             }
 
             // striping exif data
             if (CONFIG["upload"]["stripexif"] && $strip_exif && $is_media && !strip_exif($file['tmp_name'])) {
-                throw new RuntimeException('Failed to strip EXIF tags.');
+                throw new RuntimeException(__('Failed to strip EXIF tags.'));
             }
 
             $file_hash = hash_file("sha256", $file['tmp_name']);
             if (!$file_hash) {
-                throw new RuntimeException("Failed to calculate file hash");
+                throw new RuntimeException(__('Failed to calculate file hash'));
             }
 
             // checking if the file is banned
             if ($ban = FILEREGISTRY->get_file_ban($file_hash)) {
-                $message = 'This file has been banned';
-                if (!empty($ban['reason'])) {
-                    $message .= ": {$ban['reason']}";
-                }
+                $message = empty($ban['reason'])
+                    ? __('This file has been banned')
+                    : __('This file has been banned: %s', $ban['reason']);
                 throw new HTTPException($message, 403);
             }
 
@@ -273,10 +272,10 @@ try {
                 $opt->content_type = $file_mime;
 
                 $status->send('up_save', match (CONFIG['storage']['type']) {
-                    'local' => 'writing files to disk...',
-                    'sql' => 'writing files to database...',
-                    's3' => 'saving files to object storage (may take a long time)...',
-                    default => 'saving...',
+                    'local' => __('writing files to disk...'),
+                    'sql' => __('writing files to database...'),
+                    's3' => __('saving files to object storage (may take a long time)...'),
+                    default => __('saving...'),
                 } . " ($ic/$file_count)");
 
                 $snowflake_id = new SnowflakeIdentifier(CONFIG['instance']['machine_id'], CONFIG['instance']['epoch']);
@@ -285,7 +284,7 @@ try {
 
                 $base_file = FILESTORAGE->save_file("{$snowflake_id->generate()}.$file_ext", $file['tmp_name'], $opt);
                 if (!$base_file) {
-                    throw new HTTPException('Failed to save file. Try again later.');
+                    throw new HTTPException(__('Failed to save file. Try again later.'));
                 }
                 $base_file->hash = $file_hash;
                 $base_file->metadata = $metadata;
@@ -295,7 +294,7 @@ try {
             $base_file->original_filename = $original_filename;
 
             if (!FILEREGISTRY->attach_to_post($post, $base_file)) {
-                throw new HTTPException("Failed to attach file to the post.");
+                throw new HTTPException(__('Failed to attach file to the post.'));
             }
 
             if (CONFIG['views']['enabled']) {
@@ -319,7 +318,7 @@ try {
 
     // -- generating thumbnails
     if (THUMBNAILER !== null) {
-        $status->send('up_thumbnail', 'drawing thumbnails...');
+        $status->send('up_thumbnail', __('drawing thumbnails...'));
         $s3_thumb = THUMBNAILER instanceof S3ProxyThumbnailer;
         $data = [];
         foreach ($uploaded_posts as $i => $p) {
@@ -346,7 +345,7 @@ try {
     delete_empty_posts($uploaded_posts);
 
     if (empty($uploaded_posts)) {
-        throw new HTTPException('No posts');
+        throw new HTTPException(__('No posts'));
     }
 
     if (isset($_POST['save_upload_list']) && boolval($_POST['save_upload_list'])) {

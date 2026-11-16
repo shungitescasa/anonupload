@@ -9,7 +9,7 @@ $post = null;
 $file_name_specified = isset($_GET['i']) || isset($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] !== '/';
 
 if (CONFIG['storage']['index_ping'] && (!FILESTORAGE->is_available() || !FILEREGISTRY->is_available())) {
-    $error = '503 File upload is temporarily unavailable';
+    $error = '503 ' . __('File upload is temporarily unavailable');
     $error_redirect = true;
     include $_SERVER['DOCUMENT_ROOT'] . '/lib/pages/error.php';
     die();
@@ -120,7 +120,7 @@ try {
 if ($post) {
     include $_SERVER['DOCUMENT_ROOT'] . '/lib/pages/file.php';
 } elseif ($file_name_specified) {
-    $error = '404 Not Found';
+    $error = '404 ' . __('Not Found');
     include $_SERVER['DOCUMENT_ROOT'] . '/lib/pages/error.php';
 } else {
     include $_SERVER['DOCUMENT_ROOT'] . '/lib/pages/home.php';

@@ -3,17 +3,15 @@ include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/config.php";
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/partials.php";
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="<?= html_lang() ?>">
 
-<head><?php html_head("uploaders"); ?></head>
+<head><?php html_head(__('uploaders')); ?></head>
 
 <body>
     <header>
         <?php html_header() ?>
-        <h2>file uploaders</h2>
-        <p>configure your software to work with
-            <?= CONFIG["instance"]["name"] ?>
-        </p>
+        <h2><?= __('file uploaders') ?></h2>
+        <p><?= __('configure your software to work with %s', CONFIG["instance"]["name"]) ?></p>
     </header>
     <main>
         <section class="software-uploaders">
@@ -25,44 +23,43 @@ include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/partials.php";
                 <div class="content">
                     <table class="vertical">
                         <tr>
-                            <th>Name:</th>
+                            <th><?= __('Name:') ?></th>
                             <td><code><?= CONFIG["instance"]["name"] ?></code></td>
                         </tr>
                         <tr>
-                            <th>Request URL:</th>
+                            <th><?= __('Request URL:') ?></th>
                             <td><code class="copy"><?= CONFIG["instance"]["url"] ?>/upload</code></td>
                         </tr>
                         <tr>
-                            <th>Destination type:</th>
+                            <th><?= __('Destination type:') ?></th>
                             <td><code>Image uploader</code></td>
                         </tr>
                         <tr>
-                            <th>Method:</th>
+                            <th><?= __('Method:') ?></th>
                             <td><code>POST</code></td>
                         </tr>
                         <tr>
-                            <th>Body:</th>
+                            <th><?= __('Body:') ?></th>
                             <td><code>Form data (multipart/form-data)</code></td>
                         </tr>
                         <tr>
-                            <th>Headers:</th>
+                            <th><?= __('Headers:') ?></th>
                             <td><code>Accept: application/json</code></td>
                         </tr>
                         <tr>
-                            <th>File form name:</th>
+                            <th><?= __('File form name:') ?></th>
                             <td><code class="copy">file</code></td>
                         </tr>
                         <tr>
-                            <th>URL:</th>
+                            <th><?= __('URL:') ?></th>
                             <td><code class="copy">{json:data.urls.download_url}</code></td>
                         </tr>
                         <tr>
-                            <th>Deletion URL:</th>
+                            <th><?= __('Deletion URL:') ?></th>
                             <td><code class="copy">{json:data.urls.deletion_url}</code></td>
                         </tr>
                     </table>
-                    <p>Then, select it via <b>Destinations &rarr; Image uploader &rarr; Custom image
-                            uploader</b></p>
+                    <p><?= __('Then, select it via %s', '<b>Destinations &rarr; Image uploader &rarr; Custom image uploader</b>') ?></p>
                 </div>
             </div>
 
@@ -78,23 +75,23 @@ include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/partials.php";
                 <div class="content">
                     <table class="vertical">
                         <tr>
-                            <th>URL:</th>
+                            <th><?= __('URL:') ?></th>
                             <td><code class="copy"><?= CONFIG["instance"]["url"] ?>/upload</code></td>
                         </tr>
                         <tr>
-                            <th>Form field:</th>
+                            <th><?= __('Form field:') ?></th>
                             <td><code class="copy">file</code></td>
                         </tr>
                         <tr>
-                            <th>Extra headers:</th>
+                            <th><?= __('Extra headers:') ?></th>
                             <td><code class="copy">Accept: application/json</code></td>
                         </tr>
                         <tr>
-                            <th>Image link:</th>
+                            <th><?= __('Image link:') ?></th>
                             <td><code class="copy">{data.urls.download_url}</code></td>
                         </tr>
                         <tr>
-                            <th>Deletion link:</th>
+                            <th><?= __('Deletion link:') ?></th>
                             <td><code class="copy">{data.urls.deletion_url}</code></td>
                         </tr>
                     </table>
@@ -107,33 +104,33 @@ include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/partials.php";
                 </div>
                 <div class="content">
                     <div class="column">
-                        <h3>Endpoint</h3>
+                        <h3><?= __('Endpoint') ?></h3>
                         <hr>
                         <p><code>POST <span class="copy"><?= CONFIG["instance"]["url"] ?>/upload</span></code></p>
                     </div>
 
                     <div>
-                        <h3>Request Format</h3>
+                        <h3><?= __('Request Format') ?></h3>
                         <hr>
                         <table class="vertical">
                             <tr>
-                                <th>Method:</th>
+                                <th><?= __('Method:') ?></th>
                                 <td><code>POST</code></td>
                             </tr>
                             <tr>
-                                <th>Content-Type:</th>
+                                <th><?= __('Content-Type:') ?></th>
                                 <td><code>multipart/form-data</code></td>
                             </tr>
                             <tr>
-                                <th>Headers:</th>
+                                <th><?= __('Headers:') ?></th>
                                 <td><code>Accept: application/json</code></td>
                             </tr>
                             <tr>
-                                <th>File field:</th>
+                                <th><?= __('File field:') ?></th>
                                 <td><code>file</code></td>
                             </tr>
                             <tr>
-                                <th>Max file size:</th>
+                                <th><?= __('Max file size:') ?></th>
                                 <td><code><?= ini_get("upload_max_filesize") ?></code></td>
                             </tr>
                         </table>

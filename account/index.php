@@ -9,22 +9,23 @@ $user = ACCOUNT_SERVICE?->get_user();
 $unauthorized = $user === null;
 $preferences = get_preferences();
 $theme = $preferences['theme'];
+$languages = i18n_available_languages();
 $storage_available = !$unauthorized && ACCOUNT_SERVICE->is_storage_available();
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="<?= html_lang() ?>">
 
 <head>
-    <?php html_head("account"); ?>
+    <?php html_head(__('account')); ?>
 </head>
 
 <body>
     <header>
         <?php html_header() ?>
         <?php if ($unauthorized): ?>
-            <h1>account</h1>
+            <h1><?= __('account') ?></h1>
         <?php else: ?>
-            <h1>hi, <?= htmlspecialchars($user->name) ?></h1>
+            <h1><?= __('hi, %s', htmlspecialchars($user->name)) ?></h1>
         <?php endif; ?>
         <?php display_alert() ?>
     </header>
@@ -33,17 +34,17 @@ $storage_available = !$unauthorized && ACCOUNT_SERVICE->is_storage_available();
             <?php if ($unauthorized): ?>
                 <section class="box">
                     <p>
-                        <?= CONFIG['account']['name'] ?> account syncs your uploaded files and favorites
-                        across devices. <a href="/account/login">Sign in today!</a>
+                        <?= __('%s account syncs your uploaded files and favorites across devices.', CONFIG['account']['name'] ?? CONFIG['instance']['name']) ?>
+                        <a href="/account/login"><?= __('Sign in today!') ?></a>
                     </p>
                 </section>
             <?php else: ?>
                 <section class="box">
-                    <div class="tab">account</div>
+                    <div class="tab"><?= __('account') ?></div>
                     <div class="content">
                         <table class="vertical">
                             <tr>
-                                <th>Name:</th>
+                                <th><?= __('Name:') ?></th>
                                 <td>
                                     <?= htmlspecialchars($user->name) ?>
                                     <i>(<?= htmlspecialchars($user->username) ?>)</i>
@@ -51,35 +52,35 @@ $storage_available = !$unauthorized && ACCOUNT_SERVICE->is_storage_available();
                             </tr>
                             <?php if ($user->email !== null): ?>
                                 <tr>
-                                    <th>E-Mail:</th>
+                                    <th><?= __('E-Mail:') ?></th>
                                     <td><span class="spoiler"><?= htmlspecialchars($user->email) ?></span></td>
                                 </tr>
                             <?php endif; ?>
                             <?php if (!empty($user->groups)): ?>
                                 <tr>
-                                    <th>Groups:</th>
+                                    <th><?= __('Groups:') ?></th>
                                     <td><?= implode(', ', $user->groups) ?></td>
                                 </tr>
                             <?php endif; ?>
                         </table>
 
                         <form action="/account/logout" method="post" id="logout">
-                            <button type="submit">log out</button>
+                            <button type="submit"><?= __('log out') ?></button>
                         </form>
                     </div>
                 </section>
 
                 <?php if ($user->is_moderator() || $user->is_admin()): ?>
                     <section>
-                        <h2>system</h2>
+                        <h2><?= __('system') ?></h2>
                         <table class="vertical">
                             <?php if ($user->is_moderator()): ?>
                                 <tr>
                                     <th>
-                                        <a href="/system/approval">Media Approval System</a>
+                                        <a href="/system/approval"><?= __('Media Approval System') ?></a>
                                     </th>
                                     <td>
-                                        <i>approve the new files for public access or leave them unlisted permanently</i>
+                                        <i><?= __('approve the new files for public access or leave them unlisted permanently') ?></i>
                                     </td>
                                 </tr>
                             <?php endif; ?>
@@ -90,55 +91,55 @@ $storage_available = !$unauthorized && ACCOUNT_SERVICE->is_storage_available();
         <?php endif; ?>
         <section>
             <?php if ($unauthorized): ?>
-                <h2>this browser</h2>
+                <h2><?= __('this browser') ?></h2>
                 <hr>
-                <p>this data is stored locally, which means it will be deleted once you clear your browser.</p>
+                <p><?= __('this data is stored locally, which means it will be deleted once you clear your browser.') ?></p>
             <?php else: ?>
-                <h2>this account</h2>
+                <h2><?= __('my account') ?></h2>
             <?php endif; ?>
             <table class="vertical">
                 <tr>
                     <th>
-                        <a href="/account/history">history</a>
+                        <a href="/account/history"><?= __('history') ?></a>
                     </th>
                     <td>
-                        <i>your uploaded files</i>
+                        <i><?= __('your uploaded files') ?></i>
                     </td>
                 </tr>
                 <tr>
                     <th>
-                        <a href="/account/favorites">favorites</a>
+                        <a href="/account/favorites"><?= __('favorites') ?></a>
                     </th>
                     <td>
-                        <i>files you like</i>
+                        <i><?= __('saved files that you liked') ?></i>
                     </td>
                 </tr>
             </table>
         </section>
 
         <section>
-            <h2>my preferences</h2>
+            <h2><?= __('my preferences') ?></h2>
             <hr>
             <?php if ($unauthorized): ?>
-                <p>preferences are saved in this browser's cookies.</p>
+                <p><?= __("preferences are saved in this browser's cookies.") ?></p>
             <?php elseif (!$storage_available): ?>
-                <p>account storage is unavailable, so preferences are saved in this browser's cookies only.</p>
+                <p><?= __("account storage is unavailable, so preferences are saved in this browser's cookies only.") ?></p>
             <?php else: ?>
                 <noscript>
-                    <p>preferences are encrypted with your password before they're saved to your account, which requires
-                        JavaScript. without it, they're saved in this browser's cookies only.</p>
+                    <p><?= __("preferences are encrypted with your password before they're saved to your account, which requires JavaScript. without it, they're saved in this browser's cookies only.") ?>
+                    </p>
                 </noscript>
             <?php endif; ?>
             <p id="preferences-status" hidden></p>
             <form autocomplete="off" method="post" action="/account/save" class="preferences" id="preferences"
                 <?= $unauthorized ? '' : 'data-authorized' ?> <?= $storage_available ? 'data-storage' : '' ?>>
                 <fieldset>
-                    <legend>general</legend>
+                    <legend><?= __('general') ?></legend>
 
                     <?php if (!empty(THEME_LIST)): ?>
-                        <label for="theme">theme:</label>
+                        <label for="theme"><?= __('theme:') ?></label>
                         <select name="theme" id="theme">
-                            <option value="default" <?= 'default' === $theme ? 'selected' : '' ?>>Default</option>
+                            <option value="default" <?= 'default' === $theme ? 'selected' : '' ?>><?= __('Default') ?></option>
                             <?php foreach (THEME_LIST as $name): ?>
                                 <option value="<?= $name ?>" <?= $name === $theme ? 'selected' : '' ?>>
                                     <?= $name ?>
@@ -148,20 +149,40 @@ $storage_available = !$unauthorized && ACCOUNT_SERVICE->is_storage_available();
                     <?php endif; ?>
                 </fieldset>
 
+                <?php if (count($languages) > 1): ?>
+                    <fieldset>
+                        <legend><?= __('language') ?></legend>
+
+                        <ul class="language-list">
+                            <?php foreach ($languages as $code): ?>
+                                <?php $lang_name = htmlspecialchars(i18n_language_name($code)); ?>
+                                <li>
+                                    <input type="radio" name="language" id="language-<?= $code ?>" value="<?= $code ?>"
+                                        <?= $code === $preferences['language'] ? 'checked' : '' ?>>
+                                    <label for="language-<?= $code ?>" lang="<?= str_replace('_', '-', $code) ?>">
+                                        <img src="/static/img/flags/<?= $code ?>.png" alt="<?= $lang_name ?>"
+                                            title="<?= $lang_name ?>" class="flag">
+                                    </label>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </fieldset>
+                <?php endif; ?>
+
                 <fieldset>
-                    <legend>files</legend>
+                    <legend><?= __('files') ?></legend>
 
                     <input type="checkbox" name="noloop" id="noloop" value="1" <?= $preferences['noloop'] ? 'checked' : '' ?>>
-                    <label for="noloop">disable video looping</label>
+                    <label for="noloop"><?= __('disable video looping') ?></label>
 
                     <br>
 
                     <input type="checkbox" name="noautoplay" id="noautoplay" value="1" <?= $preferences['noautoplay'] ? 'checked' : '' ?>>
-                    <label for="noautoplay">disable autoplay</label>
+                    <label for="noautoplay"><?= __('disable autoplay') ?></label>
                 </fieldset>
                 <noscript>
                     <div>
-                        <button type="submit">save</button>
+                        <button type="submit"><?= __('save') ?></button>
                     </div>
                 </noscript>
             </form>

@@ -29,14 +29,14 @@ function get_big_icon(): string
 function html_head(string $title = "", string|null $description = null, Post|null $post = null)
 {
     if (!$description) {
-        $description = CONFIG['instance']['name'] . " is a simple, free and anonymous file sharing site. We do not store anything other than the files you upload.";
+        $description = __('%s is a simple, free and anonymous file sharing site. We do not store anything other than the files you upload.', CONFIG['instance']['name']);
     }
 
     if ($title) {
         $title .= ' - ';
     }
 
-    $title .= CONFIG['instance']['name'] . ' - file sharing website';
+    $title .= __('%s - file sharing website', CONFIG['instance']['name']);
 
     echo "<title>$title</title>";
     echo "<meta property=\"og:title\" content=\"$title\" />";
@@ -126,7 +126,7 @@ function html_mini_header(?Posts $posts = null)
             </li>
 
             <?php if (isset($posts->count)): ?>
-                <li>found <?= $posts->count ?> posts</li>
+                <li><?= _n('found %d post', 'found %d posts', $posts->count) ?></li>
             <?php endif; ?>
         </ul>
 
@@ -142,14 +142,15 @@ function html_mini_header(?Posts $posts = null)
                 <?php endif; ?>
                 <form action="/post/list" method="get">
                     <select name="s" id="sort">
-                        <option value="recent" <?= $s === 'recent' ? 'selected' : '' ?>>recent</option>
-                        <option value="oldest" <?= $s === 'oldest' ? 'selected' : '' ?>>oldest</option>
-                        <option value="most_views" <?= $s === 'most_views' ? 'selected' : '' ?>>most viewed</option>
-                        <option value="least_views" <?= $s === 'least_views' ? 'selected' : '' ?>>least viewed</option>
-                        <option value="filesize" <?= $s === 'filesize' ? 'selected' : '' ?>>file size</option>
+                        <option value="recent" <?= $s === 'recent' ? 'selected' : '' ?>><?= __('recent') ?></option>
+                        <option value="oldest" <?= $s === 'oldest' ? 'selected' : '' ?>><?= __('oldest') ?></option>
+                        <option value="most_views" <?= $s === 'most_views' ? 'selected' : '' ?>><?= __('most viewed') ?></option>
+                        <option value="least_views" <?= $s === 'least_views' ? 'selected' : '' ?>><?= __('least viewed') ?>
+                        </option>
+                        <option value="filesize" <?= $s === 'filesize' ? 'selected' : '' ?>><?= __('file size') ?></option>
                     </select>
                     <input type="hidden" name="p" value="<?= $query['p'] ?? '1' ?>">
-                    <button type="submit">search</button>
+                    <button type="submit"><?= __('search') ?></button>
                 </form>
             </section>
         <?php endif; ?>
@@ -179,22 +180,22 @@ function html_footer()
             </li>
         <?php endif; ?>
         <?php if (CONFIG['catalogue']['public'] || ACCOUNT_SERVICE?->get_user()): ?>
-            <li><a href="/post/list">catalogue</a></li>
+            <li><a href="/post/list"><?= __('catalogue') ?></a></li>
         <?php endif; ?>
         <?php if (CONFIG['surpriseme']['enable'] && FILEREGISTRY->is_available()): ?>
-            <li><a href="/?random">surprise me</a></li>
+            <li><a href="/?random"><?= __('surprise me') ?></a></li>
         <?php endif; ?>
-        <li><a href="/account/">account</a></li>
-        <li><a href="/uploaders">uploaders</a></li>
+        <li><a href="/account/"><?= __('account') ?></a></li>
+        <li><a href="/uploaders"><?= __('uploaders') ?></a></li>
         <?php if (CONFIG['stats']['enabled'] && FILEREGISTRY->is_available()): ?>
-            <li><a href="/stats">statistics</a></li>
+            <li><a href="/stats"><?= __('statistics') ?></a></li>
         <?php endif; ?>
         <?php if (!empty(CONFIG['contact']['url'])): ?>
-            <li><a href="<?= CONFIG['contact']['url'] ?>" referrerpolicy="origin"><?= CONFIG['contact']['name'] ?></a></li>
+            <li><a href="<?= CONFIG['contact']['url'] ?>" referrerpolicy="origin"><?= __(CONFIG['contact']['name']) ?></a></li>
         <?php endif; ?>
         <?php if (!empty($dropdown_links)): ?>
             <li class="dropdown">
-                <button class="drop-button"><?= CONFIG['instance']['linkname'] ?></button>
+                <button class="drop-button"><?= __(CONFIG['instance']['linkname']) ?></button>
                 <div class="drop-content">
                     <?php foreach ($dropdown_links as $url => $name): ?>
                         <a href="<?= $url ?>" target="_blank"><?= $name ?></a>
@@ -211,13 +212,13 @@ function html_legal()
     echo '' ?>
     <ul class="horizontal links">
         <?php if (file_exists("{$_SERVER['DOCUMENT_ROOT']}/QA.txt")): ?>
-            <li><a href="/qa">q&a</a></li>
+            <li><a href="/qa"><?= __('q&a') ?></a></li>
         <?php endif; ?>
         <?php if (file_exists("{$_SERVER['DOCUMENT_ROOT']}/TOS.txt")): ?>
-            <li><a href="/tos" rel="terms-of-service">terms of service</a></li>
+            <li><a href="/tos" rel="terms-of-service"><?= __('terms of service') ?></a></li>
         <?php endif; ?>
         <?php if (file_exists("{$_SERVER['DOCUMENT_ROOT']}/PRIVACY.txt")): ?>
-            <li><a href="/privacy" rel="privacy-policy">privacy policy</a></li>
+            <li><a href="/privacy" rel="privacy-policy"><?= __('privacy policy') ?></a></li>
         <?php endif; ?>
 
         <?php if (CONFIG['librecounter']['enabled']): ?>
@@ -274,12 +275,12 @@ function html_file_brick(Post $post)
     if ($s = $post->single_attachment()) {
         echo '<li>' . format_filesize($s->size) . '</li>';
     } else {
-        echo '<li>multiple attachments</li>';
+        echo '<li>' . __('multiple attachments') . '</li>';
     }
     echo '</ul>';
 
     echo '<div class="buttons">';
-    echo "<a href='{$post->url()}' target='_blank' class='button'>open</a>";
+    echo "<a href='{$post->url()}' target='_blank' class='button'>" . __('open') . "</a>";
     echo '</div>';
 
     echo '</div></div>';
@@ -304,7 +305,7 @@ function html_file_full(BaseFile $file)
     echo '<div class="file-contents">';
 
     if (str_starts_with($file->mime, 'image/')) {
-        echo "<img src='{$file->raw_url()}' alt='Image file.'>";
+        echo "<img src='{$file->raw_url()}' alt='" . htmlspecialchars(__('Image file.'), ENT_QUOTES) . "'>";
     } elseif (str_starts_with($file->mime, 'video/')) {
         echo "<video controls $autoplay $loop class='video-playback' file-name='{$file->name}'>";
         echo "<source src='{$file->raw_url()}' type='{$file->mime}'>";
@@ -314,14 +315,14 @@ function html_file_full(BaseFile $file)
         echo "<source src='{$file->raw_url()}' type='{$file->mime}'>";
         echo "</audio>";
     } else if ($file->is_flash()) {
-        echo '<noscript>JavaScript is required to play Flash</noscript>';
+        echo '<noscript>' . __('JavaScript is required to play Flash') . '</noscript>';
         echo '<object>';
         // TODO: change flash resolution
         echo "<embed src='{$file->raw_url()}' width='800' height='600'>";
         echo '</object>';
     } else {
         echo '<div class="unsupported-playback box">';
-        echo '<p><i>This file cannot be displayed.</i></p>';
+        echo '<p><i>' . __('This file cannot be displayed.') . '</i></p>';
         echo '</div>';
     }
 
@@ -342,7 +343,7 @@ function html_file_full(BaseFile $file)
             echo "</p>";
         }
         if ($m->line_count) {
-            echo "<p class='file-line-count'>{$m->line_count} lines</p>";
+            echo "<p class='file-line-count'>" . _n('%d line', '%d lines', $m->line_count) . "</p>";
         }
     }
 
@@ -377,7 +378,7 @@ function html_post_brick(Post $post, string|null $href = null, bool $active = fa
         echo "<p class='post-mime'>{$s->mime}</p>";
         echo "<p class='post-size'>" . format_filesize($s->size) . "</p>";
     } else {
-        echo "<p class='post-multi'>multiple attachments</p>";
+        echo "<p class='post-multi'>" . __('multiple attachments') . "</p>";
     }
 
     echo '</div></div></a>';

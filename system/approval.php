@@ -7,7 +7,7 @@ include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/registry.php";
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/account.php";
 
 if (!is_moderator()) {
-    generate_alert('/account/', 'Only moderators can access this page', 403);
+    generate_alert('/account/', __('Only moderators can access this page'), 403);
 }
 
 $posts = FILEREGISTRY->get_posts(
@@ -41,10 +41,10 @@ $next_url = '/system/approval' . ($next_post ? '?id=' . urlencode($next_post->id
 $single_attachment = $post?->single_attachment();
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="<?= html_lang() ?>">
 
 <head>
-    <?php html_head("MAS - {$posts->count} pending posts"); ?>
+    <?php html_head('MAS - ' . _n('%d pending post', '%d pending posts', $posts->count)); ?>
 </head>
 
 <body class="full-size approval">
@@ -83,7 +83,7 @@ $single_attachment = $post?->single_attachment();
                                                 <?= $post->id ?>.<?= $single_attachment->extension ?>
                                             <?php else: ?>
                                                 <?= $post->id ?>
-                                                (<?= count($post->attachments) ?> attachments)
+                                                (<?= _n('%d attachment', '%d attachments', count($post->attachments)) ?>)
                                             <?php endif; ?>
                                         </a>
 
@@ -91,19 +91,19 @@ $single_attachment = $post?->single_attachment();
                                     </p>
                                     <ul class="horizontal bulletted">
                                         <?php if (isset($post->uploaded_at)): ?>
-                                            <li>uploaded <?= format_timestamp($post->uploaded_at) ?> ago</li>
+                                            <li><?= __('uploaded %s ago', format_timestamp($post->uploaded_at)) ?></li>
                                         <?php endif; ?>
                                         <?php if (isset($post->expires_at)): ?>
-                                            <li>expires in <?= format_timestamp($post->expires_at) ?></li>
+                                            <li><?= __('expires in %s', format_timestamp($post->expires_at)) ?></li>
                                         <?php endif; ?>
                                         <?php if (isset($post->views)): ?>
-                                            <li><?= $post->views ?> views</li>
+                                            <li><?= _n('%d view', '%d views', $post->views) ?></li>
                                         <?php endif; ?>
                                         <li>
                                             <?= match ($post->visibility) {
-                                                Post::VISIBILITY_PUBLIC => 'public',
-                                                Post::VISIBILITY_UNLISTED => 'unlisted',
-                                                default => 'pending approval'
+                                                Post::VISIBILITY_PUBLIC => __('public'),
+                                                Post::VISIBILITY_UNLISTED => __('unlisted'),
+                                                default => __('pending approval')
                                             } ?>
                                         </li>
                                     </ul>
@@ -112,12 +112,12 @@ $single_attachment = $post?->single_attachment();
                             <div class="right approval-controls" id="approval-controls" data-post-id="<?= $post->id ?>"
                                 data-next-url="<?= htmlspecialchars($next_url) ?>">
                                 <div class="buttons">
-                                    <button type="button" data-action="delete">delete</button>
-                                    <button type="button" data-action="ban">ban</button>
+                                    <button type="button" data-action="delete"><?= __('delete') ?></button>
+                                    <button type="button" data-action="ban"><?= __('ban') ?></button>
                                     <button type="button" data-action="visibility"
-                                        data-visibility="<?= Post::VISIBILITY_UNLISTED ?>">unlisted</button>
+                                        data-visibility="<?= Post::VISIBILITY_UNLISTED ?>"><?= __('unlisted') ?></button>
                                     <button type="button" data-action="visibility"
-                                        data-visibility="<?= Post::VISIBILITY_PUBLIC ?>">public</button>
+                                        data-visibility="<?= Post::VISIBILITY_PUBLIC ?>"><?= __('public') ?></button>
                                 </div>
                                 <p class="approval-status" id="approval-status"></p>
                             </div>
@@ -132,16 +132,16 @@ $single_attachment = $post?->single_attachment();
                 </section>
             <?php else: ?>
                 <section class="approval-empty">
-                    <p>Nothing to approve.</p>
+                    <p><?= __('Nothing to approve.') ?></p>
                 </section>
             <?php endif; ?>
         </section>
 
         <aside class="approval-sidebar">
             <p class="approval-count">
-                <?= $posts->count ?> pending posts
+                <?= _n('%d pending post', '%d pending posts', $posts->count) ?>
                 <?php if ($posts->count > count($posts->posts)): ?>
-                    (showing first <?= count($posts->posts) ?>)
+                    (<?= __('showing first %d', count($posts->posts)) ?>)
                 <?php endif; ?>
             </p>
             <?php foreach ($posts->posts as $p): ?>

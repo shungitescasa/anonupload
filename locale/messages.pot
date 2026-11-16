@@ -1,0 +1,1065 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: anonupload\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-05 23:02+0500\n"
+"Language-Team: shungites.casa\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: account/favorites.php account/index.php
+msgid "favorites"
+msgstr ""
+
+#: account/favorites.php
+msgid "all the files you liked"
+msgstr ""
+
+#: account/favorites.php
+msgid "JavaScript is required for favorite files."
+msgstr ""
+
+#: account/history.php
+msgid "file upload history"
+msgstr ""
+
+#: account/history.php
+msgid "every file you uploaded from this device is stored in local storage"
+msgstr ""
+
+#: account/history.php
+msgid "every file you uploaded is synchronized between devices"
+msgstr ""
+
+#: account/history.php
+msgid "JavaScript is required for file upload history."
+msgstr ""
+
+#: account/index.php lib/partials.php
+msgid "account"
+msgstr ""
+
+#: account/index.php
+#, php-format
+msgid "hi, %s"
+msgstr ""
+
+#: account/index.php
+#, php-format
+msgid "%s account syncs your uploaded files and favorites across devices."
+msgstr ""
+
+#: account/index.php
+msgid "Sign in today!"
+msgstr ""
+
+#: account/index.php uploaders.php
+msgid "Name:"
+msgstr ""
+
+#: account/index.php
+msgid "E-Mail:"
+msgstr ""
+
+#: account/index.php
+msgid "Groups:"
+msgstr ""
+
+#: account/index.php
+msgid "log out"
+msgstr ""
+
+#: account/index.php
+msgid "system"
+msgstr ""
+
+#: account/index.php
+msgid "Media Approval System"
+msgstr ""
+
+#: account/index.php
+msgid ""
+"approve the new files for public access or leave them unlisted permanently"
+msgstr ""
+
+#: account/index.php
+msgid "this browser"
+msgstr ""
+
+#: account/index.php
+msgid ""
+"this data is stored locally, which means it will be deleted once you clear "
+"your browser."
+msgstr ""
+
+#: account/index.php
+msgid "this account"
+msgstr ""
+
+#: account/index.php
+msgid "history"
+msgstr ""
+
+#: account/index.php
+msgid "your uploaded files"
+msgstr ""
+
+#: account/index.php
+msgid "files you like"
+msgstr ""
+
+#: account/index.php
+msgid "my preferences"
+msgstr ""
+
+#: account/index.php
+msgid "preferences are saved in this browser's cookies."
+msgstr ""
+
+#: account/index.php
+msgid ""
+"account storage is unavailable, so preferences are saved in this browser's "
+"cookies only."
+msgstr ""
+
+#: account/index.php
+msgid ""
+"preferences are encrypted with your password before they're saved to your "
+"account, which requires JavaScript. without it, they're saved in this "
+"browser's cookies only."
+msgstr ""
+
+#: account/index.php lib/pages/home.php
+msgid "general"
+msgstr ""
+
+#: account/index.php
+msgid "theme:"
+msgstr ""
+
+#: account/index.php
+msgid "Default"
+msgstr ""
+
+#: account/index.php
+msgid "language"
+msgstr ""
+
+#: account/index.php
+msgid "files"
+msgstr ""
+
+#: account/index.php
+msgid "disable video looping"
+msgstr ""
+
+#: account/index.php
+msgid "disable autoplay"
+msgstr ""
+
+#: account/index.php
+msgid "save"
+msgstr ""
+
+#: account/login.php account/logout.php
+msgid "Authentication is disabled!"
+msgstr ""
+
+#: account/login.php
+msgid "Authentication service is unavailable. Try again later."
+msgstr ""
+
+#: account/login.php
+msgid "Invalid username or password"
+msgstr ""
+
+#: account/login.php
+msgid "Logged in!"
+msgstr ""
+
+#: account/login.php
+#, php-format
+msgid "log in to %s account"
+msgstr ""
+
+#: account/login.php
+msgid "account credentials"
+msgstr ""
+
+#: account/login.php
+msgid "username:"
+msgstr ""
+
+#: account/login.php
+msgid "password:"
+msgstr ""
+
+#: account/login.php
+msgid "remember me"
+msgstr ""
+
+#: account/login.php
+msgid "log in"
+msgstr ""
+
+#: account/login.php
+msgid "register"
+msgstr ""
+
+#: account/logout.php account/save.php account/storage.php post/ban.php
+#: post/delete.php post/edit.php upload.php
+msgid "Method not allowed"
+msgstr ""
+
+#: account/logout.php
+msgid "Logged out!"
+msgstr ""
+
+#: account/save.php
+msgid "Malformed encrypted preferences"
+msgstr ""
+
+#: account/save.php
+msgid "Preferences saved in this browser!"
+msgstr ""
+
+#: account/save.php
+msgid "Preferences loaded from your account!"
+msgstr ""
+
+#: account/save.php
+msgid ""
+"Preferences saved in this browser only. JavaScript is required to save them "
+"to your account."
+msgstr ""
+
+#: account/save.php
+msgid "Preferences saved in this browser only: account storage is unavailable."
+msgstr ""
+
+#: account/save.php
+msgid ""
+"Preferences saved in this browser only: failed to save them to your account."
+msgstr ""
+
+#: account/save.php
+msgid "Preferences saved!"
+msgstr ""
+
+#: account/storage.php
+msgid "Not authorized"
+msgstr ""
+
+#: account/storage.php
+msgid "Account storage is unavailable"
+msgstr ""
+
+#: account/storage.php
+msgid "Failed to load account data"
+msgstr ""
+
+#: account/storage.php
+#, php-format
+msgid "Malformed encrypted %s"
+msgstr ""
+
+#: account/storage.php
+msgid "Nothing to save"
+msgstr ""
+
+#: account/storage.php
+msgid "Failed to save account data"
+msgstr ""
+
+#: account/storage.php
+msgid "Saved!"
+msgstr ""
+
+#: index.php
+msgid "File upload is temporarily unavailable"
+msgstr ""
+
+#: index.php
+msgid "Not Found"
+msgstr ""
+
+#: lib/account.php
+#, php-format
+msgid "Username must be between %d and %d characters long"
+msgstr ""
+
+#: lib/account.php
+#, php-format
+msgid "Password must be at least %d character long"
+msgid_plural "Password must be at least %d characters long"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/pages/error.php
+msgid "Something went wrong"
+msgstr ""
+
+#: lib/pages/error.php
+msgid "There is nothing to see here."
+msgstr ""
+
+#: lib/pages/file.php lib/partials.php
+#, php-format
+msgid "%d line"
+msgid_plural "%d lines"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/pages/file.php
+#, php-format
+msgid "Post with %d attachment"
+msgid_plural "Post with %d attachments"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/pages/file.php system/approval.php
+#, php-format
+msgid "%d view"
+msgid_plural "%d views"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/pages/file.php system/approval.php
+#, php-format
+msgid "uploaded %s ago"
+msgstr ""
+
+#: lib/pages/file.php
+msgid ""
+"All trademarks and copyrights belong to their respective owners. The "
+"uploader is responsible for any content shared here."
+msgstr ""
+
+#: lib/pages/file.php system/approval.php
+#, php-format
+msgid "%d attachment"
+msgid_plural "%d attachments"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/pages/file.php
+#, php-format
+msgid "by %s"
+msgstr ""
+
+#: lib/pages/file.php
+#, php-format
+msgid "%d line(s) omitted. click to expand."
+msgstr ""
+
+#: lib/pages/file.php
+msgid "description omitted. click to expand."
+msgstr ""
+
+#: lib/pages/file.php
+msgid "re-roll"
+msgstr ""
+
+#: lib/pages/file.php
+msgid "download"
+msgstr ""
+
+#: lib/pages/file.php
+msgid "download file"
+msgstr ""
+
+#: lib/pages/file.php
+msgid "full size"
+msgstr ""
+
+#: lib/pages/file.php
+msgid "open in full size"
+msgstr ""
+
+#: lib/pages/file.php
+msgid "report"
+msgstr ""
+
+#: lib/pages/file.php
+msgid "report this file"
+msgstr ""
+
+#: lib/pages/home.php
+#, php-format
+msgid "max upload size is %s & files expire after %s"
+msgstr ""
+
+#: lib/pages/home.php
+#, php-format
+msgid "max upload size is %s"
+msgstr ""
+
+#: lib/pages/home.php
+msgid "click, drop, or paste files here"
+msgstr ""
+
+#: lib/pages/home.php
+msgid "drop files here"
+msgstr ""
+
+#: lib/pages/home.php
+msgid "password"
+msgstr ""
+
+#: lib/pages/home.php
+msgid "for file deletion"
+msgstr ""
+
+#: lib/pages/home.php
+msgid "leave empty for permanent file"
+msgstr ""
+
+#: lib/pages/home.php
+msgid "single URL"
+msgstr ""
+
+#: lib/pages/home.php
+msgid "attach all files to a single link"
+msgstr ""
+
+#: lib/pages/home.php
+msgid "sign this post"
+msgstr ""
+
+#: lib/pages/home.php
+#, php-format
+msgid "link this post with your account (%s)"
+msgstr ""
+
+#: lib/pages/home.php
+msgid "expires in:"
+msgstr ""
+
+#: lib/pages/home.php
+msgid "miscellaneous"
+msgstr ""
+
+#: lib/pages/home.php
+msgid "preserve original filename:"
+msgstr ""
+
+#: lib/pages/home.php
+msgid "strip EXIF data:"
+msgstr ""
+
+#: lib/pages/home.php
+msgid "description"
+msgstr ""
+
+#: lib/pages/home.php
+msgid "tell us what you are going to upload... (Markdown supported)"
+msgstr ""
+
+#: lib/pages/home.php
+msgid "upload"
+msgstr ""
+
+#: lib/pages/home.php
+msgid "the upload will start immediately after selecting the file"
+msgstr ""
+
+#: lib/pages/home.php
+msgid "the page will be refreshed once all uploads are complete"
+msgstr ""
+
+#: lib/pages/home.php
+msgid "image file"
+msgstr ""
+
+#: lib/pages/home.php
+msgid "video file"
+msgstr ""
+
+#: lib/pages/home.php
+msgid "audio file"
+msgstr ""
+
+#: lib/pages/home.php
+msgid "text file"
+msgstr ""
+
+#: lib/pages/home.php
+msgid "flash file"
+msgstr ""
+
+#: lib/pages/home.php
+msgid "file"
+msgstr ""
+
+#: lib/pages/home.php lib/partials.php
+msgid "open"
+msgstr ""
+
+#: lib/partials.php
+#, php-format
+msgid ""
+"%s is a simple, free and anonymous file sharing site. We do not store "
+"anything other than the files you upload."
+msgstr ""
+
+#: lib/partials.php
+#, php-format
+msgid "%s - file sharing website"
+msgstr ""
+
+#: lib/partials.php
+#, php-format
+msgid "found %d post"
+msgid_plural "found %d posts"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/partials.php
+msgid "recent"
+msgstr ""
+
+#: lib/partials.php
+msgid "oldest"
+msgstr ""
+
+#: lib/partials.php
+msgid "most viewed"
+msgstr ""
+
+#: lib/partials.php
+msgid "least viewed"
+msgstr ""
+
+#: lib/partials.php
+msgid "file size"
+msgstr ""
+
+#: lib/partials.php
+msgid "search"
+msgstr ""
+
+#: lib/partials.php
+msgid "catalogue"
+msgstr ""
+
+#: lib/partials.php
+msgid "surprise me"
+msgstr ""
+
+#: lib/partials.php
+msgid "contact"
+msgstr ""
+
+#: lib/partials.php
+msgid "more..."
+msgstr ""
+
+#: lib/partials.php uploaders.php
+msgid "uploaders"
+msgstr ""
+
+#: lib/partials.php stats.php
+msgid "statistics"
+msgstr ""
+
+#: lib/partials.php
+msgid "q&a"
+msgstr ""
+
+#: lib/partials.php tos.php
+msgid "terms of service"
+msgstr ""
+
+#: lib/partials.php privacy.php
+msgid "privacy policy"
+msgstr ""
+
+#: lib/partials.php
+msgid "multiple attachments"
+msgstr ""
+
+#: lib/partials.php
+msgid "Image file."
+msgstr ""
+
+#: lib/partials.php
+msgid "JavaScript is required to play Flash"
+msgstr ""
+
+#: lib/partials.php
+msgid "This file cannot be displayed."
+msgstr ""
+
+#: lib/utils.php
+#, php-format
+msgid "%d second"
+msgid_plural "%d seconds"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/utils.php
+#, php-format
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/utils.php
+#, php-format
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/utils.php
+#, php-format
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/utils.php
+#, php-format
+msgid "%d month"
+msgid_plural "%d months"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/utils.php
+#, php-format
+msgid "%d year"
+msgid_plural "%d years"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/utils.php
+msgid "MB"
+msgstr ""
+
+#: lib/utils.php
+msgid "GB"
+msgstr ""
+
+#: post/ban.php
+msgid "Only moderators can ban posts"
+msgstr ""
+
+#: post/ban.php post/delete.php post/edit.php
+msgid "Post ID must be set!"
+msgstr ""
+
+#: post/ban.php post/delete.php post/edit.php
+msgid "Post does not exist or has been deleted"
+msgstr ""
+
+#: post/ban.php
+msgid "Failed to ban the post files. Try again later."
+msgstr ""
+
+#: post/ban.php
+msgid ""
+"Files have been banned, but the post could not be deleted. Try again later."
+msgstr ""
+
+#: post/ban.php
+#, php-format
+msgid "Post %s has been banned"
+msgstr ""
+
+#: post/delete.php
+msgid "Incorrect password or this post cannot be deleted"
+msgstr ""
+
+#: post/delete.php
+msgid "Failed to delete the post. Try again later."
+msgstr ""
+
+#: post/delete.php
+#, php-format
+msgid "Post %s has been deleted"
+msgstr ""
+
+#: post/edit.php
+msgid "Incorrect password or this post cannot be edited"
+msgstr ""
+
+#: post/edit.php
+msgid "Only moderators can change post visibility"
+msgstr ""
+
+#: post/edit.php
+msgid "Invalid visibility value"
+msgstr ""
+
+#: post/edit.php
+msgid "Nothing to edit"
+msgstr ""
+
+#: post/edit.php
+msgid "Failed to edit the post. Try again later."
+msgstr ""
+
+#: post/edit.php
+#, php-format
+msgid "Post %s has been edited"
+msgstr ""
+
+#: post/list.php
+msgid "File catalogue is unavailable for anonymous users"
+msgstr ""
+
+#: post/list.php
+#, php-format
+msgid "%d post"
+msgid_plural "%d posts"
+msgstr[0] ""
+msgstr[1] ""
+
+#: post/list.php
+#, php-format
+msgid "page %d/%d"
+msgstr ""
+
+#: post/list.php
+msgid "the catalogue"
+msgstr ""
+
+#: post/list.php
+msgid "Nothing found."
+msgstr ""
+
+#: privacy.php
+msgid "Privacy policy is not set!"
+msgstr ""
+
+#: privacy.php
+msgid "We don't store anything personal about you."
+msgstr ""
+
+#: privacy.php qa.php tos.php
+#, php-format
+msgid "last updated: %s"
+msgstr ""
+
+#: qa.php
+msgid "QA is not set!"
+msgstr ""
+
+#: qa.php
+msgid "No questions - no answers."
+msgstr ""
+
+#: qa.php
+msgid "question & answer"
+msgstr ""
+
+#: stats.php
+#, php-format
+msgid "last updated %s ago"
+msgstr ""
+
+#: stats.php
+msgid "about files & posts"
+msgstr ""
+
+#: stats.php
+msgid "serving posts"
+msgstr ""
+
+#: stats.php
+msgid "serving files"
+msgstr ""
+
+#: stats.php
+msgid "active content"
+msgstr ""
+
+#: stats.php
+msgid "average file size"
+msgstr ""
+
+#: stats.php
+msgid "average upload rate (per minute)"
+msgstr ""
+
+#: stats.php
+msgid "how many files can be uploaded"
+msgstr ""
+
+#: stats.php
+msgid "first uploaded post"
+msgstr ""
+
+#: stats.php
+#, php-format
+msgid "%s ago (%s)"
+msgstr ""
+
+#: stats.php
+msgid "last uploaded post"
+msgstr ""
+
+#: stats.php
+msgid "posts uploaded (per quarter)"
+msgstr ""
+
+#: stats.php
+msgid "JavaScript is required for bar chart"
+msgstr ""
+
+#: stats.php
+msgid "the most viewed posts"
+msgstr ""
+
+#: system/approval.php
+msgid "Only moderators can access this page"
+msgstr ""
+
+#: system/approval.php
+#, php-format
+msgid "%d pending post"
+msgid_plural "%d pending posts"
+msgstr[0] ""
+msgstr[1] ""
+
+#: system/approval.php
+#, php-format
+msgid "expires in %s"
+msgstr ""
+
+#: system/approval.php
+msgid "public"
+msgstr ""
+
+#: system/approval.php
+msgid "unlisted"
+msgstr ""
+
+#: system/approval.php
+msgid "pending approval"
+msgstr ""
+
+#: system/approval.php
+msgid "delete"
+msgstr ""
+
+#: system/approval.php
+msgid "ban"
+msgstr ""
+
+#: system/approval.php
+msgid "Nothing to approve."
+msgstr ""
+
+#: system/approval.php
+#, php-format
+msgid "showing first %d"
+msgstr ""
+
+#: tos.php
+msgid "TOS is not set!"
+msgstr ""
+
+#: tos.php
+msgid "Don't upload anything bad."
+msgstr ""
+
+#: track.php
+msgid "This feature is not available"
+msgstr ""
+
+#: track.php
+msgid "waiting..."
+msgstr ""
+
+#: track.php
+#, php-format
+msgid "File track ID %s not found"
+msgstr ""
+
+#: upload.php
+msgid "re-rolling IDs..."
+msgstr ""
+
+#: upload.php
+msgid "File upload is temporarily unavailable. Please try again later!"
+msgstr ""
+
+#: upload.php
+msgid "preparing..."
+msgstr ""
+
+#: upload.php
+msgid "Invalid base64 data"
+msgstr ""
+
+#: upload.php
+msgid "No files to upload"
+msgstr ""
+
+#: upload.php
+msgid "Exceeded file upload limit"
+msgstr ""
+
+#: upload.php
+msgid "You must be logged in to sign posts"
+msgstr ""
+
+#: upload.php
+msgid "Invalid parameters"
+msgstr ""
+
+#: upload.php
+msgid "No file sent"
+msgstr ""
+
+#: upload.php
+msgid "Exceeded filesize limit"
+msgstr ""
+
+#: upload.php
+msgid "Unknown errors"
+msgstr ""
+
+#: upload.php
+#, php-format
+msgid "verifying file integrity... (%d/%d)"
+msgstr ""
+
+#: upload.php
+msgid "Invalid file format."
+msgstr ""
+
+#: upload.php
+msgid "Failed to strip EXIF tags."
+msgstr ""
+
+#: upload.php
+msgid "Failed to calculate file hash"
+msgstr ""
+
+#: upload.php
+msgid "This file has been banned"
+msgstr ""
+
+#: upload.php
+#, php-format
+msgid "This file has been banned: %s"
+msgstr ""
+
+#: upload.php
+msgid "writing files to disk..."
+msgstr ""
+
+#: upload.php
+msgid "writing files to database..."
+msgstr ""
+
+#: upload.php
+msgid "saving files to object storage (may take a long time)..."
+msgstr ""
+
+#: upload.php
+msgid "saving..."
+msgstr ""
+
+#: upload.php
+msgid "Failed to save file. Try again later."
+msgstr ""
+
+#: upload.php
+msgid "Failed to attach file to the post."
+msgstr ""
+
+#: upload.php
+msgid "drawing thumbnails..."
+msgstr ""
+
+#: upload.php
+msgid "No posts"
+msgstr ""
+
+#: uploaders.php
+msgid "file uploaders"
+msgstr ""
+
+#: uploaders.php
+#, php-format
+msgid "configure your software to work with %s"
+msgstr ""
+
+#: uploaders.php
+msgid "Request URL:"
+msgstr ""
+
+#: uploaders.php
+msgid "Destination type:"
+msgstr ""
+
+#: uploaders.php
+msgid "Method:"
+msgstr ""
+
+#: uploaders.php
+msgid "Body:"
+msgstr ""
+
+#: uploaders.php
+msgid "Headers:"
+msgstr ""
+
+#: uploaders.php
+msgid "File form name:"
+msgstr ""
+
+#: uploaders.php
+msgid "URL:"
+msgstr ""
+
+#: uploaders.php
+msgid "Deletion URL:"
+msgstr ""
+
+#: uploaders.php
+#, php-format
+msgid "Then, select it via %s"
+msgstr ""
+
+#: uploaders.php
+msgid "Form field:"
+msgstr ""
+
+#: uploaders.php
+msgid "Extra headers:"
+msgstr ""
+
+#: uploaders.php
+msgid "Image link:"
+msgstr ""
+
+#: uploaders.php
+msgid "Deletion link:"
+msgstr ""
+
+#: uploaders.php
+msgid "Endpoint"
+msgstr ""
+
+#: uploaders.php
+msgid "Request Format"
+msgstr ""
+
+#: uploaders.php
+msgid "Content-Type:"
+msgstr ""
+
+#: uploaders.php
+msgid "File field:"
+msgstr ""
+
+#: uploaders.php
+msgid "Max file size:"
+msgstr ""

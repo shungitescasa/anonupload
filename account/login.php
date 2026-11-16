@@ -5,7 +5,7 @@ include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/alert.php";
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/account.php";
 
 if (ACCOUNT_SERVICE === null) {
-    generate_alert('/', 'Authentication is disabled!', 403);
+    generate_alert('/', __('Authentication is disabled!'), 403);
 }
 
 if (ACCOUNT_SERVICE->get_user() !== null) {
@@ -20,20 +20,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         generate_alert('/account/login', $e->getMessage(), 400);
     } catch (RuntimeException $e) {
         error_log("Account service: {$e->getMessage()}");
-        generate_alert('/account/login', 'Authentication service is unavailable. Try again later.', 503);
+        generate_alert('/account/login', __('Authentication service is unavailable. Try again later.'), 503);
     }
 
     if ($profile === null) {
-        generate_alert('/account/login', 'Invalid username or password', 401);
+        generate_alert('/account/login', __('Invalid username or password'), 401);
     }
 
-    generate_alert('/account/', 'Logged in!', 200, $profile);
+    generate_alert('/account/', __('Logged in!'), 200, $profile);
 }
 
-$title = 'log in to ' . (CONFIG['account']['name'] ?? CONFIG['instance']['name']) . ' account';
+$title = __('log in to %s account', CONFIG['account']['name'] ?? CONFIG['instance']['name']);
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="<?= html_lang() ?>">
 
 <head>
     <?php html_head($title); ?>
@@ -48,11 +48,11 @@ $title = 'log in to ' . (CONFIG['account']['name'] ?? CONFIG['instance']['name']
     <main>
         <form method="post" action="/account/login" class="preferences" id="login">
             <fieldset>
-                <legend>account credentials</legend>
+                <legend><?= __('account credentials') ?></legend>
 
                 <table class="vertical">
                     <tr>
-                        <th><label for="username">username:</label></th>
+                        <th><label for="username"><?= __('username:') ?></label></th>
                         <td>
                             <input type="text" name="username" id="username" autocomplete="username" required
                                 minlength="<?= CONFIG['account']['username_min_length'] ?>"
@@ -60,7 +60,7 @@ $title = 'log in to ' . (CONFIG['account']['name'] ?? CONFIG['instance']['name']
                         </td>
                     </tr>
                     <tr>
-                        <th><label for="password">password:</label></th>
+                        <th><label for="password"><?= __('password:') ?></label></th>
                         <td>
                             <input type="password" name="password" id="password" autocomplete="current-password"
                                 required minlength="<?= CONFIG['account']['password_min_length'] ?>">
@@ -70,15 +70,15 @@ $title = 'log in to ' . (CONFIG['account']['name'] ?? CONFIG['instance']['name']
                         <th></th>
                         <td>
                             <input type="checkbox" name="remember" id="remember" value="1">
-                            <label for="remember">remember me</label>
+                            <label for="remember"><?= __('remember me') ?></label>
                         </td>
                     </tr>
                 </table>
             </fieldset>
             <div>
-                <button type="submit">log in</button>
+                <button type="submit"><?= __('log in') ?></button>
                 <?php if (!empty(CONFIG['account']['registration_url'])): ?>
-                    <a href="<?= CONFIG['account']['registration_url'] ?>" target="_blank">register</a>
+                    <a href="<?= CONFIG['account']['registration_url'] ?>" target="_blank"><?= __('register') ?></a>
                 <?php endif; ?>
             </div>
         </form>
