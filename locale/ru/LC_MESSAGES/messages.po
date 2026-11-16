@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: anonupload\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-05 23:02+0500\n"
+"POT-Creation-Date: 2026-11-16 20:30+0500\n"
 "PO-Revision-Date: 2026-10-05 23:02+0500\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: shungites.casa\n"
@@ -135,8 +135,8 @@ msgid ""
 "account storage is unavailable, so preferences are saved in this browser's "
 "cookies only."
 msgstr ""
-"хранилище аккаунта недоступно, поэтому настройки сохраняются только в "
-"куки этого браузера."
+"хранилище аккаунта недоступно, поэтому настройки сохраняются только в куки "
+"этого браузера."
 
 #: account/index.php
 msgid ""
@@ -569,6 +569,14 @@ msgid "file size"
 msgstr "размер файла"
 
 #: lib/partials.php
+msgid "show unlisted"
+msgstr "показать скрытые"
+
+#: lib/partials.php
+msgid "show pending approval"
+msgstr "показать ожидающие проверки"
+
+#: lib/partials.php
 msgid "search"
 msgstr "искать"
 
@@ -579,14 +587,6 @@ msgstr "галерея"
 #: lib/partials.php
 msgid "surprise me"
 msgstr "испытать удачу"
-
-#: lib/partials.php
-msgid "contact"
-msgstr "контакты"
-
-#: lib/partials.php
-msgid "more..."
-msgstr "ещё..."
 
 #: lib/partials.php uploaders.php
 msgid "uploaders"
@@ -1103,3 +1103,9 @@ msgstr "Поле файла:"
 #: uploaders.php
 msgid "Max file size:"
 msgstr "Макс. размер файла:"
+
+#~ msgid "contact"
+#~ msgstr "контакты"
+
+#~ msgid "more..."
+#~ msgstr "ещё..."

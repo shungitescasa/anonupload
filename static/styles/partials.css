@@ -32,6 +32,15 @@ header:has(>.mini-nav) {
     gap: 0;
 }
 
+.query-settings>form>.toggle {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 0 var(--pad);
+    cursor: pointer;
+    user-select: none;
+}
+
 .query-settings>form>button[type="submit"] {
     padding: var(--pad) calc(var(--pad)*2);
 }

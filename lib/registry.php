@@ -11,7 +11,7 @@ interface FileRegistry
     public function get_posts(
         int $page = 1,
         string $sort = 'recent',
-        int|null $visibility = Post::VISIBILITY_PUBLIC,
+        int|array|null $visibility = Post::VISIBILITY_PUBLIC,
         bool $use_cache = true,
         bool $count_pages = true
     ): Posts;
@@ -102,7 +102,7 @@ class SQLFileRegistry implements FileRegistry
     public function get_posts(
         int $page = 1,
         string $sort = 'recent',
-        int|null $visibility = Post::VISIBILITY_PUBLIC,
+        int|array|null $visibility = Post::VISIBILITY_PUBLIC,
         bool $use_cache = true,
         bool $count_pages = true
     ): Posts {
@@ -113,7 +113,11 @@ class SQLFileRegistry implements FileRegistry
         };
 
         // checking the cache first
-        $vis_name = $visibility ?? 'all';
+        if (is_array($visibility)) {
+            $visibility = array_values(array_unique(array_map('intval', $visibility)));
+            sort($visibility);
+        }
+        $vis_name = $visibility === null ? 'all' : implode(',', (array) $visibility);
         $cache_key = CONFIG['instance']['id'] . ":posts:{$page}:{$sort_name}:{$vis_name}:" . intval($count_pages);
         if ($use_cache && MEMCACHED && ($cached = MEMCACHED->get($cache_key)) && is_string($cached)) {
             $obj = unserialize($cached, ['allowed_classes' => [Posts::class, Post::class, BaseFile::class, DateTime::class]]);
@@ -143,8 +147,12 @@ class SQLFileRegistry implements FileRegistry
 
         // filtering by visibility
         if ($visibility !== null) {
-            $conds[] = 'p.visibility = :visibility';
-            $params[':visibility'] = $visibility;
+            $vis_conds = [];
+            foreach ((array) $visibility as $i => $v) {
+                $vis_conds[] = ":visibility$i";
+                $params[":visibility$i"] = $v;
+            }
+            $conds[] = empty($vis_conds) ? '0 = 1' : 'p.visibility IN (' . implode(', ', $vis_conds) . ')';
         }
 
         // filtering by mime types

@@ -16,10 +16,20 @@ if ($page < 1) {
 
 $sort = $_GET['s'] ?? 'recent';
 
+$visibility = [Post::VISIBILITY_PUBLIC];
+if (is_moderator()) {
+    if (!empty($_GET['unlisted'])) {
+        $visibility[] = Post::VISIBILITY_UNLISTED;
+    }
+    if (!empty($_GET['pending'])) {
+        $visibility[] = Post::VISIBILITY_PENDING;
+    }
+}
+
 $posts = FILEREGISTRY->get_posts(
     page: $page,
     sort: $sort,
-    visibility: Post::VISIBILITY_PUBLIC,
+    visibility: $visibility,
     use_cache: true,
     count_pages: true
 );

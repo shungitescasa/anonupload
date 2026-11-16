@@ -149,6 +149,16 @@ function html_mini_header(?Posts $posts = null)
                         </option>
                         <option value="filesize" <?= $s === 'filesize' ? 'selected' : '' ?>><?= __('file size') ?></option>
                     </select>
+                    <?php if (is_moderator()): ?>
+                        <label class="toggle">
+                            <input type="checkbox" name="unlisted" value="1" <?= !empty($query['unlisted']) ? 'checked' : '' ?>>
+                            <?= __('show unlisted') ?>
+                        </label>
+                        <label class="toggle">
+                            <input type="checkbox" name="pending" value="1" <?= !empty($query['pending']) ? 'checked' : '' ?>>
+                            <?= __('show pending approval') ?>
+                        </label>
+                    <?php endif; ?>
                     <input type="hidden" name="p" value="<?= $query['p'] ?? '1' ?>">
                     <button type="submit"><?= __('search') ?></button>
                 </form>

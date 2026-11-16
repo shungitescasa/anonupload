@@ -1,9 +1,17 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the anonupload package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: anonupload\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-05 23:02+0500\n"
-"Language-Team: shungites.casa\n"
+"POT-Creation-Date: 2026-11-16 20:30+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
@@ -96,7 +104,7 @@ msgid ""
 msgstr ""
 
 #: account/index.php
-msgid "this account"
+msgid "my account"
 msgstr ""
 
 #: account/index.php
@@ -108,7 +116,7 @@ msgid "your uploaded files"
 msgstr ""
 
 #: account/index.php
-msgid "files you like"
+msgid "saved files that you liked"
 msgstr ""
 
 #: account/index.php
@@ -538,6 +546,14 @@ msgid "file size"
 msgstr ""
 
 #: lib/partials.php
+msgid "show unlisted"
+msgstr ""
+
+#: lib/partials.php
+msgid "show pending approval"
+msgstr ""
+
+#: lib/partials.php
 msgid "search"
 msgstr ""
 
@@ -547,14 +563,6 @@ msgstr ""
 
 #: lib/partials.php
 msgid "surprise me"
-msgstr ""
-
-#: lib/partials.php
-msgid "contact"
-msgstr ""
-
-#: lib/partials.php
-msgid "more..."
 msgstr ""
 
 #: lib/partials.php uploaders.php
