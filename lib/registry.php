@@ -120,9 +120,12 @@ class SQLFileRegistry implements FileRegistry
         $vis_name = $visibility === null ? 'all' : implode(',', (array) $visibility);
         $cache_key = CONFIG['instance']['id'] . ":posts:{$page}:{$sort_name}:{$vis_name}:" . intval($count_pages);
         if ($use_cache && MEMCACHED && ($cached = MEMCACHED->get($cache_key)) && is_string($cached)) {
-            $obj = unserialize($cached, ['allowed_classes' => [Posts::class, Post::class, BaseFile::class, DateTime::class]]);
-            if ($obj instanceof Posts) {
-                return $obj;
+            try {
+                $obj = unserialize($cached, ['allowed_classes' => [Posts::class, Post::class, BaseFile::class, FileMetadata::class, DateTime::class]]);
+                if ($obj instanceof Posts) {
+                    return $obj;
+                }
+            } catch (Throwable $e) {
             }
         }
 

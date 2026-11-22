@@ -1,6 +1,32 @@
 <?php
 include_once "{$_SERVER['DOCUMENT_ROOT']}/vendor/autoload.php";
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/config.php";
+include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/spool.php";
+
+function imagick_limit_resources(): void
+{
+    static $done = false;
+    if ($done || !class_exists('Imagick')) {
+        return;
+    }
+    $done = true;
+
+    $limits = [
+        Imagick::RESOURCETYPE_MEMORY => 32 * 1024 * 1024,
+        Imagick::RESOURCETYPE_MAP => 32 * 1024 * 1024,
+        Imagick::RESOURCETYPE_DISK => 1024 * 1024 * 1024,
+        Imagick::RESOURCETYPE_THREAD => 1,
+        Imagick::RESOURCETYPE_TIME => 60,
+    ];
+    foreach (['RESOURCETYPE_WIDTH' => 16384, 'RESOURCETYPE_HEIGHT' => 16384, 'RESOURCETYPE_LISTLENGTH' => 1000] as $name => $value) {
+        if (defined("Imagick::$name")) {
+            $limits[constant("Imagick::$name")] = $value;
+        }
+    }
+    foreach ($limits as $type => $value) {
+        Imagick::setResourceLimit($type, $value);
+    }
+}
 
 function is_swf_file($filename)
 {
@@ -105,7 +131,9 @@ function verify_mimetype(string $file_path, string $mimetype): bool
 function verify_image(string $file_path): bool
 {
     try {
-        $img = new Imagick($file_path);
+        imagick_limit_resources();
+        $img = new Imagick();
+        $img->pingImage($file_path);
         $format = $img->getImageFormat();
         return !empty($format);
     } catch (Exception $e) {
@@ -133,6 +161,7 @@ function verify_media(string $file_path): bool
 function strip_exif(string $file_path): bool
 {
     try {
+        imagick_limit_resources();
         $img = new Imagick($file_path);
 
         $img->stripImage();
@@ -184,10 +213,14 @@ class FileMetadata
         } else if (str_starts_with($mime, 'text/')) {
             $m = new FileMetadata();
 
-            $file = new SplFileObject($input_path);
-            $file->seek(PHP_INT_MAX);
+            $lines = 1;
+            $h = fopen($input_path, 'rb');
+            while ($h && !feof($h) && ($block = fread($h, 1024 * 1024)) !== false && $block !== '') {
+                $lines += substr_count($block, "\n");
+            }
+            $h && fclose($h);
 
-            $m->line_count = $file->key() + 1;
+            $m->line_count = $lines;
         }
 
         return $m;
@@ -234,6 +267,15 @@ class BaseFile implements JsonSerializable
     }
 
     public function raw_url(): string|null
+    {
+        if ((str_starts_with((string) $this->path, 'spool://') || SPOOL->is_spooled("{$this->name}.{$this->extension}")) && !empty(CONFIG['spool']['accel_location'])) {
+            return sprintf("%s/raw/%s.%s", CONFIG['instance']['url'], $this->name, $this->extension);
+        }
+
+        return $this->storage_url();
+    }
+
+    public function storage_url(): string|null
     {
         return match (CONFIG['storage']['type']) {
             "local" => sprintf("%s%s/%s.%s", CONFIG['instance']['url'], CONFIG['storage']['prefix'], $this->name, $this->extension),

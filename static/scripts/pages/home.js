@@ -1,6 +1,9 @@
 let cachedFiles = [];
 
 window.addEventListener("DOMContentLoaded", () => {
+    const chunked = typeof ChunkedUploads !== 'undefined';
+    if (chunked && ChunkedUploads.basicFormRequested()) return;
+
     initOptions("form-upload");
 
     const form = document.getElementById("form-upload");
@@ -61,12 +64,22 @@ window.addEventListener("DOMContentLoaded", () => {
         submitButton.click();
     });
 
+    if (chunked && ChunkedUploads.supported) {
+        ChunkedUploads.enhance(fileUploadQueue);
+    }
+
     // -- file upload via fetch
     form.addEventListener("submit", (ev) => {
         ev.preventDefault();
         const cf = cachedFiles;
 
         if (cf.length === 0) {
+            return;
+        }
+
+        if (chunked && ChunkedUploads.supported) {
+            cachedFiles = [];
+            ChunkedUploads.start(cf, form, fileUploadQueue);
             return;
         }
 

@@ -6,9 +6,10 @@ include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/alert.php";
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/storage.php";
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/registry.php";
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/id.php";
-include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/thumbnails.php";
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/file.php";
 include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/account.php";
+include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/spool.php";
+include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/ingest.php";
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
@@ -30,68 +31,17 @@ $status = new FileTrackStatus(
     : "0"
 );
 
-function create_post(
-    string|null $password,
-    DateTime $upload_date,
-    DateTime|null $expiration_date,
-    string|null $description,
-    Account|null $signer
-): Post {
-    global $status;
-
-    // generating file id
-    $status->send('up_genid', __('re-rolling IDs...'));
-    $attempts = 0;
-    $id_length = CONFIG["id"]["length"];
-    $id_prefix = CONFIG["id"]["prefix"] ?? '';
-    do {
-        $post_id = $id_prefix . IDENTIFIER->generate($id_length);
-        if ($attempts > 20) {
-            $id_length++;
-            $attempts = 0;
-        }
-        $attempts++;
-    } while (FILEREGISTRY->has_post($post_id));
-
-    $p = new Post();
-    $p->id = $post_id;
-    $p->uploaded_at = $upload_date;
-    $p->expires_at = $expiration_date;
-    $p->password = $password;
-    $p->description = $description;
-    $p->uploaded_by = $signer !== null ? ['id' => $signer->username, 'username' => $signer->name] : null;
-
-    if (!FILEREGISTRY->put_post($p)) {
-        throw new RuntimeException("Failed to save post");
-    }
-
-    return $p;
-}
-
-$uploaded_posts = null;
-
-function delete_empty_posts(array &$posts)
-{
-    $posts = array_values(array_filter(
-        $posts,
-        function ($post) {
-            if (is_array($post)) {
-                return true;
-            }
-
-            $has_attachments = isset($post->attachments) && !empty($post->attachments);
-            if (!$has_attachments) {
-                FILEREGISTRY->delete_post($post);
-                return false;
-            }
-            return true;
-        }
-    ));
-}
+$uploaded_posts = [];
+$spool_ids = [];
 
 try {
-    if (!FILESTORAGE->is_available() || !FILEREGISTRY->is_available()) {
+    if (!FILESTORAGE->is_available() || !FILEREGISTRY->is_available() || !SPOOL->is_available()) {
         throw new HTTPException(__('File upload is temporarily unavailable. Please try again later!'), 500);
+    }
+
+    // PHP drops the whole body if it is bigger than post_max_size
+    if (empty($_FILES) && empty($_POST) && (int) ($_SERVER['CONTENT_LENGTH'] ?? 0) > 0) {
+        throw new HTTPException(__('Exceeded filesize limit'), 413);
     }
 
     $files = [];
@@ -116,28 +66,25 @@ try {
         }
     }
     // -- load file from base64
-    else if (isset($_POST['base64'])) {
-        $file = [
-            'tmp_name' => '/tmp/php' . bin2hex(random_bytes(5)),
-            'error' => UPLOAD_ERR_OK,
-            'base64' => true
-        ];
-
-        $parts = explode(',', $_POST['base64']);
+    else if (isset($_POST['base64']) && is_string($_POST['base64'])) {
+        $parts = explode(',', $_POST['base64'], 2);
         $meta = $parts[0];
         if (!str_starts_with($meta, 'data:image/') || !str_ends_with($meta, ';base64')) {
             throw new HTTPException(__('Invalid base64 data'));
         }
 
-        $data = $parts[1];
+        $tmp = tempnam(SPOOL->tmp_dir(), 'b64');
+        if ($tmp === false || file_put_contents($tmp, base64_decode($parts[1] ?? '')) === false) {
+            throw new RuntimeException(__('Failed to save file. Try again later.'));
+        }
 
-        $ifp = fopen($file['tmp_name'], 'wb');
-
-        fwrite($ifp, base64_decode($data));
-        fclose($ifp);
-
-        $file['size'] = filesize($file['tmp_name']);
-        array_push($files, $file);
+        array_push($files, [
+            'tmp_name' => $tmp,
+            'name' => '',
+            'error' => UPLOAD_ERR_OK,
+            'size' => filesize($tmp),
+            'base64' => true
+        ]);
     } else {
         throw new HTTPException(__('No files to upload'));
     }
@@ -150,60 +97,11 @@ try {
         throw new HTTPException(__('No files to upload'));
     }
 
-    $single_url = boolval($_POST['single_url'] ?? '0');
-    $strip_exif = boolval($_POST['strip_exif'] ?? '0');
-    $preserve_original_name = boolval($_POST['preserve_original_name'] ?? '0');
-    $expire_in = $_POST['expires_in'] ?? CONFIG['expiration']['default'];
-    $password = $_POST['password'] ?? null;
+    $options = UploadOptions::from_input($_POST);
 
-    $signer = null;
-    if (boolval($_POST['sign_post'] ?? '0')) {
-        $signer = ACCOUNT_SERVICE?->get_user();
-        if ($signer === null) {
-            throw new HTTPException(__('You must be logged in to sign posts'), 401);
-        }
-    }
-
-    if (CONFIG['expiration']['force_default'] || !array_key_exists($expire_in, CONFIG['expiration']['time'])) {
-        $expire_in = CONFIG['expiration']['default'];
-    }
-
-    $format = 'Y-m-d H:i:s';
-    function calculate_expiration_time($e, $format)
-    {
-        $v = intval(substr($e, 0, strlen($e) - 1));
-        $m = substr($e, strlen($e) - 1);
-
-        $secs = match ($m) {
-            'd' => 86400,
-            'h' => 3600,
-            'm' => 60,
-            default => 0
-        };
-
-        $t = time() + $v * $secs;
-        return date($format, $t);
-    }
-
-    $upload_date = new DateTime();
-    $expiration_date = match ($expire_in) {
-        'ne' => null,
-        're' => $upload_date,
-        default => new DateTime(calculate_expiration_time($expire_in, $format))
-    };
-
-    $description = trim($_POST['description'] ?? '');
-
-    if (!empty($description)) {
-        $pdown = new Parsedown();
-        $pdown->setSafeMode(true);
-        $description = $pdown->text($description);
-    } else {
-        $description = null;
-    }
-
-    $root_post = $single_url ? create_post($password, $upload_date, $expiration_date, $description, $signer) : null;
-    $uploaded_posts = $single_url ? [$root_post] : [];
+    $root_post = $options->single_url ? create_post($options, new DateTime(), $status) : null;
+    $uploaded_posts = $options->single_url ? [$root_post] : [];
+    $error_codes = [];
 
     for ($i = 0; $i < $file_count; $i++) {
         $file = $files[$i];
@@ -225,77 +123,34 @@ try {
                     throw new HTTPException(__('No file sent'));
                 case UPLOAD_ERR_INI_SIZE:
                 case UPLOAD_ERR_FORM_SIZE:
-                    throw new HTTPException(__('Exceeded filesize limit'));
+                    throw new HTTPException(__('Exceeded filesize limit'), 413);
                 default:
                     throw new HTTPException(__('Unknown errors'));
             }
 
-            $status->send('up_integrity', __('verifying file integrity... (%d/%d)', $ic, $file_count));
-
-            // checking file mimetype
-            $finfo = new finfo(FILEINFO_MIME_TYPE);
-            if (false === $file_ext = array_search($finfo->file($file['tmp_name']), CONFIG["upload"]["acceptedmimetypes"], true)) {
-                throw new HTTPException(__('Invalid file format.'));
+            $size = (int) $file['size'];
+            if ($size > MAX_FORM_UPLOAD_BYTES) {
+                throw new HTTPException(__('Exceeded filesize limit'), 413);
             }
 
-            // verifying file mimetype
-            $file_mime = CONFIG["upload"]["acceptedmimetypes"][$file_ext];
-            $is_media = str_starts_with($file_mime, 'image/') || str_starts_with($file_mime, 'video/') || str_starts_with($file_mime, 'audio/');
-            if (CONFIG["upload"]["verifymimetype"] && $is_media && !verify_mimetype($file['tmp_name'], $file_mime)) {
-                throw new RuntimeException(__('Invalid file format.'));
+            // into the spool. upload_tmp_dir is on the spool's filesystem, so this is a rename, not a copy
+            $record = SPOOL->create([
+                'source' => 'form',
+                'size' => $size,
+                'client_name' => mb_substr((string) ($file['name'] ?? ''), 0, 255),
+                'client_type' => (string) ($file['type'] ?? ''),
+            ], $size, 0);
+            $spool_ids[] = $record['id'];
+
+            $dst = SPOOL->data_path($record['id']);
+            $moved = empty($file['base64']) ? move_uploaded_file($file['tmp_name'], $dst) : rename($file['tmp_name'], $dst);
+            if (!$moved) {
+                SPOOL->reject($record['id'], __('Failed to save file. Try again later.'));
+                throw new RuntimeException(__('Failed to save file. Try again later.'));
             }
+            chmod($dst, 0640);
 
-            // striping exif data
-            if (CONFIG["upload"]["stripexif"] && $strip_exif && $is_media && !strip_exif($file['tmp_name'])) {
-                throw new RuntimeException(__('Failed to strip EXIF tags.'));
-            }
-
-            $file_hash = hash_file("sha256", $file['tmp_name']);
-            if (!$file_hash) {
-                throw new RuntimeException(__('Failed to calculate file hash'));
-            }
-
-            // checking if the file is banned
-            if ($ban = FILEREGISTRY->get_file_ban($file_hash)) {
-                $message = empty($ban['reason'])
-                    ? __('This file has been banned')
-                    : __('This file has been banned: %s', $ban['reason']);
-                throw new HTTPException($message, 403);
-            }
-
-            $post = $root_post ?? create_post($password, $upload_date, $expiration_date, $description, $signer);
-
-            // searching for similar file
-            $base_file = FILEREGISTRY->get_file_by_hash($file_hash);
-            if (!$base_file) {
-                $opt = new FileOptions();
-                $opt->content_type = $file_mime;
-
-                $status->send('up_save', match (CONFIG['storage']['type']) {
-                    'local' => __('writing files to disk...'),
-                    'sql' => __('writing files to database...'),
-                    's3' => __('saving files to object storage (may take a long time)...'),
-                    default => __('saving...'),
-                } . " ($ic/$file_count)");
-
-                $snowflake_id = new SnowflakeIdentifier(CONFIG['instance']['machine_id'], CONFIG['instance']['epoch']);
-
-                $metadata = FileMetadata::from_file_path($file['tmp_name'], $file_mime);
-
-                $base_file = FILESTORAGE->save_file("{$snowflake_id->generate()}.$file_ext", $file['tmp_name'], $opt);
-                if (!$base_file) {
-                    throw new HTTPException(__('Failed to save file. Try again later.'));
-                }
-                $base_file->hash = $file_hash;
-                $base_file->metadata = $metadata;
-            }
-
-            $original_filename = $preserve_original_name ? str_safe($file['name'], null) : null;
-            $base_file->original_filename = $original_filename;
-
-            if (!FILEREGISTRY->attach_to_post($post, $base_file)) {
-                throw new HTTPException(__('Failed to attach file to the post.'));
-            }
+            $post = enqueue($record['id'], $options, $root_post, $status, $ic, $file_count);
 
             if (CONFIG['views']['enabled']) {
                 $viewed_posts = $_SESSION['viewed_posts'] ?? [];
@@ -305,42 +160,26 @@ try {
                 $_SESSION['viewed_posts'] = $viewed_posts;
             }
 
-            if (!$single_url) {
+            if (!$options->single_url) {
                 array_push($uploaded_posts, $post);
             }
         } catch (Exception $e) {
+            if (!empty($file['base64'])) {
+                @unlink($file['tmp_name']);
+            }
+            $error_codes[] = $e instanceof HTTPException ? $e->getStatusCode() : 400;
+            if ($e instanceof SpoolException && $e->retry_after) {
+                header("Retry-After: {$e->retry_after}");
+            }
             array_push($uploaded_posts, [
-                'original_name' => $file['name'],
+                'original_name' => $file['name'] ?? '',
                 'error' => $e->getMessage()
             ]);
         }
     }
 
-    // -- generating thumbnails
-    if (THUMBNAILER !== null) {
-        $status->send('up_thumbnail', __('drawing thumbnails...'));
-        $s3_thumb = THUMBNAILER instanceof S3ProxyThumbnailer;
-        $data = [];
-        foreach ($uploaded_posts as $i => $p) {
-            if (is_array($p)) {
-                continue;
-            }
-
-            foreach ($p->attachments as &$f) {
-                if ($s3_thumb || $f->path) {
-                    array_push($data, [
-                        'input_path' => $s3_thumb ? "{$f->name}.{$f->extension}" : $f->path,
-                        'width' => CONFIG['thumbnails']['width'],
-                        'height' => CONFIG['thumbnails']['height'],
-                    ]);
-                }
-            }
-
-            unset($f);
-        }
-
-        $thumbnails = THUMBNAILER->generate_thumbnails($data);
-    }
+    // there was thumbnail generator
+    // now thumbnails are generated by bin/transfer-worker.php once the files are in the storage
 
     delete_empty_posts($uploaded_posts);
 
@@ -366,10 +205,15 @@ try {
         $status->send('success', null);
     }
 
+    // a single failed file keeps its own status code
+    $code = $upload_fail ? (count(array_unique($error_codes)) === 1 ? $error_codes[0] : 400) : 201;
+
     generate_alert(
-        "/",
-        null,
-        $upload_fail ? 400 : 201,
+        // browsers go to the status page, which also shows the errors; if nothing reached the spool,
+        // the home page shows them
+        empty($spool_ids) ? '/' : '/status?id=' . implode(',', $spool_ids),
+        $upload_fail ? implode('; ', array_unique(array_column($uploaded_posts, 'error'))) : null,
+        $code,
         match (true) {
             count($uploaded_posts) == 1 => $uploaded_posts[0],
             default => $uploaded_posts
@@ -378,6 +222,9 @@ try {
 } catch (HTTPException $e) {
     $status->send('error', $e->getMessage());
     delete_empty_posts($uploaded_posts);
+    if ($e instanceof SpoolException && $e->retry_after) {
+        header("Retry-After: {$e->retry_after}");
+    }
     generate_alert('/', $e->getMessage(), $e->getStatusCode());
 } catch (Exception $e) {
     delete_empty_posts($uploaded_posts);

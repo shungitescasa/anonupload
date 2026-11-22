@@ -39,12 +39,16 @@ function display_alert()
     $alert = $_SESSION['alert'];
     unset($_SESSION['alert']);
 
+    if (empty($alert['message'])) {
+        return;
+    }
+
     echo '<section class="box alert';
     if ($alert['code'] > 399) {
         echo ' red';
     }
     echo '">';
 
-    echo "<p>{$alert['message']}</p>";
+    echo '<p>' . htmlspecialchars($alert['message']) . '</p>';
     echo '</section>';
 }

@@ -131,7 +131,11 @@ include_once "{$_SERVER['DOCUMENT_ROOT']}/lib/partials.php";
                             </tr>
                             <tr>
                                 <th><?= __('Max file size:') ?></th>
-                                <td><code><?= ini_get("upload_max_filesize") ?></code></td>
+                                <td><code><?= format_filesize(MAX_FORM_UPLOAD_BYTES) ?></code></td>
+                            </tr>
+                            <tr>
+                                <th><?= __('Larger files:') ?></th>
+                                <td><?= __('chunked API at %s (up to %s)', '<code>' . CONFIG["instance"]["url"] . '/post/upload</code>', format_filesize(MAX_UPLOAD_BYTES)) ?></td>
                             </tr>
                         </table>
                     </div>

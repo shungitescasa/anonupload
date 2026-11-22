@@ -329,6 +329,47 @@ function createFileUploadProgress(files) {
     return f;
 }
 
+// the row of a finished upload (a post as returned by /upload or /post/upload); also used by upload.js
+function createUploadedFileRow(f) {
+    f.name = `${f.id}`;
+    f.type = null;
+
+    if (f.attachments && f.attachments.length === 1) {
+        const a = f.attachments[0];
+        f.type = a.mime;
+        f.name += `.${a.extension}`;
+        if (a.urls && a.urls.thumbnail_url) {
+            f.urls.thumbnail_url = a.urls.thumbnail_url;
+        }
+    }
+
+    const file = createFileUploadProgress([f]);
+    file.setProgress(100);
+    file.setStatus(null, 'success');
+
+    if (f.urls) {
+        if (f.urls.download_url) {
+            file.buttons.open.style.display = 'inline';
+            file.buttons.open.addEventListener("click", () => window.open(f.urls.download_url, '_blank'));
+            if (navigator.clipboard) {
+                file.buttons.copy.style.display = 'inline';
+                file.buttons.copy.addEventListener("click", () => navigator.clipboard.writeText(f.urls.download_url));
+            }
+        }
+
+        if (f.urls.deletion_url) {
+            file.buttons.delete.style.display = 'inline';
+            file.buttons.delete.addEventListener('click', () => {
+                file.buttons.delete.style.display = 'none';
+                file.setStatus('deleting...', 'delete_wait');
+                deleteUploadedFile(f.id, file);
+            });
+        }
+    }
+
+    return file;
+}
+
 function uploadData(form) {
     let file = createFileUploadProgress(form.getAll("file[]"));
     file.setStatus('waiting...', 'queue');
@@ -399,43 +440,7 @@ function uploadData(form) {
         file.root.remove();
 
         for (const f of d) {
-            f.name = `${f.id}`;
-            f.type = null;
-
-            if (f.attachments && f.attachments.length === 1) {
-                const a = f.attachments[0];
-                f.type = a.mime;
-                f.name += `.${a.extension}`;
-                if (a.urls && a.urls.thumbnail_url) {
-                    f.urls.thumbnail_url = a.urls.thumbnail_url;
-                }
-            }
-
-            file = createFileUploadProgress([f]);
-            file.setProgress(100);
-            file.setStatus(null, 'success');
-
-            if (f.urls) {
-                if (f.urls.download_url) {
-                    file.buttons.open.style.display = 'inline';
-                    file.buttons.open.addEventListener("click", () => window.open(f.urls.download_url, '_blank'));
-                    if (navigator.clipboard) {
-                        file.buttons.copy.style.display = 'inline';
-                        file.buttons.copy.addEventListener("click", () => navigator.clipboard.writeText(f.urls.download_url));
-                    }
-                }
-
-                if (f.urls.deletion_url) {
-                    file.buttons.delete.style.display = 'inline';
-                    file.buttons.delete.addEventListener('click', () => {
-                        file.buttons.delete.style.display = 'none';
-                        file.setStatus('deleting...', 'delete_wait');
-                        deleteUploadedFile(f.id, file);
-                    });
-                }
-            }
-
-            parent.prepend(file.root);
+            parent.prepend(createUploadedFileRow(f).root);
             saveUploadedFile(f);
         }
     });

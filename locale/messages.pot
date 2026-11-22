@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: anonupload\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 20:30+0500\n"
+"POT-Creation-Date: 2026-11-23 03:56+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -218,7 +218,7 @@ msgid "register"
 msgstr ""
 
 #: account/logout.php account/save.php account/storage.php post/ban.php
-#: post/delete.php post/edit.php upload.php
+#: post/delete.php post/edit.php post/upload.php upload.php
 msgid "Method not allowed"
 msgstr ""
 
@@ -290,7 +290,7 @@ msgstr ""
 msgid "File upload is temporarily unavailable"
 msgstr ""
 
-#: index.php
+#: index.php post/upload.php
 msgid "Not Found"
 msgstr ""
 
@@ -306,7 +306,61 @@ msgid_plural "Password must be at least %d characters long"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/pages/error.php
+#: lib/ingest.php
+msgid "You must be logged in to sign posts"
+msgstr ""
+
+#: lib/ingest.php
+msgid "re-rolling IDs..."
+msgstr ""
+
+#: lib/ingest.php lib/spool.php post/upload.php status.php
+msgid "Upload not found"
+msgstr ""
+
+#: lib/ingest.php
+msgid "The upload was interrupted"
+msgstr ""
+
+#: lib/ingest.php
+#, php-format
+msgid "verifying file integrity... (%d/%d)"
+msgstr ""
+
+#: lib/ingest.php post/upload.php
+msgid "Invalid file format."
+msgstr ""
+
+#: lib/ingest.php
+msgid "Failed to strip EXIF tags."
+msgstr ""
+
+#: lib/ingest.php
+msgid "Failed to calculate file hash"
+msgstr ""
+
+#: lib/ingest.php
+msgid "This file has been banned"
+msgstr ""
+
+#: lib/ingest.php
+#, php-format
+msgid "This file has been banned: %s"
+msgstr ""
+
+#: lib/ingest.php
+msgid "saving..."
+msgstr ""
+
+#: lib/ingest.php
+msgid "Failed to attach file to the post."
+msgstr ""
+
+#: lib/ingest.php
+msgid "Failed to process the file"
+msgstr ""
+
+#: lib/pages/error.php post/upload.php
 msgid "Something went wrong"
 msgstr ""
 
@@ -371,7 +425,7 @@ msgstr ""
 msgid "re-roll"
 msgstr ""
 
-#: lib/pages/file.php
+#: lib/pages/file.php status.php
 msgid "download"
 msgstr ""
 
@@ -601,6 +655,37 @@ msgstr ""
 msgid "This file cannot be displayed."
 msgstr ""
 
+#: lib/spool.php
+msgid "Too many uploads are in progress. Please try again later."
+msgstr ""
+
+#: lib/spool.php
+msgid "The server is busy storing other uploads. Please try again later."
+msgstr ""
+
+#: lib/spool.php
+msgid "The server is running out of disk space. Please try again later."
+msgstr ""
+
+#: lib/spool.php
+#, php-format
+msgid "This upload is %s and does not accept chunks"
+msgstr ""
+
+#: lib/spool.php
+#, php-format
+msgid "Chunk %d is out of range (0-%d)"
+msgstr ""
+
+#: lib/spool.php
+#, php-format
+msgid "Chunk %d must be %d bytes, got %d"
+msgstr ""
+
+#: lib/spool.php post/upload.php
+msgid "This upload was cancelled"
+msgstr ""
+
 #: lib/utils.php
 #, php-format
 msgid "%d second"
@@ -659,7 +744,7 @@ msgstr ""
 msgid "Post ID must be set!"
 msgstr ""
 
-#: post/ban.php post/delete.php post/edit.php
+#: post/ban.php post/delete.php post/edit.php post/upload.php
 msgid "Post does not exist or has been deleted"
 msgstr ""
 
@@ -737,6 +822,56 @@ msgstr ""
 
 #: post/list.php
 msgid "Nothing found."
+msgstr ""
+
+#: post/upload.php
+msgid "Expected a JSON body (Content-Type: application/json)"
+msgstr ""
+
+#: post/upload.php
+msgid "Malformed JSON body"
+msgstr ""
+
+#: post/upload.php upload.php
+msgid "File upload is temporarily unavailable. Please try again later!"
+msgstr ""
+
+#: post/upload.php
+msgid "filename, size and content_type are required"
+msgstr ""
+
+#: post/upload.php upload.php
+msgid "No file sent"
+msgstr ""
+
+#: post/upload.php
+#, php-format
+msgid "Exceeded filesize limit (%s)"
+msgstr ""
+
+#: post/upload.php upload.php
+msgid "Exceeded file upload limit"
+msgstr ""
+
+#: post/upload.php
+msgid "This upload is being completed, please wait"
+msgstr ""
+
+#: post/upload.php
+#, php-format
+msgid "This upload is %s and cannot be completed"
+msgstr ""
+
+#: post/upload.php
+msgid "Some chunks are missing"
+msgstr ""
+
+#: post/upload.php upload.php
+msgid "No posts"
+msgstr ""
+
+#: post/upload.php
+msgid "This upload is complete; delete the post with its deletion URL"
 msgstr ""
 
 #: privacy.php
@@ -822,6 +957,81 @@ msgstr ""
 msgid "the most viewed posts"
 msgstr ""
 
+#: status.php
+#, php-format
+msgid "uploading: %d of %d parts received"
+msgstr ""
+
+#: status.php
+msgid "processing..."
+msgstr ""
+
+#: status.php
+#, php-format
+msgid "waiting for the storage (attempt %d failed, retrying in %s)"
+msgstr ""
+
+#: status.php
+msgid "waiting to be moved to the storage"
+msgstr ""
+
+#: status.php
+#, php-format
+msgid "moving to the storage: %d%%"
+msgstr ""
+
+#: status.php
+msgid "stored"
+msgstr ""
+
+#: status.php
+msgid ""
+"could not be moved to the storage; the file is kept on this server for now"
+msgstr ""
+
+#: status.php upload.php
+msgid "Unknown errors"
+msgstr ""
+
+#: status.php
+#, php-format
+msgid "rejected: %s"
+msgstr ""
+
+#: status.php
+msgid "cancelled"
+msgstr ""
+
+#: status.php
+msgid "deleted"
+msgstr ""
+
+#: status.php
+msgid "upload status"
+msgstr ""
+
+#: status.php
+msgid ""
+"Your links work already. This page refreshes every few seconds until "
+"everything is stored."
+msgstr ""
+
+#: status.php
+msgid "status"
+msgstr ""
+
+#: status.php
+msgid "size"
+msgstr ""
+
+#: status.php
+msgid "link"
+msgstr ""
+
+#: status.php
+msgid "upload more files"
+msgstr ""
+
 #: system/approval.php
 msgid "Only moderators can access this page"
 msgstr ""
@@ -889,11 +1099,7 @@ msgid "File track ID %s not found"
 msgstr ""
 
 #: upload.php
-msgid "re-rolling IDs..."
-msgstr ""
-
-#: upload.php
-msgid "File upload is temporarily unavailable. Please try again later!"
+msgid "Exceeded filesize limit"
 msgstr ""
 
 #: upload.php
@@ -905,89 +1111,15 @@ msgid "Invalid base64 data"
 msgstr ""
 
 #: upload.php
-msgid "No files to upload"
-msgstr ""
-
-#: upload.php
-msgid "Exceeded file upload limit"
-msgstr ""
-
-#: upload.php
-msgid "You must be logged in to sign posts"
-msgstr ""
-
-#: upload.php
-msgid "Invalid parameters"
-msgstr ""
-
-#: upload.php
-msgid "No file sent"
-msgstr ""
-
-#: upload.php
-msgid "Exceeded filesize limit"
-msgstr ""
-
-#: upload.php
-msgid "Unknown errors"
-msgstr ""
-
-#: upload.php
-#, php-format
-msgid "verifying file integrity... (%d/%d)"
-msgstr ""
-
-#: upload.php
-msgid "Invalid file format."
-msgstr ""
-
-#: upload.php
-msgid "Failed to strip EXIF tags."
-msgstr ""
-
-#: upload.php
-msgid "Failed to calculate file hash"
-msgstr ""
-
-#: upload.php
-msgid "This file has been banned"
-msgstr ""
-
-#: upload.php
-#, php-format
-msgid "This file has been banned: %s"
-msgstr ""
-
-#: upload.php
-msgid "writing files to disk..."
-msgstr ""
-
-#: upload.php
-msgid "writing files to database..."
-msgstr ""
-
-#: upload.php
-msgid "saving files to object storage (may take a long time)..."
-msgstr ""
-
-#: upload.php
-msgid "saving..."
-msgstr ""
-
-#: upload.php
 msgid "Failed to save file. Try again later."
 msgstr ""
 
 #: upload.php
-msgid "Failed to attach file to the post."
+msgid "No files to upload"
 msgstr ""
 
 #: upload.php
-msgid "drawing thumbnails..."
-msgstr ""
-
-#: upload.php
-msgid "No posts"
+msgid "Invalid parameters"
 msgstr ""
 
 #: uploaders.php
@@ -1070,4 +1202,13 @@ msgstr ""
 
 #: uploaders.php
 msgid "Max file size:"
+msgstr ""
+
+#: uploaders.php
+msgid "Larger files:"
+msgstr ""
+
+#: uploaders.php
+#, php-format
+msgid "chunked API at %s (up to %s)"
 msgstr ""

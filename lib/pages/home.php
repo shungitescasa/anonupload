@@ -2,6 +2,8 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/lib/config.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/lib/partials.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/lib/utils.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/lib/alert.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/lib/spool.php';
 
 if (IS_JSON_REQUEST) {
     $x = get_commit() ?? ['sha' => 'N/A'];
@@ -17,6 +19,14 @@ $recently_uploaded_files = $_SESSION['recently_uploaded_files'] ?? [];
 unset($_SESSION['recently_uploaded_files']);
 
 $user = ACCOUNT_SERVICE?->get_user();
+
+// the plain form is limited by MAX_FORM_UPLOAD_BYTES, the chunked uploads of upload.js by MAX_UPLOAD_BYTES
+$limit_text = function (int $bytes): string {
+    if (!empty(CONFIG['expiration']['time']) && CONFIG['expiration']['force_default'] && CONFIG['expiration']['default'] !== 'ne') {
+        return __('max upload size is %s & files expire after %s', format_filesize($bytes), CONFIG['expiration']['time'][CONFIG['expiration']['default']]);
+    }
+    return __('max upload size is %s', format_filesize($bytes));
+};
 ?>
 <!DOCTYPE html>
 <html lang="<?= html_lang() ?>">
@@ -28,16 +38,16 @@ $user = ACCOUNT_SERVICE?->get_user();
 <body>
     <header>
         <?php html_header(); ?>
-        <h2 style="text-align:center">
-            <?php if (!empty(CONFIG['expiration']['time']) && CONFIG['expiration']['force_default'] && CONFIG['expiration']['default'] !== 'ne'): ?>
-                <?= __('max upload size is %s & files expire after %s', ini_get('upload_max_filesize'), CONFIG['expiration']['time'][CONFIG['expiration']['default']]) ?>
-            <?php else: ?>
-                <?= __('max upload size is %s', ini_get('upload_max_filesize')) ?>
-            <?php endif; ?>
+        <h2 style="text-align:center" id="upload-limits"
+            data-chunked-text="<?= htmlspecialchars($limit_text(MAX_UPLOAD_BYTES)) ?>">
+            <?= $limit_text(MAX_FORM_UPLOAD_BYTES) ?>
         </h2>
     </header>
     <main>
-        <form action="/upload" method="post" enctype="multipart/form-data" autocomplete="off" id="form-upload">
+        <?php display_alert(); ?>
+        <form action="/upload" method="post" enctype="multipart/form-data" autocomplete="off" id="form-upload"
+            data-max-size="<?= MAX_UPLOAD_BYTES ?>"
+            data-max-files="<?= (int) CONFIG['upload']['max_files_per_request'] ?>">
             <button id="huge-upload-button" style="display:none"
                 data-text="<?= __('click, drop, or paste files here') ?>"
                 data-drop-text="<?= __('drop files here') ?>"><?= __('click, drop, or paste files here') ?></button>
@@ -183,6 +193,7 @@ $user = ACCOUNT_SERVICE?->get_user();
 
 <script src="/static/scripts/options.js"></script>
 <script src="/static/scripts/file.js"></script>
+<script src="/static/scripts/upload.js"></script>
 <script src="/static/scripts/pages/home.js"></script>
 
 </html>

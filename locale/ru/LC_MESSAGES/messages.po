@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: anonupload\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 20:30+0500\n"
+"POT-Creation-Date: 2026-11-23 03:56+0500\n"
 "PO-Revision-Date: 2026-10-05 23:02+0500\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: shungites.casa\n"
@@ -225,7 +225,7 @@ msgid "register"
 msgstr "зарегистрироваться"
 
 #: account/logout.php account/save.php account/storage.php post/ban.php
-#: post/delete.php post/edit.php upload.php
+#: post/delete.php post/edit.php post/upload.php upload.php
 msgid "Method not allowed"
 msgstr "Метод не разрешён"
 
@@ -302,7 +302,7 @@ msgstr "Сохранено!"
 msgid "File upload is temporarily unavailable"
 msgstr "Загрузка файлов временно недоступна"
 
-#: index.php
+#: index.php post/upload.php
 msgid "Not Found"
 msgstr "Не найдено"
 
@@ -319,7 +319,61 @@ msgstr[0] "Пароль должен содержать не менее %d си�
 msgstr[1] "Пароль должен содержать не менее %d символов"
 msgstr[2] "Пароль должен содержать не менее %d символов"
 
-#: lib/pages/error.php
+#: lib/ingest.php
+msgid "You must be logged in to sign posts"
+msgstr "Чтобы подписывать посты, нужно войти в аккаунт"
+
+#: lib/ingest.php
+msgid "re-rolling IDs..."
+msgstr "подбираем ID..."
+
+#: lib/ingest.php lib/spool.php post/upload.php status.php
+msgid "Upload not found"
+msgstr "Загрузка не найдена"
+
+#: lib/ingest.php
+msgid "The upload was interrupted"
+msgstr "Загрузка была прервана"
+
+#: lib/ingest.php
+#, php-format
+msgid "verifying file integrity... (%d/%d)"
+msgstr "проверка целостности файла... (%d/%d)"
+
+#: lib/ingest.php post/upload.php
+msgid "Invalid file format."
+msgstr "Недопустимый формат файла."
+
+#: lib/ingest.php
+msgid "Failed to strip EXIF tags."
+msgstr "Не удалось удалить EXIF-теги."
+
+#: lib/ingest.php
+msgid "Failed to calculate file hash"
+msgstr "Не удалось вычислить хеш файла"
+
+#: lib/ingest.php
+msgid "This file has been banned"
+msgstr "Этот файл забанен"
+
+#: lib/ingest.php
+#, php-format
+msgid "This file has been banned: %s"
+msgstr "Этот файл забанен: %s"
+
+#: lib/ingest.php
+msgid "saving..."
+msgstr "сохранение..."
+
+#: lib/ingest.php
+msgid "Failed to attach file to the post."
+msgstr "Не удалось прикрепить файл к посту."
+
+#: lib/ingest.php
+msgid "Failed to process the file"
+msgstr "Не удалось обработать файл"
+
+#: lib/pages/error.php post/upload.php
 msgid "Something went wrong"
 msgstr "Что-то пошло не так"
 
@@ -391,7 +445,7 @@ msgstr "описание скрыто. нажмите, чтобы разверн
 msgid "re-roll"
 msgstr "испытать удачу ещё раз"
 
-#: lib/pages/file.php
+#: lib/pages/file.php status.php
 msgid "download"
 msgstr "скачать"
 
@@ -624,6 +678,38 @@ msgstr "Для воспроизведения Flash нужен JavaScript"
 msgid "This file cannot be displayed."
 msgstr "Этот файл невозможно отобразить."
 
+#: lib/spool.php
+msgid "Too many uploads are in progress. Please try again later."
+msgstr "Слишком много загрузок одновременно. Пожалуйста, попробуйте позже."
+
+#: lib/spool.php
+msgid "The server is busy storing other uploads. Please try again later."
+msgstr ""
+"Сервер занят сохранением других загрузок. Пожалуйста, попробуйте позже."
+
+#: lib/spool.php
+msgid "The server is running out of disk space. Please try again later."
+msgstr "На сервере заканчивается место на диске. Пожалуйста, попробуйте позже."
+
+#: lib/spool.php
+#, php-format
+msgid "This upload is %s and does not accept chunks"
+msgstr "Загрузка в состоянии «%s» и не принимает части"
+
+#: lib/spool.php
+#, php-format
+msgid "Chunk %d is out of range (0-%d)"
+msgstr "Часть %d вне допустимого диапазона (0-%d)"
+
+#: lib/spool.php
+#, php-format
+msgid "Chunk %d must be %d bytes, got %d"
+msgstr "Часть %d должна быть %d байт, получено %d"
+
+#: lib/spool.php post/upload.php
+msgid "This upload was cancelled"
+msgstr "Эта загрузка была отменена"
+
 #: lib/utils.php
 #, php-format
 msgid "%d second"
@@ -688,7 +774,7 @@ msgstr "Только модераторы могут банить посты"
 msgid "Post ID must be set!"
 msgstr "Нужно указать ID поста!"
 
-#: post/ban.php post/delete.php post/edit.php
+#: post/ban.php post/delete.php post/edit.php post/upload.php
 msgid "Post does not exist or has been deleted"
 msgstr "Пост не существует или был удалён"
 
@@ -768,6 +854,56 @@ msgstr "галерея"
 #: post/list.php
 msgid "Nothing found."
 msgstr "Ничего не найдено."
+
+#: post/upload.php
+msgid "Expected a JSON body (Content-Type: application/json)"
+msgstr "Ожидалось тело запроса в JSON (Content-Type: application/json)"
+
+#: post/upload.php
+msgid "Malformed JSON body"
+msgstr "Некорректное тело запроса JSON"
+
+#: post/upload.php upload.php
+msgid "File upload is temporarily unavailable. Please try again later!"
+msgstr "Загрузка файлов временно недоступна. Пожалуйста, попробуйте позже!"
+
+#: post/upload.php
+msgid "filename, size and content_type are required"
+msgstr "Требуются filename, size и content_type"
+
+#: post/upload.php upload.php
+msgid "No file sent"
+msgstr "Файл не отправлен"
+
+#: post/upload.php
+#, php-format
+msgid "Exceeded filesize limit (%s)"
+msgstr "Превышен лимит размера файла (%s)"
+
+#: post/upload.php upload.php
+msgid "Exceeded file upload limit"
+msgstr "Превышен лимит количества файлов"
+
+#: post/upload.php
+msgid "This upload is being completed, please wait"
+msgstr "Загрузка завершается, пожалуйста, подождите"
+
+#: post/upload.php
+#, php-format
+msgid "This upload is %s and cannot be completed"
+msgstr "Загрузка в состоянии «%s» и не может быть завершена"
+
+#: post/upload.php
+msgid "Some chunks are missing"
+msgstr "Некоторые части отсутствуют"
+
+#: post/upload.php upload.php
+msgid "No posts"
+msgstr "Нет постов"
+
+#: post/upload.php
+msgid "This upload is complete; delete the post with its deletion URL"
+msgstr "Загрузка уже завершена; удалите пост по ссылке для удаления"
 
 #: privacy.php
 msgid "Privacy policy is not set!"
@@ -852,6 +988,83 @@ msgstr "Для диаграммы нужен JavaScript"
 msgid "the most viewed posts"
 msgstr "самые просматриваемые посты"
 
+#: status.php
+#, php-format
+msgid "uploading: %d of %d parts received"
+msgstr "загрузка: получено %d из %d частей"
+
+#: status.php
+msgid "processing..."
+msgstr "обработка..."
+
+#: status.php
+#, php-format
+msgid "waiting for the storage (attempt %d failed, retrying in %s)"
+msgstr "ожидание хранилища (попытка %d не удалась, повтор через %s)"
+
+#: status.php
+msgid "waiting to be moved to the storage"
+msgstr "ожидает переноса в хранилище"
+
+#: status.php
+#, php-format
+msgid "moving to the storage: %d%%"
+msgstr "перенос в хранилище: %d%%"
+
+#: status.php
+msgid "stored"
+msgstr "сохранено"
+
+#: status.php
+msgid ""
+"could not be moved to the storage; the file is kept on this server for now"
+msgstr "не удалось перенести в хранилище; пока файл хранится на этом сервере"
+
+#: status.php upload.php
+msgid "Unknown errors"
+msgstr "Неизвестная ошибка"
+
+#: status.php
+#, php-format
+msgid "rejected: %s"
+msgstr "отклонено: %s"
+
+#: status.php
+msgid "cancelled"
+msgstr "отменено"
+
+#: status.php
+msgid "deleted"
+msgstr "удалено"
+
+#: status.php
+msgid "upload status"
+msgstr "статус загрузки"
+
+#: status.php
+msgid ""
+"Your links work already. This page refreshes every few seconds until "
+"everything is stored."
+msgstr ""
+"Ваши ссылки уже работают. Эта страница обновляется каждые несколько секунд, "
+"пока всё не будет сохранено."
+
+#: status.php
+msgid "status"
+msgstr "статус"
+
+#: status.php
+msgid "size"
+msgstr "размер"
+
+#: status.php
+msgid "link"
+msgstr "ссылка"
+
+#: status.php
+msgid "upload more files"
+msgstr "загрузить ещё файлы"
+
 #: system/approval.php
 msgid "Only moderators can access this page"
 msgstr "Эта страница доступна только модераторам"
@@ -920,12 +1133,8 @@ msgid "File track ID %s not found"
 msgstr "ID отслеживания %s не найден"
 
 #: upload.php
-msgid "re-rolling IDs..."
-msgstr "подбираем ID..."
-
-#: upload.php
-msgid "File upload is temporarily unavailable. Please try again later!"
-msgstr "Загрузка файлов временно недоступна. Пожалуйста, попробуйте позже!"
+msgid "Exceeded filesize limit"
+msgstr "Превышен лимит размера файла"
 
 #: upload.php
 msgid "preparing..."
@@ -936,91 +1145,16 @@ msgid "Invalid base64 data"
 msgstr "Недопустимые данные base64"
 
 #: upload.php
-msgid "No files to upload"
-msgstr "Нет файлов для загрузки"
-
-#: upload.php
-msgid "Exceeded file upload limit"
-msgstr "Превышен лимит количества файлов"
-
-#: upload.php
-msgid "You must be logged in to sign posts"
-msgstr "Чтобы подписывать посты, нужно войти в аккаунт"
-
-#: upload.php
-msgid "Invalid parameters"
-msgstr "Недопустимые параметры"
-
-#: upload.php
-msgid "No file sent"
-msgstr "Файл не отправлен"
-
-#: upload.php
-msgid "Exceeded filesize limit"
-msgstr "Превышен лимит размера файла"
-
-#: upload.php
-msgid "Unknown errors"
-msgstr "Неизвестная ошибка"
-
-#: upload.php
-#, php-format
-msgid "verifying file integrity... (%d/%d)"
-msgstr "проверка целостности файла... (%d/%d)"
-
-#: upload.php
-msgid "Invalid file format."
-msgstr "Недопустимый формат файла."
-
-#: upload.php
-msgid "Failed to strip EXIF tags."
-msgstr "Не удалось удалить EXIF-теги."
-
-#: upload.php
-msgid "Failed to calculate file hash"
-msgstr "Не удалось вычислить хеш файла"
-
-#: upload.php
-msgid "This file has been banned"
-msgstr "Этот файл забанен"
-
-#: upload.php
-#, php-format
-msgid "This file has been banned: %s"
-msgstr "Этот файл забанен: %s"
-
-#: upload.php
-msgid "writing files to disk..."
-msgstr "запись файлов на диск..."
-
-#: upload.php
-msgid "writing files to database..."
-msgstr "запись файлов в базу данных..."
-
-#: upload.php
-msgid "saving files to object storage (may take a long time)..."
-msgstr ""
-"сохранение файлов в объектное хранилище (может занять много времени)..."
-
-#: upload.php
-msgid "saving..."
-msgstr "сохранение..."
-
-#: upload.php
 msgid "Failed to save file. Try again later."
 msgstr "Не удалось сохранить файл. Попробуйте позже."
 
 #: upload.php
-msgid "Failed to attach file to the post."
-msgstr "Не удалось прикрепить файл к посту."
+msgid "No files to upload"
+msgstr "Нет файлов для загрузки"
 
 #: upload.php
-msgid "drawing thumbnails..."
-msgstr "создание миниатюр..."
-
-#: upload.php
-msgid "No posts"
-msgstr "Нет постов"
+msgid "Invalid parameters"
+msgstr "Недопустимые параметры"
 
 #: uploaders.php
 msgid "file uploaders"
@@ -1103,6 +1237,28 @@ msgstr "Поле файла:"
 #: uploaders.php
 msgid "Max file size:"
 msgstr "Макс. размер файла:"
+
+#: uploaders.php
+msgid "Larger files:"
+msgstr "Большие файлы:"
+
+#: uploaders.php
+#, php-format
+msgid "chunked API at %s (up to %s)"
+msgstr "API загрузки по частям: %s (до %s)"
+
+#~ msgid "writing files to disk..."
+#~ msgstr "запись файлов на диск..."
+
+#~ msgid "writing files to database..."
+#~ msgstr "запись файлов в базу данных..."
+
+#~ msgid "saving files to object storage (may take a long time)..."
+#~ msgstr ""
+#~ "сохранение файлов в объектное хранилище (может занять много времени)..."
+
+#~ msgid "drawing thumbnails..."
+#~ msgstr "создание миниатюр..."
 
 #~ msgid "contact"
 #~ msgstr "контакты"

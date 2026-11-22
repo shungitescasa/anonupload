@@ -54,6 +54,29 @@ $cfg = [
 
         'index_ping' => true
     ],
+    // staged uploads: every upload is written to a local spool first and moved to the storage
+    // by bin/transfer-worker.php. All upload limits live here (bytes and seconds).
+    'spool' => [
+        // must be outside the document root
+        'directory' => '/var/spool/anonupload',
+        // nginx 'internal' location that maps to "<directory>/data/" (X-Accel-Redirect),
+        // empty: files are not served before they reach the storage
+        'accel_location' => '/_spool',
+        'max_upload_bytes' => 4 * 1024 * 1024 * 1024,
+        'max_form_upload_bytes' => 1024 * 1024 * 1024,
+        'chunk_size' => 16 * 1024 * 1024,
+        'max_bytes' => 10 * 1024 * 1024 * 1024,
+        'min_free_disk' => 2 * 1024 * 1024 * 1024,
+        'max_active_uploads' => 32,
+        'stale_upload_ttl' => 24 * 60 * 60,
+        'reservation_ttl' => 60 * 60,
+        'failed_retention' => 7 * 24 * 60 * 60,
+        'max_attempts' => 20,
+        'backoff_min' => 30,
+        'backoff_max' => 600,
+        'client_parallel_chunks' => 1,
+        'log' => '/var/log/anonupload/transfer-worker.log'
+    ],
     'memcached' => [
         'hosts' => null,
         'use_redis' => false
